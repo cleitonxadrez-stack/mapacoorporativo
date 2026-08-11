@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAPA Corporativo — desenvolvimento de competências profissionais</title>
+<meta name="description" content="Instrumento de desenvolvimento de competências profissionais. Mede o que está por trás do resultado — e separa o que é da pessoa do que é da organização.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinta:#0C1B2A; --tinta2:#5A6B7A; --tinta3:#8B9AA7;
+  --papel:#FFFFFF; --fundo:#F5F7F9; --fundo2:#EDF1F4;
+  --linha:#D8DFE5; --linha2:#E8EDF1;
+  --azul:#0C1B2A; --aco:#2E5C7E; --acoc:#5D8FB3;
+  --ambar:#C8891A; --verde:#2E7D5B; --coral:#C25A45; --roxo:#6B5B95;
+  --disp:'Fraunces',Georgia,serif; --texto:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --raio:14px; --sombra:0 1px 3px rgba(12,27,42,.06),0 6px 20px rgba(12,27,42,.05);
+  --sombra2:0 8px 30px rgba(12,27,42,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--texto);color:var(--tinta);background:var(--fundo);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+.sec{padding:3rem 0}
+h1,h2,h3{font-family:var(--disp);font-weight:600;line-height:1.15;letter-spacing:-.015em}
+h1{font-size:clamp(1.9rem,4.2vw,3rem)}
+h2{font-size:clamp(1.35rem,2.6vw,1.85rem);margin:0 0 .7rem}
+h3{font-size:1.05rem}
+p{margin:0 0 .9rem}
+a{color:var(--aco)}
+.lead{font-size:1.1rem;color:var(--tinta2);max-width:70ch}
+.eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--aco);margin:0 0 .5rem;display:flex;align-items:center;gap:.6rem}
+.eyebrow::before{content:'';width:22px;height:2px;background:var(--aco)}
+.divisor{height:1px;background:var(--linha2);margin:2.4rem 0}
+.apoio{font-size:.86rem;color:var(--tinta3)}
+.nota{font-size:.9rem;color:var(--tinta2)}
+
+/* ── topo ───────────────────────────────────────────────── */
+.topo{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--linha2)}
+.topo .wrap{display:flex;align-items:center;gap:1.2rem;padding-top:.8rem;padding-bottom:.8rem;flex-wrap:wrap}
+.marca{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--azul)}
+.marca .sig{width:36px;height:36px;border-radius:9px;background:var(--azul);display:grid;place-items:center;color:#fff;font-family:var(--disp);font-weight:700;font-size:1rem}
+.marca b{font-family:var(--disp);font-size:1.15rem;display:block;line-height:1.1}
+.marca span{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta3)}
+.menu{display:flex;gap:.25rem;margin-left:auto;flex-wrap:wrap;align-items:center}
+.menu a{font-size:.87rem;text-decoration:none;color:var(--tinta2);padding:.42rem .72rem;border-radius:8px;transition:.15s}
+.menu a:hover{background:var(--fundo2);color:var(--azul)}
+.menu a.on{color:var(--azul);font-weight:600;background:var(--fundo2)}
+.menu a.cta{background:var(--azul);color:#fff;font-weight:600}
+.menu a.cta:hover{background:var(--aco)}
+
+/* ── botões ─────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--texto);font-size:.93rem;font-weight:600;
+  padding:.72rem 1.35rem;border-radius:10px;border:1px solid transparent;background:var(--azul);color:#fff;
+  cursor:pointer;text-decoration:none;transition:.16s}
+.btn:hover{background:var(--aco);transform:translateY(-1px);box-shadow:var(--sombra)}
+.btn-sec{background:transparent;color:var(--azul);border-color:var(--linha)}
+.btn-sec:hover{background:var(--fundo2);border-color:var(--aco);color:var(--azul)}
+.btn-mini{font-size:.82rem;padding:.45rem .9rem}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* ── cartões ────────────────────────────────────────────── */
+.card{background:var(--papel);border:1px solid var(--linha2);border-radius:var(--raio);padding:1.4rem;box-shadow:var(--sombra)}
+.card.dest{border-left:3px solid var(--ambar)}
+.card.info{background:var(--fundo2);box-shadow:none}
+.grid{display:grid;gap:1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.metrica{text-align:left;padding:1.1rem 1.2rem}
+.metrica b{display:block;font-family:var(--disp);font-size:2rem;line-height:1;color:var(--azul);margin-bottom:.25rem}
+.metrica span{font-size:.8rem;color:var(--tinta2);line-height:1.35;display:block}
+.coord{font-family:var(--mono);font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;color:var(--tinta3);margin:0 0 .3rem}
+.aviso{background:#FFF9EC;border:1px solid #F0DFB8;border-left:3px solid var(--ambar);border-radius:10px;padding:.95rem 1.1rem;font-size:.9rem;color:#6B5416}
+.alerta{background:#FDF2F0;border:1px solid #F2D5CE;border-left:3px solid var(--coral);border-radius:10px;padding:.95rem 1.1rem;font-size:.9rem;color:#7A3524}
+.ok-box{background:#F0F8F4;border:1px solid #C9E4D5;border-left:3px solid var(--verde);border-radius:10px;padding:.95rem 1.1rem;font-size:.9rem;color:#1F5C41}
+
+/* ── barras ─────────────────────────────────────────────── */
+.bar{height:9px;background:var(--fundo2);border-radius:99px;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;border-radius:99px;transition:width .5s}
+.bar-lin{display:grid;grid-template-columns:1fr 190px 46px;gap:.9rem;align-items:center;padding:.62rem 0;border-bottom:1px solid var(--linha2)}
+.bar-lin:last-child{border-bottom:0}
+.bar-lin b{font-size:.9rem;font-weight:500}
+.bar-lin .v{text-align:right;font-family:var(--mono);font-size:.88rem;font-weight:500}
+.marca-alvo{position:absolute;top:-3px;width:2px;height:15px;background:var(--azul)}
+@media(max-width:700px){.bar-lin{grid-template-columns:1fr 60px}.bar-lin .bar{display:none}}
+
+/* ── etiquetas ──────────────────────────────────────────── */
+.tag{display:inline-block;font-family:var(--mono);font-size:.68rem;padding:.16rem .5rem;border-radius:5px;background:var(--fundo2);color:var(--tinta2)}
+.tag.v{background:#E8F4EE;color:var(--verde)}
+.tag.a{background:#FDF3E0;color:#96690F}
+.tag.c{background:#FBEDEA;color:var(--coral)}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap}
+.pill{font-size:.84rem;padding:.36rem .82rem;border-radius:999px;border:1px solid var(--linha);background:transparent;
+  color:var(--tinta2);cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
+.pill:hover{border-color:var(--aco);color:var(--azul)}
+.pill.on{background:var(--azul);border-color:var(--azul);color:#fff;font-weight:600}
+
+/* ── formulário ─────────────────────────────────────────── */
+.campo{margin-bottom:1rem}
+.campo label{display:block;font-size:.85rem;font-weight:500;margin-bottom:.35rem;color:var(--tinta2)}
+.campo input,.campo select,.campo textarea{width:100%;padding:.65rem .8rem;border:1px solid var(--linha);border-radius:9px;
+  font-family:inherit;font-size:.94rem;background:var(--papel);color:var(--tinta)}
+.campo input:focus,.campo select:focus{outline:2px solid var(--acoc);outline-offset:-1px;border-color:var(--aco)}
+
+/* ── aplicação ──────────────────────────────────────────── */
+.prog{position:sticky;top:60px;z-index:50;background:var(--fundo);padding:.8rem 0;border-bottom:1px solid var(--linha2)}
+.prog-bar{height:5px;background:var(--fundo2);border-radius:99px;overflow:hidden}
+.prog-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--aco),var(--acoc));transition:width .4s}
+.q-card{background:var(--papel);border:1px solid var(--linha2);border-radius:var(--raio);padding:1.6rem;margin-bottom:1rem;box-shadow:var(--sombra)}
+.q-num{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;color:var(--tinta3)}
+.q-txt{font-size:1.05rem;font-weight:500;margin:.4rem 0 1.1rem;line-height:1.45}
+.q-ops{display:grid;gap:.5rem}
+.q-op{display:flex;align-items:center;gap:.7rem;padding:.7rem .9rem;border:1px solid var(--linha);border-radius:10px;
+  cursor:pointer;transition:.14s;font-size:.93rem;background:var(--papel)}
+.q-op:hover{border-color:var(--aco);background:var(--fundo2)}
+.q-op.sel{border-color:var(--azul);background:var(--azul);color:#fff;font-weight:500}
+.q-op .mk{width:18px;height:18px;border-radius:50%;border:2px solid var(--linha);flex:none;transition:.14s}
+.q-op.sel .mk{border-color:#fff;background:#fff;box-shadow:inset 0 0 0 3px var(--azul)}
+.q-esc{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem}
+.q-esc .q-op{flex-direction:column;text-align:center;gap:.4rem;font-size:.8rem;padding:.7rem .4rem}
+@media(max-width:640px){.q-esc{grid-template-columns:1fr}.q-esc .q-op{flex-direction:row;text-align:left}}
+
+/* ── tabela ─────────────────────────────────────────────── */
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th{text-align:left;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--tinta3);padding:.6rem .5rem;border-bottom:1px solid var(--linha);font-weight:500}
+td{padding:.7rem .5rem;border-bottom:1px solid var(--linha2);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+
+.rod{background:var(--azul);color:#B8C7D4;padding:2.5rem 0;margin-top:3rem;font-size:.88rem}
+.rod a{color:#fff;text-decoration:none}
+.rod h4{font-family:var(--disp);color:#fff;font-size:1rem;margin:0 0 .5rem}
+.sec-oculta{display:none}
+@media print{.topo,.rod,.prog,.btn{display:none}.sec-oculta{display:block!important}}
+</style>
+</head>
+<body>
+<div id="topo"></div>
+<main id="app"></main>
+<div id="rodape"></div>
+
+<script>
+/* =====================================================================
+   MAPA Corporativo — instrumento de desenvolvimento de competências
+   Arquivo único. Protótipo com dados simulados.
+   ===================================================================== */
+
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const media = a => a.length ? a.reduce((s,x)=>s+x,0)/a.length : 0;
+function rng(s){ let x = s||1; return () => (x = (x*1103515245 + 12345) & 0x7fffffff) / 0x7fffffff; }
+const fmt = v => Math.round(v);
+
+/* cor por faixa */
+function corDe(v){
+  if(v >= 70) return 'var(--verde)';
+  if(v >= 55) return 'var(--aco)';
+  if(v >= 40) return 'var(--ambar)';
+  return 'var(--coral)';
+}
+function faixaDe(v){
+  if(v >= 70) return 'consolidado';
+  if(v >= 55) return 'presente';
+  if(v >= 40) return 'em formação';
+  return 'pouco frequente';
+}
+function barra(rot, v, alvo){
+  return `<div class="bar-lin">
+    <b>${esc(rot)}</b>
+    <span class="bar"><i style="width:${clamp(v,0,100)}%;background:${corDe(v)}"></i>${alvo?`<span class="marca-alvo" style="left:${alvo}%"></span>`:''}</span>
+    <span class="v" style="color:${corDe(v)}">${fmt(v)}</span>
+  </div>`;
+}
+</script>
+
+<script>
+/* =====================================================================
+   Banco de questões — 142 itens
+   t: esc escala · sit situação · dil dilema · forc forçada · cog raciocínio · porq fonte
+   w: pesos por indicador · inv: item invertido · anc: âncora com o instrumento escolar
+   ===================================================================== */
+
+const ESCALA = ['Nunca','Raramente','Às vezes','Quase sempre','Sempre'];
+
+const E = (id,e,q,w,o={}) => ({id, e, t:'esc', q, w, ...o});
+const QS = (id,e,q,ops) => ({id, e, t:'sit', q, ops});
+const D = (id,e,q,ops) => ({id, e, t:'dil', q, ops});
+const F = (id,e,q,ops) => ({id, e, t:'forc', q, ops});
+const C = (id,e,q,ops) => ({id, e, t:'cog', q, ops});
+const P = (id,e,q,ops) => ({id, e, t:'porq', q, ops});
+
+const BANCO = [
+/* ── Eixo 1 · Entrega e método ───────────────────────────── */
+E('E1.01',1,'Eu decido a ordem das tarefas antes de começar o dia.',{organizacao:1}),
+E('E1.02',1,'Eu anoto o que preciso fazer para não depender da memória.',{organizacao:1},{anc:1}),
+E('E1.03',1,'Quando recebo várias demandas ao mesmo tempo, eu consigo definir o que vem primeiro.',{priorizacao:1}),
+E('E1.04',1,'Eu começo várias coisas e termino poucas.',{conclusao:1},{inv:1}),
+E('E1.05',1,'Eu começo o trabalho antes do último momento possível.',{antecipacao_prazo:1},{anc:1}),
+E('E1.06',1,'Quando percebo que não vou cumprir um prazo, eu aviso antes de estourar.',{aviso_previo:1}),
+E('E1.07',1,'O que eu me comprometo a entregar, eu entrego.',{compromisso:1}),
+QS('E1.08',1,'Você tem três entregas para a mesma sexta-feira e percebe na quarta que não dá para fazer as três bem. O que você faz?',[
+  {t:'Aviso hoje ao meu líder e proponho qual adiar', w:{aviso_previo:2,priorizacao:1}},
+  {t:'Entrego as três com a qualidade que der', w:{compromisso:1}},
+  {t:'Entrego duas bem e explico a terceira na sexta', w:{priorizacao:1}}]),
+E('E1.09',1,'Eu reviso o que produzi antes de enviar.',{revisao:1}),
+E('E1.10',1,'Quando encontro um erro no meu trabalho, eu corrijo mesmo que ninguém tenha visto.',{revisao:1,integridade:1}),
+E('E1.11',1,'Prefiro entregar rápido a entregar completo.',{qualidade:1},{inv:1}),
+QS('E1.12',1,'Você percebeu um erro num relatório que já foi enviado ao cliente. É pequeno e provavelmente ninguém vai notar. O que você faz?',[
+  {t:'Aviso e mando a versão corrigida', w:{integridade:2,revisao:1}},
+  {t:'Corrijo internamente e não menciono', w:{qualidade:1}},
+  {t:'Espero para ver se alguém percebe', w:{}}]),
+E('E1.13',1,'Em semana de pico, eu mantenho a qualidade do que entrego.',{constancia:1}),
+E('E1.14',1,'Eu consigo trabalhar em tarefa repetitiva sem perder atenção.',{constancia:1}),
+E('E1.15',1,'Eu consigo me organizar sem alguém me cobrar.',{autonomia:1},{anc:1}),
+E('E1.17',1,'Quando assumo uma tarefa, eu a levo até o fim antes de pegar outra.',{conclusao:1}),
+E('E1.18',1,'Eu funciono melhor com o prazo em cima.',{antecipacao_prazo:1},{inv:1}),
+E('E1.19',1,'Eu resolvo o que aparece no meu trabalho sem precisar perguntar a cada passo.',{autonomia:1}),
+
+/* ── Eixo 2 · Análise e decisão ──────────────────────────── */
+E('E2.01',2,'Antes de propor solução, eu procuro entender o que causou o problema.',{causa:1}),
+E('E2.02',2,'Quando algo dá errado, eu já sei de cara de quem foi a culpa.',{causa:1},{inv:1}),
+E('E2.03',2,'Eu consigo ler um relatório ou planilha e dizer o que está acontecendo.',{interpretacao:1}),
+C('E2.04',2,'Uma equipe entregou 240 pedidos em 8 dias. Para entregar 400 no mesmo ritmo, quantos dias seriam necessários?',[
+  {t:'12 dias', w:{}},{t:'13 dias', w:{logico_mat:2}},{t:'14 dias', w:{}},{t:'16 dias', w:{}}]),
+C('E2.05',2,'O retrabalho da sua área caiu de 12% para 9% em três meses. Um colega diz que caiu 3%. Ele está certo?',[
+  {t:'Sim, caiu 3 pontos e isso é 3%', w:{}},
+  {t:'Não, caiu 3 pontos percentuais, o que equivale a uma queda de 25%', w:{interpretacao:2,logico_mat:2}},
+  {t:'Não dá para saber sem o total de peças', w:{interpretacao:1}}]),
+E('E2.06',2,'Eu decido mesmo quando falta informação, e digo o que ficou em aberto.',{decisao_incerteza:1}),
+E('E2.07',2,'Eu consigo explicar por que decidi de um jeito e não de outro.',{criterio:1},{anc:1}),
+E('E2.08',2,'Prefiro esperar alguém decidir por mim quando o assunto é difícil.',{decisao_incerteza:1},{inv:1}),
+D('E2.09',2,'Você precisa escolher entre duas soluções. Uma resolve rápido e cria um problema pequeno lá na frente. A outra demora o dobro e não deixa resíduo. O prazo está apertado.',[
+  {t:'Escolho a rápida e registro o problema que ficou', w:{decisao_incerteza:1,transparencia:1}},
+  {t:'Escolho a completa e negocio o prazo', w:{qualidade:1,sistemico:1}}]),
+P('E2.10',2,'Na questão anterior, o que mais pesou na sua escolha?',[
+  {t:'O prazo combinado', w:{compromisso:1}},
+  {t:'A qualidade final', w:{qualidade:1}},
+  {t:'O efeito sobre quem vem depois', w:{sistemico:1}},
+  {t:'O que meu líder esperaria', w:{conformidade:1}}]),
+E('E2.11',2,'Antes de mudar algo no meu trabalho, eu penso em quem mais é afetado.',{sistemico:1}),
+QS('E2.13',2,'Sua área entregaria mais rápido se parasse de conferir uma etapa. Essa etapa protege a área seguinte. O que você faz?',[
+  {t:'Converso com a área seguinte antes de mudar qualquer coisa', w:{sistemico:2,colaboracao:1}},
+  {t:'Proponho a mudança com um teste e prazo para avaliar', w:{criterio:1,melhoria:1}},
+  {t:'Mantenho como está, porque a conferência existe por algum motivo', w:{conformidade:1}}]),
+E('E2.14',2,'Quando alguém me traz uma informação importante, eu confiro antes de agir.',{verificacao:1}),
+E('E2.15',2,'Eu uso números para sustentar o que proponho.',{dados:1}),
+F('E2.16',2,'Diante de uma decisão importante, o que te dá mais segurança?',[
+  {t:'Ter o dado na mão', w:{dados:1}},
+  {t:'Ter conversado com quem vive o problema', w:{escuta:1}}]),
+
+/* ── Eixo 3 · Relação e colaboração ──────────────────────── */
+E('E3.01',3,'Quando não entendo o que me pediram, eu pergunto na hora.',{comunicacao:1},{anc:1}),
+E('E3.02',3,'Eu escrevo mensagem de trabalho deixando claro o que preciso e para quando.',{comunicacao:1}),
+E('E3.03',3,'Já aconteceu de um trabalho meu ser refeito porque eu não entendi direito o pedido.',{comunicacao:1,verificacao:1},{inv:1}),
+QS('E3.04',3,'Você recebeu uma tarefa por mensagem e ficou com dúvida. Quem pediu está em reunião o dia todo. O que você faz?',[
+  {t:'Escrevo o que entendi e peço confirmação antes de começar', w:{comunicacao:2,verificacao:1}},
+  {t:'Começo pelo que tenho certeza e deixo o resto', w:{priorizacao:1}},
+  {t:'Faço do jeito que entendi e ajusto depois', w:{}}]),
+E('E3.05',3,'Eu percebo quando alguém da equipe está sobrecarregado.',{percepcao:1}),
+E('E3.06',3,'Quando alguém me explica algo, eu escuto até o fim antes de responder.',{escuta:1},{anc:1}),
+E('E3.07',3,'Eu pergunto a opinião de quem vai ser afetado pelo que estou decidindo.',{escuta:1,sistemico:1}),
+E('E3.08',3,'Eu cumpro a minha parte no trabalho em grupo.',{colaboracao:1},{anc:1}),
+E('E3.09',3,'Eu ajudo colega de outra área mesmo quando não sou obrigado.',{colaboracao:1,cidadania:1}),
+E('E3.10',3,'Eu peço ajuda antes de o problema crescer.',{pedido_ajuda:1}),
+E('E3.11',3,'Prefiro resolver sozinho a ter que combinar com outras pessoas.',{colaboracao:1},{inv:1}),
+E('E3.12',3,'Quando discordo do meu líder, eu digo.',{voz:1}),
+E('E3.13',3,'Eu consigo discordar sem que a relação fique ruim.',{conflito:1}),
+QS('E3.14',3,'Um colega apresentou como dele uma ideia que era sua, na frente da equipe. O que você faz?',[
+  {t:'Falo com ele em particular depois da reunião', w:{conflito:2,respeito:1}},
+  {t:'Complemento na hora, dizendo o que eu tinha pensado', w:{voz:2}},
+  {t:'Deixo passar, porque o importante é a ideia andar', w:{colaboracao:1}}]),
+QS('E3.15',3,'Duas áreas estão travadas num desacordo e o trabalho parou. Ninguém pediu nada a você, mas você entende os dois lados. O que você faz?',[
+  {t:'Proponho uma conversa entre os dois com uma pauta', w:{mediacao:2,iniciativa:1}},
+  {t:'Levo o caso a quem tem autoridade para decidir', w:{sistemico:1}},
+  {t:'Não me envolvo, porque não é minha função', w:{}}]),
+F('E3.16',3,'Numa equipe, o que te faz render mais?',[
+  {t:'Saber exatamente o que se espera de mim', w:{clareza:1}},
+  {t:'Ter liberdade para decidir como fazer', w:{autonomia:1}}]),
+E('E3.17',3,'Eu noto quando o clima da equipe muda.',{percepcao:1}),
+E('E3.18',3,'Eu evito pedir ajuda para não parecer que não dou conta.',{pedido_ajuda:1},{inv:1}),
+E('E3.19',3,'Quando duas pessoas discordam, eu consigo ajudar as duas a se entenderem.',{mediacao:1}),
+
+/* ── Eixo 4 · Adaptação e aprendizagem ───────────────────── */
+E('E4.01',4,'Quando muda o processo, eu me adapto sem resistir.',{adaptacao:1}),
+E('E4.02',4,'Quando anunciam mudança, minha primeira reação é achar que vai dar errado.',{adaptacao:1},{inv:1}),
+E('E4.03',4,'Eu consigo trabalhar bem mesmo quando o plano muda no meio.',{flexibilidade:1}),
+QS('E4.04',4,'A empresa vai trocar o sistema que você usa há cinco anos. O novo é mais lento no começo. O que você faz?',[
+  {t:'Aprendo o novo e ajudo quem está travando', w:{adaptacao:2,colaboracao:1}},
+  {t:'Aprendo o novo e registro o que ficou pior, para melhorar', w:{adaptacao:1,voz:1}},
+  {t:'Uso o novo só no necessário e mantenho meu jeito onde der', w:{}}]),
+E('E4.05',4,'Quando preciso aprender algo novo, eu procuro por conta própria.',{metodo_aprender:1},{anc:1}),
+E('E4.06',4,'Eu aprendo ferramenta nova sem depender de treinamento formal.',{autonomia_aprender:1}),
+E('E4.07',4,'Eu procuro entender coisas do meu trabalho que ninguém me pediu para entender.',{curiosidade:1}),
+E('E4.08',4,'Quando aprendo algo útil, eu passo para a equipe.',{compartilhar:1}),
+E('E4.09',4,'Depois de um erro, eu volto e entendo o que aconteceu.',{recuperacao:1}),
+E('E4.10',4,'Quando levo uma crítica, fico mal por vários dias.',{resiliencia:1},{inv:1}),
+E('E4.11',4,'Eu consigo separar a crítica ao trabalho da crítica a mim.',{resiliencia:1}),
+QS('E4.12',4,'Um projeto que você conduziu não deu certo e a diretoria vai discutir o caso. O que você faz?',[
+  {t:'Levo a análise do que falhou, incluindo o que foi minha responsabilidade', w:{recuperacao:2,integridade:2}},
+  {t:'Levo a análise do que falhou, focando no que estava fora do meu controle', w:{recuperacao:1}},
+  {t:'Espero ser perguntado e respondo o que perguntarem', w:{}}]),
+D('E4.13',4,'Você pode assumir um projeto na sua zona de conforto, com sucesso quase garantido, ou um projeto novo em que pode não dar certo.',[
+  {t:'O novo, porque aprendo mais', w:{curiosidade:1,risco:1}},
+  {t:'O conhecido, porque a entrega é o que importa', w:{compromisso:1,qualidade:1}}]),
+P('E4.14',4,'Na questão anterior, o que mais pesou?',[
+  {t:'Meu desenvolvimento', w:{curiosidade:1}},
+  {t:'O resultado para a empresa', w:{compromisso:1}},
+  {t:'O risco de me expor', w:{seguranca_pessoal:1}},
+  {t:'A oportunidade de aparecer', w:{reconhecimento:1}}]),
+E('E4.16',4,'Eu mudo o meu jeito de trabalhar quando aparece um melhor.',{flexibilidade:1}),
+E('E4.17',4,'Eu sei como estudar uma coisa nova até realmente dominar.',{metodo_aprender:1}),
+E('E4.18',4,'Quando travo numa ferramenta, eu procuro a resposta antes de perguntar.',{autonomia_aprender:1}),
+E('E4.19',4,'Eu registro o que aprendi de um jeito que outra pessoa consiga usar.',{compartilhar:1}),
+E('E4.20',4,'Eu me incomodo em fazer alguma coisa sem entender bem como funciona.',{dominio:1}),
+F('E4.15',4,'O que te motiva mais no trabalho?',[
+  {t:'Ficar muito bom no que já faço', w:{dominio:1}},
+  {t:'Aprender coisas que ainda não sei', w:{curiosidade:1}}]),
+
+/* ── Eixo 5 · Iniciativa e melhoria ──────────────────────── */
+E('E5.01',5,'Já aconteceu de eu começar alguma coisa sem ninguém pedir.',{iniciativa:1},{anc:1}),
+E('E5.02',5,'Quando vejo algo que precisa ser feito, eu faço mesmo sem ser minha função.',{iniciativa:1,cidadania:1}),
+E('E5.03',5,'Eu espero a orientação chegar antes de agir.',{iniciativa:1},{inv:1}),
+E('E5.04',5,'Nos últimos três meses, propus alguma mudança no meu trabalho.',{melhoria:1}),
+E('E5.05',5,'Eu aviso quando vejo um problema se formando, antes de ele estourar.',{antecipacao:1}),
+E('E5.06',5,'Eu penso no que pode dar errado antes de começar.',{antecipacao:1,criterio:1}),
+QS('E5.07',5,'Você percebeu que um fornecedor está atrasando de forma consistente. Ainda não afetou nada, mas vai. Não é da sua alçada. O que você faz?',[
+  {t:'Levo o dado a quem cuida disso, com o histórico', w:{antecipacao:2,dados:1}},
+  {t:'Comento com meu líder e deixo com ele', w:{antecipacao:1}},
+  {t:'Aguardo, porque quem cuida disso deve estar vendo', w:{}}]),
+E('E5.08',5,'Eu proponho melhoria mesmo sabendo que vai dar trabalho para mim.',{melhoria:1,propriedade:1}),
+E('E5.09',5,'Quando algo do meu trabalho não funciona bem, eu tento resolver antes de reclamar.',{propriedade:1}),
+QS('E5.10',5,'Você identificou um desperdício que custa caro à empresa. Corrigir exige mexer no processo de outra área, que provavelmente vai resistir. O que você faz?',[
+  {t:'Levanto o valor do desperdício e apresento com números', w:{dados:2,melhoria:2}},
+  {t:'Converso primeiro com a outra área para entender por que é assim', w:{escuta:1,sistemico:1}},
+  {t:'Reporto ao meu líder e deixo a decisão com ele', w:{}}]),
+E('E5.11',5,'Eu digo o que precisa ser dito, mesmo quando é desconfortável.',{voz:1}),
+E('E5.12',5,'Já deixei de apontar um problema para não criar atrito.',{voz:1},{inv:1}),
+D('E5.13',5,'Você discorda de uma decisão da liderança. Falar pode gerar desgaste; não falar deixa o erro seguir.',[
+  {t:'Falo em particular, com a alternativa pronta', w:{voz:2,criterio:1}},
+  {t:'Cumpro e registro minha posição por escrito', w:{conformidade:1,transparencia:1}}]),
+P('E5.14',5,'Na questão anterior, o que mais pesou?',[
+  {t:'O resultado da empresa', w:{compromisso:1}},
+  {t:'Minha relação com a liderança', w:{relacao:1}},
+  {t:'Minha responsabilidade sobre o que sei', w:{integridade:1}},
+  {t:'O risco para mim', w:{seguranca_pessoal:1}}]),
+F('E5.15',5,'O que você prefere?',[
+  {t:'Executar bem o que foi definido', w:{compromisso:1}},
+  {t:'Participar de definir o que será feito', w:{iniciativa:1}}]),
+
+/* ── Eixo 6 · Ética e integridade ────────────────────────── */
+E('E6.01',6,'Eu cumpro o combinado mesmo quando ninguém verifica.',{integridade:1},{anc:1}),
+E('E6.02',6,'Eu registro meu horário como ele realmente foi.',{integridade:1}),
+E('E6.03',6,'Já usei recurso da empresa para assunto pessoal sem avisar.',{integridade:1,patrimonio:1},{inv:1}),
+E('E6.04',6,'Eu trato informação da empresa com o mesmo cuidado fora do trabalho.',{sigilo:1}),
+QS('E6.05',6,'Um amigo que trabalha em outra empresa do setor pergunta, num churrasco, quanto a sua empresa está cobrando num contrato grande. O que você faz?',[
+  {t:'Digo que não posso falar sobre isso', w:{sigilo:2}},
+  {t:'Falo por alto, sem número exato', w:{}},
+  {t:'Mudo de assunto', w:{sigilo:1}}]),
+QS('E6.06',6,'Você recebeu por engano um e-mail com a folha de pagamento da sua área. O que você faz?',[
+  {t:'Aviso quem enviou e apago sem ler', w:{sigilo:2,integridade:1}},
+  {t:'Apago sem ler e não comento', w:{sigilo:1}},
+  {t:'Leio, porque já está comigo', w:{}}]),
+E('E6.08',6,'Quando erro, eu assumo mesmo que dê para atribuir a outro.',{responsabilidade:1,integridade:1}),
+QS('E6.09',6,'Na avaliação de um fornecedor, o que oferece a melhor proposta é de um conhecido seu. A proposta é realmente a melhor. O que você faz?',[
+  {t:'Declaro a relação e peço que outra pessoa decida', w:{transparencia:2,justica:2}},
+  {t:'Declaro a relação e sustento a escolha com os números', w:{transparencia:2,dados:1}},
+  {t:'Escolho pela proposta, porque a relação não influenciou', w:{}}]),
+E('E6.10',6,'Se eu visse uma irregularidade, eu saberia a quem falar.',{canal:1}),
+E('E6.11',6,'Se eu visse uma irregularidade, eu falaria.',{coragem_moral:1}),
+D('E6.12',6,'Você descobriu que um colega próximo está descumprindo um procedimento de segurança. Ninguém se machucou ainda. Reportar cria problema para ele.',[
+  {t:'Falo com ele primeiro e dou prazo para regularizar', w:{coragem_moral:1,respeito:1}},
+  {t:'Reporto direto, porque é segurança', w:{coragem_moral:2,responsabilidade:1}}]),
+P('E6.13',6,'Na questão anterior, o que mais pesou?',[
+  {t:'O risco de alguém se machucar', w:{responsabilidade:1}},
+  {t:'A relação com o colega', w:{relacao:1}},
+  {t:'A regra existir', w:{conformidade:1}},
+  {t:'Minha parte se acontecer algo', w:{integridade:1}}]),
+F('E6.14',6,'O que é pior numa empresa?',[
+  {t:'Alguém levar vantagem sem ser notado', w:{justica:1}},
+  {t:'Todo mundo saber e ninguém falar', w:{coragem_moral:1}}]),
+E('E6.15',6,'Eu cuido do que é da empresa como cuidaria do que é meu.',{patrimonio:1}),
+E('E6.16',6,'Eu sei quais condutas aqui são consideradas inaceitáveis.',{canal:1,conformidade:1}),
+
+/* ── Eixo 7 · Liderança — condicional ────────────────────── */
+E('E7.01',7,'Eu delego e acompanho, em vez de fazer por conta própria.',{delegacao:1}),
+E('E7.02',7,'É mais rápido eu fazer do que explicar para alguém.',{delegacao:1},{inv:1}),
+E('E7.03',7,'Quando delego, eu deixo claro o que se espera e até quando.',{delegacao:1,clareza:1}),
+E('E7.04',7,'Eu digo o que não está bom, e não só o que está.',{devolutiva:1}),
+E('E7.05',7,'Quando dou uma devolutiva difícil, eu digo o que fazer diferente.',{devolutiva:1,desenvolvimento:1}),
+E('E7.06',7,'Eu reconheço publicamente o trabalho de quem fez.',{reconhecimento:1}),
+QS('E7.07',7,'Alguém da sua equipe vem entregando abaixo do que entregava. Você não sabe por quê. O que você faz?',[
+  {t:'Chamo para conversar e pergunto o que está acontecendo', w:{escuta:2,cuidado:2}},
+  {t:'Aponto o que caiu e combino o que precisa melhorar', w:{devolutiva:2}},
+  {t:'Espero mais um pouco para ver se recupera sozinho', w:{}}]),
+E('E7.08',7,'Alguém da minha equipe cresceu porque eu investi nisso.',{desenvolvimento:1}),
+E('E7.09',7,'Eu dou tarefa que faz a pessoa crescer, mesmo com risco de sair imperfeita.',{desenvolvimento:1,risco:1}),
+E('E7.10',7,'Eu sei o que cada pessoa da minha equipe quer desenvolver.',{desenvolvimento:1,escuta:1}),
+E('E7.11',7,'Eu decido quando precisa ser decidido, mesmo sem consenso.',{decisao_lideranca:1}),
+E('E7.12',7,'Eu explico o porquê da decisão, não só a decisão.',{transparencia:1,clareza:1}),
+QS('E7.14',7,'A diretoria tomou uma decisão que você acha errada e você precisa comunicá-la à equipe. O que você faz?',[
+  {t:'Comunico, digo que discordei e que vamos executar', w:{transparencia:2,representacao:1}},
+  {t:'Comunico sem revelar minha posição', w:{conformidade:1}},
+  {t:'Comunico e digo que também não concordo', w:{transparencia:1}}]),
+D('E7.15',7,'Um projeto exige alguém da sua equipe por três meses em outra área. É bom para a pessoa e ruim para você.',[
+  {t:'Libero, porque é o desenvolvimento dela', w:{desenvolvimento:2}},
+  {t:'Negocio prazo ou substituição antes de liberar', w:{planejamento:1,representacao:1}}]),
+P('E7.16',7,'Na questão anterior, o que mais pesou?',[
+  {t:'O crescimento da pessoa', w:{desenvolvimento:1}},
+  {t:'A entrega da minha área', w:{compromisso:1}},
+  {t:'A relação com a outra área', w:{colaboracao:1}},
+  {t:'O que é justo com quem fica', w:{justica:1}}]),
+E('E7.17',7,'Eu adio decisão difícil esperando que a situação se resolva.',{decisao_lideranca:1},{inv:1}),
+E('E7.18',7,'Eu percebo quando alguém da equipe não está bem, antes de a entrega cair.',{cuidado:1,percepcao:1}),
+E('E7.19',7,'Eu planejo a carga da equipe com antecedência, em vez de distribuir na urgência.',{planejamento:1}),
+
+/* ── Eixo 8 · Tecnologia e inovação ──────────────────────── */
+E('E8.01',8,'Eu uso os recursos das ferramentas da empresa além do básico.',{uso_ferramenta:1}),
+E('E8.02',8,'Faço em planilha à parte o que o sistema da empresa já faria.',{uso_ferramenta:1},{inv:1}),
+E('E8.03',8,'Quando aparece um recurso novo na ferramenta que uso, eu experimento.',{autonomia_digital:1,experimentacao:1}),
+E('E8.04',8,'Eu resolvo sozinho a maior parte dos problemas técnicos do meu trabalho.',{autonomia_digital:1}),
+QS('E8.05',8,'Você descobriu que a ferramenta que usa tem uma função que economizaria duas horas por semana da sua equipe. Ninguém sabe disso. O que você faz?',[
+  {t:'Aprendo, aplico e mostro à equipe como usar', w:{autonomia_digital:2,compartilhar:2}},
+  {t:'Aplico no meu trabalho e comento se alguém perguntar', w:{autonomia_digital:1}},
+  {t:'Anoto para ver com calma quando sobrar tempo', w:{}}]),
+E('E8.06',8,'Eu proponho soluções que ninguém tinha sugerido antes.',{criacao:1}),
+E('E8.07',8,'Quando um problema não tem solução pronta, eu construo uma.',{criacao:1,problemas:1}),
+E('E8.08',8,'Antes de tentar resolver, eu levanto o que já foi tentado.',{problemas:1,verificacao:1}),
+E('E8.09',8,'Prefiro seguir o procedimento existente a arriscar um caminho novo.',{criacao:1,experimentacao:1},{inv:1}),
+QS('E8.10',8,'Um processo da sua área foi desenhado há oito anos e ninguém sabe explicar por que é assim. Ele funciona, mas custa caro. O que você faz?',[
+  {t:'Levanto o custo e proponho um teste de outro caminho', w:{problemas:2,experimentacao:2,dados:1}},
+  {t:'Procuro quem desenhou para entender a razão original', w:{verificacao:1,sistemico:1}},
+  {t:'Mantenho, porque funcionar já é resultado', w:{}}]),
+E('E8.11',8,'Eu testo em pequena escala antes de mudar tudo.',{experimentacao:1,criterio:1}),
+E('E8.12',8,'Já implementei algo que não deu certo, e aprendi com isso.',{experimentacao:1,recuperacao:1}),
+D('E8.13',8,'Uma ferramenta nova promete ganho grande, mas exige três meses de adaptação e pode não funcionar aqui.',[
+  {t:'Proponho um piloto numa parte pequena da operação', w:{experimentacao:2,criterio:1}},
+  {t:'Espero outra empresa testar primeiro e observo o resultado', w:{critica_tec:2}}]),
+P('E8.14',8,'Na questão anterior, o que mais pesou?',[
+  {t:'O ganho possível', w:{experimentacao:1}},
+  {t:'O custo de três meses', w:{compromisso:1}},
+  {t:'O risco de não funcionar aqui', w:{critica_tec:1}},
+  {t:'O que a equipe aguentaria', w:{cuidado:1}}]),
+E('E8.15',8,'Quando uma ferramenta me dá um resultado, eu confiro antes de usar.',{critica_tec:1,verificacao:1}),
+E('E8.16',8,'Eu sei explicar o que a ferramenta que uso não consegue fazer.',{critica_tec:1}),
+QS('E8.17',8,'Uma tarefa que ocupava metade do seu dia passou a ser feita automaticamente. O que você faz com o tempo?',[
+  {t:'Assumo algo que eu não conseguia fazer antes por falta de tempo', w:{automacao:2,iniciativa:1}},
+  {t:'Aprofundo a qualidade do que já entrego', w:{automacao:2,qualidade:1}},
+  {t:'Aguardo a empresa definir o que fazer com esse tempo', w:{}}]),
+E('E8.21',8,'Quando uma ferramenta assume parte do meu trabalho, eu procuro o que fazer com o tempo que sobra.',{automacao:1,iniciativa:1}),
+E('E8.18',8,'Já compartilhei senha de sistema com colega para agilizar.',{seguranca_info:1},{inv:1}),
+E('E8.19',8,'Eu trato dado de cliente ou de colega com o cuidado que gostaria que tratassem o meu.',{seguranca_info:1,sigilo:1}),
+F('E8.20',8,'Diante de uma ferramenta nova, o que você faz primeiro?',[
+  {t:'Testo para descobrir o que ela faz', w:{experimentacao:1}},
+  {t:'Leio para entender antes de mexer', w:{metodo_aprender:1}}]),
+];
+
+/* ── contexto organizacional — não pontua a pessoa ───────── */
+const CTX = [
+ {id:'C.01', d:'clareza', q:'Eu sei claramente o que se espera de mim.'},
+ {id:'C.02', d:'clareza', q:'Eu sei como meu trabalho é avaliado.'},
+ {id:'C.03', d:'clareza', q:'As prioridades mudam sem que eu entenda por quê.', inv:1},
+ {id:'C.04', d:'devolutiva', q:'Meu líder me diz o que fazer diferente, não só o que está errado.'},
+ {id:'C.05', d:'devolutiva', q:'Recebo devolutiva sobre meu trabalho com alguma regularidade.'},
+ {id:'C.06', d:'devolutiva', q:'Quando faço algo bem, alguém percebe.'},
+ {id:'C.07', d:'desenvolvimento', q:'Eu tenho acesso à formação de que preciso.'},
+ {id:'C.08', d:'desenvolvimento', q:'Alguém já me ensinou como fazer, não só o que fazer.'},
+ {id:'C.09', d:'desenvolvimento', q:'Tenho tempo de trabalho para aprender coisas novas.'},
+ {id:'C.10', d:'condicoes', q:'Tenho as ferramentas necessárias para fazer bem o meu trabalho.'},
+ {id:'C.11', d:'condicoes', q:'O volume de trabalho é compatível com o tempo que tenho.'},
+ {id:'C.12', d:'condicoes', q:'As informações que preciso chegam a tempo.'},
+ {id:'C.13', d:'seguranca', q:'Aqui dá para discordar sem sofrer consequência.'},
+ {id:'C.14', d:'seguranca', q:'Quando alguém erra, o foco é resolver, não achar culpado.'},
+ {id:'C.15', d:'seguranca', q:'Eu me sentiria à vontade para reportar uma irregularidade.'},
+ {id:'C.16', d:'pertencimento', q:'Eu entendo como meu trabalho contribui para o resultado da empresa.'},
+ {id:'C.17', d:'pertencimento', q:'Eu me sinto parte da equipe em que trabalho.'},
+ {id:'C.18', d:'pertencimento', q:'Se eu tivesse outra proposta, eu pensaria antes de sair daqui.'},
+ {id:'C.19', d:'inovar', q:'Eu tenho as ferramentas digitais adequadas para o meu trabalho.'},
+ {id:'C.20', d:'inovar', q:'Aqui, propor mudança é bem recebido.'},
+ {id:'C.21', d:'inovar', q:'Quando uma tentativa não dá certo, o foco é aprender, não punir.'},
+];
+
+const DIM_CTX = {
+ clareza:        ['Clareza do que se espera','Saber o que se espera e como o trabalho é avaliado.'],
+ devolutiva:     ['Devolutiva recebida','Retorno sobre o trabalho, com orientação e não só correção.'],
+ desenvolvimento:['Acesso a desenvolvimento','Formação disponível e tempo para aprender.'],
+ condicoes:      ['Condições de trabalho','Ferramentas, informação e volume compatível com o tempo.'],
+ seguranca:      ['Segurança para falar','Poder discordar, errar e reportar sem sofrer consequência.'],
+ pertencimento:  ['Sentido e pertencimento','Entender a própria contribuição e querer ficar.'],
+ inovar:         ['Condições para inovar','Ferramenta adequada, proposta acolhida e erro tratado como aprendizado.'],
+};
+
+/* ── indicadores ─────────────────────────────────────────── */
+const IND = {
+ organizacao:['Organização do trabalho',1], priorizacao:['Priorização',1], conclusao:['Conclusão do que começa',1],
+ antecipacao_prazo:['Antecipação de prazo',1], aviso_previo:['Aviso antes do problema',1], compromisso:['Cumprimento do combinado',1],
+ revisao:['Revisão antes de entregar',1], qualidade:['Padrão de qualidade',1], constancia:['Constância sob pressão',1],
+ autonomia:['Autonomia de execução',1],
+ causa:['Busca de causa',2], interpretacao:['Interpretação de informação',2], logico_mat:['Raciocínio quantitativo',2],
+ decisao_incerteza:['Decisão com dado incompleto',2], criterio:['Explicação do critério',2], sistemico:['Visão sistêmica',2],
+ verificacao:['Verificação antes de agir',2], dados:['Uso de dado',2], transparencia:['Registro e transparência',2],
+ comunicacao:['Comunicação no trabalho',3], escuta:['Escuta',3], percepcao:['Percepção do outro',3],
+ colaboracao:['Colaboração',3], cidadania:['Contribuição além do escopo',3], pedido_ajuda:['Pedido de ajuda',3],
+ voz:['Dizer o que precisa ser dito',3], conflito:['Manejo de conflito',3], mediacao:['Mediação',3],
+ respeito:['Respeito no trato',3], clareza:['Necessidade de clareza',3],
+ adaptacao:['Abertura à mudança',4], flexibilidade:['Flexibilidade',4], metodo_aprender:['Método de aprender',4],
+ autonomia_aprender:['Aprender por conta própria',4], curiosidade:['Curiosidade profissional',4],
+ compartilhar:['Compartilhar o que aprende',4], recuperacao:['Recuperação após erro',4], resiliencia:['Resiliência à crítica',4],
+ risco:['Disposição ao risco',4], dominio:['Busca de domínio',4],
+ iniciativa:['Iniciativa',5], melhoria:['Proposta de melhoria',5], antecipacao:['Antecipação de problema',5],
+ propriedade:['Senso de propriedade',5], relacao:['Peso da relação na decisão',5], seguranca_pessoal:['Peso do risco pessoal',5],
+ reconhecimento:['Reconhecimento',5],
+ integridade:['Integridade',6], patrimonio:['Cuidado com o patrimônio',6], sigilo:['Tratamento de informação',6],
+ justica:['Justiça no trato',6], responsabilidade:['Assumir a própria parte',6], canal:['Conhecimento do canal',6],
+ coragem_moral:['Coragem de reportar',6], conformidade:['Peso da regra',6],
+ delegacao:['Delegação',7], devolutiva:['Devolutiva',7], desenvolvimento:['Desenvolvimento de pessoas',7],
+ decisao_lideranca:['Decisão de liderança',7], representacao:['Representação da equipe',7],
+ cuidado:['Cuidado com a pessoa',7], planejamento:['Planejamento de equipe',7],
+ uso_ferramenta:['Uso das ferramentas disponíveis',8], autonomia_digital:['Autonomia digital',8],
+ criacao:['Criação',8], problemas:['Resolução de problemas',8],
+ experimentacao:['Disposição a experimentar',8], critica_tec:['Discernimento tecnológico',8],
+ automacao:['Relação com a automação',8], seguranca_info:['Segurança da informação',8],
+};
+
+const EIXOS = [
+ {n:1, t:'Entrega e método',          cor:'#2E5C7E', d:'Como a pessoa organiza, cumpre e mantém a qualidade do que entrega.'},
+ {n:2, t:'Análise e decisão',         cor:'#6B5B95', d:'Interpretar informação, encontrar causa e decidir com dado incompleto.'},
+ {n:3, t:'Relação e colaboração',     cor:'#2E7D5B', d:'Comunicar, escutar, colaborar e sustentar divergência.'},
+ {n:4, t:'Adaptação e aprendizagem',  cor:'#5D8FB3', d:'Reagir à mudança, aprender sozinho e se recuperar de erro.'},
+ {n:5, t:'Iniciativa e melhoria',     cor:'#C8891A', d:'Fazer sem ser pedido, antecipar problema e propor melhoria.'},
+ {n:6, t:'Ética e integridade',       cor:'#C25A45', d:'Conduta, sigilo, justiça e coragem de reportar.'},
+ {n:7, t:'Liderança',                 cor:'#0C1B2A', d:'Delegar, dar devolutiva, desenvolver e decidir por um grupo.', cond:1},
+ {n:8, t:'Tecnologia e inovação',     cor:'#8A4FBF', d:'Usar o que existe, criar o que não existe e desconfiar com critério.'},
+];
+</script>
+
+
+<script>
+/* =====================================================================
+   Motor de cálculo
+   ===================================================================== */
+
+const Q_EIXO = n => BANCO.filter(q=>q.e===n);
+const Q_POR_ID = Object.fromEntries(BANCO.map(q=>[q.id,q]));
+
+/* itens que alimentam cada indicador */
+const ITENS_IND = (()=>{
+  const m = {};
+  BANCO.forEach(q=>{
+    const pesos = q.t==='esc' ? [q.w||{}] : (q.ops||[]).map(o=>o.w||{});
+    pesos.forEach(p=>{ for(const k in p){ (m[k] = m[k] || new Set()).add(q.id); } });
+  });
+  for(const k in m) m[k] = [...m[k]];
+  return m;
+})();
+
+/* calcula indicadores a partir das respostas
+   respostas: { 'E1.01': 3, 'E1.08': 0, ... }  índice da alternativa ou ponto da escala */
+function calcular(resp){
+  const acum = {}, cont = {};
+  BANCO.forEach(q=>{
+    const r = resp[q.id];
+    if(r === undefined || r === null) return;
+    if(q.t === 'esc'){
+      let v = r * 25;                       /* 0..4 → 0..100 */
+      if(q.inv) v = 100 - v;
+      for(const k in q.w){
+        acum[k] = (acum[k]||0) + v * q.w[k];
+        cont[k] = (cont[k]||0) + q.w[k];
+      }
+    } else {
+      const op = (q.ops||[])[r];
+      if(!op) return;
+      const maxP = Math.max(1, ...(q.ops||[]).flatMap(o=>Object.values(o.w||{})));
+      const chaves = new Set((q.ops||[]).flatMap(o=>Object.keys(o.w||{})));
+      chaves.forEach(k=>{
+        const p = (op.w||{})[k] || 0;
+        acum[k] = (acum[k]||0) + (p / maxP) * 100;
+        cont[k] = (cont[k]||0) + 1;
+      });
+    }
+  });
+  const pct = {};
+  for(const k in acum) if(cont[k] >= 2) pct[k] = Math.round(acum[k] / cont[k]);
+  return pct;
+}
+
+/* média por eixo */
+function porEixo(pct){
+  const r = {};
+  EIXOS.forEach(e=>{
+    const vs = Object.keys(IND).filter(k=>IND[k][1]===e.n && pct[k]!==undefined).map(k=>pct[k]);
+    if(vs.length) r[e.n] = Math.round(media(vs));
+  });
+  return r;
+}
+
+/* contexto organizacional */
+function calcCtx(respCtx){
+  const acum = {}, cont = {};
+  CTX.forEach(c=>{
+    const r = respCtx[c.id];
+    if(r === undefined) return;
+    let v = r * 25;
+    if(c.inv) v = 100 - v;
+    acum[c.d] = (acum[c.d]||0) + v;
+    cont[c.d] = (cont[c.d]||0) + 1;
+  });
+  const d = {};
+  for(const k in acum) d[k] = Math.round(acum[k]/cont[k]);
+  return d;
+}
+
+/* ── base simulada ──────────────────────────────────────── */
+const AREAS_EMP = [
+ {n:'Produção',      perfil:'medio',  ctx:'medio',  qtd:34},
+ {n:'Logística',     perfil:'medio',  ctx:'fragil', qtd:22},
+ {n:'Comercial',     perfil:'forte',  ctx:'forte',  qtd:19},
+ {n:'Administrativo',perfil:'medio',  ctx:'medio',  qtd:16},
+ {n:'Manutenção',    perfil:'fragil', ctx:'fragil', qtd:14},
+ {n:'Qualidade',     perfil:'forte',  ctx:'medio',  qtd:11},
+ {n:'Tecnologia',    perfil:'forte',  ctx:'forte',  qtd:9},
+ {n:'Recursos Humanos', perfil:'medio', ctx:'forte', qtd:7},
+];
+const NOMES_E = ['Ana','Bruno','Carla','Diego','Elaine','Fábio','Gabriela','Henrique','Isabel','João','Karina','Lucas',
+ 'Márcia','Nelson','Olívia','Paulo','Queila','Rafael','Simone','Tiago','Úrsula','Vinícius','Wanda','Yuri','Zilda',
+ 'Adriana','Bernardo','Cristina','Daniel','Eduarda','Felipe','Giovana','Hugo','Iara','Jonas','Kelly','Leandro','Mônica'];
+const SOBRE_E = ['Almeida','Barbosa','Cardoso','Duarte','Esteves','Ferreira','Gomes','Henriques','Ibrahim','Jardim',
+ 'Klein','Lima','Machado','Nunes','Oliveira','Pacheco','Quirino','Ramos','Santana','Teixeira','Ueda','Vieira','Xavier'];
+
+const BASE_PERFIL = {
+ forte:  {m:62, s:13, lider:.30},
+ medio:  {m:52, s:14, lider:.22},
+ fragil: {m:43, s:14, lider:.18},
+};
+const BASE_CTX = { forte:{m:68,s:10}, medio:{m:54,s:12}, fragil:{m:40,s:13} };
+
+/* viés por eixo em cada área — é o que faz as áreas terem perfis diferentes.
+   Sem isso, o ruído se cancela na média e todos os eixos ficam iguais. */
+const VIES_AREA = {
+ 'Produção':       {1:+8, 2:-5, 3:-2, 4:-4, 5:-6, 6:+4, 7:0},
+ 'Logística':      {1:+6, 2:-2, 3:-4, 4:-6, 5:-5, 6:+3, 7:-3},
+ 'Comercial':      {1:-4, 2:+2, 3:+9, 4:+4, 5:+8, 6:-3, 7:+4},
+ 'Administrativo': {1:+5, 2:+3, 3:0,  4:-3, 5:-7, 6:+6, 7:-2},
+ 'Manutenção':     {1:+2, 2:+5, 3:-7, 4:-2, 5:-3, 6:+2, 7:-5},
+ 'Qualidade':      {1:+9, 2:+7, 3:-3, 4:-2, 5:-2, 6:+8, 7:0},
+ 'Tecnologia':     {1:-2, 2:+10,3:-4, 4:+9, 5:+5, 6:0,  7:+2},
+ 'Recursos Humanos':{1:0, 2:-2, 3:+10,4:+3, 5:+2, 6:+5, 7:+6},
+};
+
+let _cacheBase = null;
+function baseEmpresa(){
+  if(_cacheBase) return _cacheBase;
+  const r = rng(4242);
+  const out = [];
+  let id = 1;
+  AREAS_EMP.forEach((A, ai)=>{
+    const P = BASE_PERFIL[A.perfil], X = BASE_CTX[A.ctx];
+    for(let i=0;i<A.qtd;i++){
+      const desvio = (r()+r()+r()-1.5) * 2;             /* aproxima normal */
+      const pessoal = clamp(P.m + desvio * P.s, 12, 96);
+      /* cada pessoa tem forças próprias, além do viés da área */
+      const meuEixo = {};
+      EIXOS.forEach(e=>{ meuEixo[e.n] = (r()+r()+r()-1.5) * 9; });
+      const V = VIES_AREA[A.n] || {};
+      const pct = {};
+      Object.keys(IND).forEach(k=>{
+        const ex = IND[k][1];
+        const ruido = (r()+r()+r()-1.5) * 9;
+        pct[k] = Math.round(clamp(pessoal + (V[ex]||0) + meuEixo[ex] + ruido, 5, 99));
+      });
+      const lider = r() < P.lider;
+      if(!lider) Object.keys(IND).filter(k=>IND[k][1]===7).forEach(k=>delete pct[k]);
+      const ctx = {};
+      Object.keys(DIM_CTX).forEach(d=>{
+        ctx[d] = Math.round(clamp(X.m + (r()+r()+r()-1.5)*X.s, 5, 99));
+      });
+      out.push({
+        id: 'F' + String(id++).padStart(4,'0'),
+        nome: NOMES_E[Math.floor(r()*NOMES_E.length)] + ' ' + SOBRE_E[Math.floor(r()*SOBRE_E.length)],
+        area: A.n, lider, tempo: 1 + Math.floor(r()*12),
+        pct, ctx, eixos: porEixo(pct),
+      });
+    }
+  });
+  _cacheBase = out;
+  return out;
+}
+
+/* agregação por área */
+function agregaArea(base, area){
+  const g = area ? base.filter(p=>p.area===area) : base;
+  if(!g.length) return null;
+  const eixos = {}, ctx = {}, ind = {};
+  EIXOS.forEach(e=>{
+    const vs = g.map(p=>p.eixos[e.n]).filter(v=>v!==undefined);
+    if(vs.length >= 3) eixos[e.n] = Math.round(media(vs));
+  });
+  Object.keys(DIM_CTX).forEach(d=>{ ctx[d] = Math.round(media(g.map(p=>p.ctx[d]))); });
+  Object.keys(IND).forEach(k=>{
+    const vs = g.map(p=>p.pct[k]).filter(v=>v!==undefined);
+    if(vs.length >= 3) ind[k] = Math.round(media(vs));
+  });
+  return {n:g.length, eixos, ctx, ind, pessoas:g, lideres:g.filter(p=>p.lider).length};
+}
+</script>
+
+
+<script>
+/* =====================================================================
+   Estado, roteador e navegação
+   ===================================================================== */
+const PAGINAS = {};
+let rhLiberado = false, areaSel = 'todas', pessoaSel = null, abaRH = 'painel';
+let S = { dados:{}, resp:{}, ctx:{}, etapa:0, iniciado:false, concluido:false, lider:null };
+
+const MENU = [
+ ['/', 'Início'], ['/como', 'Como funciona'], ['/eixos', 'O que medimos'],
+ ['/contexto', 'O contexto'], ['/limites', 'Limites e ética'], ['/empresas', 'Para empresas'],
+];
+
+function topo(){
+  const r = rota();
+  return `<header class="topo"><div class="wrap">
+    <a class="marca" href="#/"><span class="sig">M</span>
+      <span><b>MAPA Corporativo</b><span>Desenvolvimento de competências</span></span></a>
+    <nav class="menu">
+      ${MENU.map(([h,t])=>`<a href="#${h}" class="${r===h?'on':''}">${t}</a>`).join('')}
+      <a href="#/painel" class="${r==='/painel'?'on':''}">${rhLiberado?'Painel':'Entrar'}</a>
+      ${admLiberado? `<a href="#/admin" class="${r==='/admin'?'on':''}">Admin</a>`:''}
+      <a href="#/aplicar" class="cta">Responder</a>
+    </nav>
+  </div></header>`;
+}
+function rodape(){
+  return `<footer class="rod"><div class="wrap">
+    <div class="grid g3">
+      <div><h4>MAPA Corporativo</h4>
+        <p style="margin:0">Instrumento de desenvolvimento de competências profissionais. Mede o que está por trás do resultado — e separa o que é da pessoa do que é da organização.</p></div>
+      <div><h4>O que ele não é</h4>
+        <p style="margin:0">Não é teste psicológico, não serve para seleção, e não deve ser usado em decisão de promoção, corte ou remuneração.</p></div>
+      <div><h4>Estado do instrumento</h4>
+        <p style="margin:0">Protótipo com dados simulados. Ainda não passou por validação psicométrica.</p></div>
+    </div>
+    <p style="margin:1.6rem 0 0;font-size:.8rem;opacity:.65">Escola de Líderes · Mato Grosso · ${new Date().getFullYear()}</p>
+  </div></footer>`;
+}
+const rota = () => (location.hash.replace('#','') || '/').split('?')[0];
+
+function render(){
+  const r = rota();
+  const p = PAGINAS[r] || PAGINAS['/'];
+  document.getElementById('topo').innerHTML = topo();
+  document.getElementById('app').innerHTML = p();
+  document.getElementById('rodape').innerHTML = rodape();
+}
+window.addEventListener('hashchange', ()=>{ render(); window.scrollTo(0,0); });
+
+/* =====================================================================
+   Páginas públicas
+   ===================================================================== */
+
+PAGINAS['/'] = () => `
+<section class="sec"><div class="wrap">
+  <div class="grid g2" style="align-items:center;gap:2.5rem">
+    <div>
+      <p class="eyebrow">Instrumento de desenvolvimento</p>
+      <h1>A avaliação de desempenho diz o resultado.<br>Ela não diz o que está por trás dele.</h1>
+      <p class="lead" style="margin-top:1rem">Duas pessoas entregam abaixo do esperado. Uma não sabe organizar o tempo. A outra sabe, e trabalha num setor onde a prioridade muda toda semana. O relatório é o mesmo — e cada solução acerta a pessoa errada.</p>
+      <div style="display:flex;gap:.7rem;margin-top:1.6rem;flex-wrap:wrap">
+        <a class="btn" href="#/aplicar">Responder o instrumento</a>
+        <a class="btn btn-sec" href="#/empresas">Ver o que a empresa recebe</a>
+      </div>
+    </div>
+    <div class="card" style="padding:1.8rem">
+      <p class="coord">O que o instrumento devolve</p>
+      ${[['Ao profissional','O próprio perfil, com um plano de 90 dias. A empresa não vê este documento.'],
+         ['Ao líder','O retrato da equipe, e o que é problema local contra o que é da organização inteira.'],
+         ['Ao RH','O mapa por área — e onde a organização está impedindo a competência de aparecer.'],
+         ['À diretoria','O deslocamento depois da formação. A única prestação de contas honesta em desenvolvimento de pessoas.']]
+        .map(([a,b])=>`<div style="padding:.75rem 0;border-bottom:1px solid var(--linha2)">
+          <b style="font-size:.94rem">${a}</b>
+          <p style="margin:.2rem 0 0;font-size:.88rem;color:var(--tinta2)">${b}</p></div>`).join('')}
+    </div>
+  </div>
+
+  <div class="divisor"></div>
+  <h2>Por que agora</h2>
+  <div class="grid g3" style="margin-top:1.2rem">
+    <div class="card"><p class="coord">Confederação Nacional da Indústria</p>
+      <b style="font-family:var(--disp);font-size:1.7rem;display:block;color:var(--azul)">23,1%</b>
+      <p style="margin:.3rem 0 0;font-size:.9rem;color:var(--tinta2)">das indústrias citaram falta de trabalhador qualificado como um dos principais entraves no quarto trimestre de 2025 — o maior nível da série iniciada em 2015. Entre pequenas empresas, 28,4%.</p></div>
+    <div class="card"><p class="coord">Mapa do Trabalho Industrial</p>
+      <b style="font-family:var(--disp);font-size:1.7rem;display:block;color:var(--azul)">3 em 5</b>
+      <p style="margin:.3rem 0 0;font-size:.9rem;color:var(--tinta2)">trabalhadores precisarão de treinamento até 2027, principalmente para alinhar competências às demandas das empresas.</p></div>
+    <div class="card"><p class="coord">Fórum Econômico Mundial</p>
+      <b style="font-family:var(--disp);font-size:1.7rem;display:block;color:var(--azul)">39%</b>
+      <p style="margin:.3rem 0 0;font-size:.9rem;color:var(--tinta2)">das competências-chave devem mudar até 2030. E quatro das cinco mais valorizadas são comportamentais — justamente as que a empresa não sabe medir.</p></div>
+  </div>
+
+  <div class="card dest" style="margin-top:1.4rem">
+    <p style="margin:0"><b>A convergência.</b> A empresa precisa treinar muita gente, em competências que não sabe medir, e precisa medir de novo depois porque o alvo se move. É esse o espaço que este instrumento ocupa.</p>
+  </div>
+
+  <div class="divisor"></div>
+  <h2>O que separa este instrumento dos testes de perfil</h2>
+  <div class="grid g2" style="margin-top:1.2rem">
+    <div class="card">
+      <h3>Ele mede a organização também</h3>
+      <p style="margin:.5rem 0 0;color:var(--tinta2)">Vinte e uma perguntas descrevem a empresa e a liderança direta, e <b>são retiradas do cálculo</b> antes de qualquer leitura sobre a pessoa. Um profissional com iniciativa baixa pode ser alguém sem iniciativa — ou alguém cuja iniciativa foi punida três vezes.</p>
+      <p style="margin:.6rem 0 0;color:var(--tinta2)">Sem essa separação, o instrumento mede a organização e atribui o resultado à pessoa.</p>
+    </div>
+    <div class="card">
+      <h3>O resultado é de quem respondeu</h3>
+      <p style="margin:.5rem 0 0;color:var(--tinta2)">A empresa contrata a aplicação, não o conteúdo individual. Ela recebe agregados por área; o relatório individual é da pessoa.</p>
+      <p style="margin:.6rem 0 0;color:var(--tinta2)">Isso não é escrúpulo: é o que garante resposta honesta. Quem responde achando que o emprego depende disso responde o que acha que se espera — e aí não se mede nada.</p>
+    </div>
+  </div>
+</div></section>`;
+
+PAGINAS['/como'] = () => `
+<section class="sec"><div class="wrap">
+  <p class="eyebrow">Como funciona</p>
+  <h1>Uma aplicação, quatro leituras</h1>
+  <p class="lead" style="margin-top:.8rem">O mesmo conjunto de respostas alimenta o relatório do profissional, o da equipe, o do RH e o da diretoria. Cada um vê o recorte que corresponde à sua responsabilidade.</p>
+
+  <div class="grid g4" style="margin-top:1.6rem">
+    ${[['1','Aplicação','162 questões em cinco etapas, com pausa. Cerca de 68 minutos.'],
+       ['2','Leitura','Cada pessoa recebe a sua. Cada líder, o retrato da equipe. O RH consolida.'],
+       ['3','Decisão','Duas ou três competências prioritárias por área. Nunca mais que isso.'],
+       ['4','Formação','Trilhas e desafios práticos nas competências escolhidas.'],
+       ['5','Reaplicação','Seis ou doze meses. O deslocamento é a prova de que a formação funcionou.']]
+      .map(([n,t,d])=>`<div class="card">
+        <span class="tag">ETAPA ${n}</span>
+        <h3 style="margin:.5rem 0 .3rem">${t}</h3>
+        <p style="margin:0;font-size:.88rem;color:var(--tinta2)">${d}</p></div>`).join('')}
+  </div>
+
+  <div class="divisor"></div>
+  <h2>Os seis formatos de questão</h2>
+  <p style="color:var(--tinta2);max-width:74ch">A variedade não é enfeite: cada formato mede algo que os outros não alcançam, e alguns existem especificamente para reduzir a resposta socialmente desejável.</p>
+  <div class="grid g3" style="margin-top:1.2rem">
+    ${[['Escala de frequência','Com que frequência um comportamento acontece.','Quando o prazo aperta, eu aviso antes de estourar.'],
+       ['Situação de trabalho','Caso curto com três ações plausíveis.','Você percebeu um erro num relatório já enviado ao cliente. O que faz?'],
+       ['Dilema profissional','Duas opções com custo real. Não há resposta certa.','Cumprir o prazo com qualidade menor, ou atrasar e entregar completo?'],
+       ['Preferência forçada','Duas opções igualmente aceitáveis, para reduzir desejabilidade.','Você prefere autonomia ou clareza do que se espera?'],
+       ['Raciocínio aplicado','Interpretação de número e tabela do cotidiano de trabalho.','O retrabalho caiu de 12% para 9%. Isso é uma queda de 3%?'],
+       ['Fonte da decisão','Depois da escolha, o que pesou nela. Mede critério, não ação.','O prazo, a qualidade, o efeito sobre quem vem depois, ou a expectativa do líder?']]
+      .map(([t,d,ex])=>`<div class="card">
+        <h3>${t}</h3>
+        <p style="margin:.4rem 0 .5rem;font-size:.88rem;color:var(--tinta2)">${d}</p>
+        <p style="margin:0;font-size:.85rem;font-style:italic;color:var(--tinta3);border-left:2px solid var(--linha);padding-left:.7rem">${ex}</p></div>`).join('')}
+  </div>
+
+  <div class="card info" style="margin-top:1.4rem">
+    <p style="margin:0"><b>Sobre os itens invertidos.</b> Cerca de um em cada oito é escrito ao contrário — <i>eu começo várias coisas e termino poucas</i>. Existem para quebrar a resposta automática: sem eles, quem marca a mesma opção em tudo passaria despercebido.</p>
+  </div>
+</div></section>`;
+
+PAGINAS['/eixos'] = () => `
+<section class="sec"><div class="wrap">
+  <p class="eyebrow">O que medimos</p>
+  <h1>Oito eixos, 70 indicadores</h1>
+  <p class="lead" style="margin-top:.8rem">A estrutura parte de quatro fontes: as competências que a pesquisa em psicologia organizacional identifica como preditoras de desempenho, as que o mercado declara valorizar, o estudo do Polo de Liderança Sebrae sobre perfis brasileiros, e a continuidade com o instrumento aplicado em estudantes.</p>
+
+  <div class="grid g2" style="margin-top:1.6rem">
+    ${EIXOS.map(e=>{
+      const inds = Object.keys(IND).filter(k=>IND[k][1]===e.n);
+      const qs = BANCO.filter(q=>q.e===e.n).length;
+      return `<div class="card" style="border-left:3px solid ${e.cor}">
+        <p class="coord">Eixo ${e.n}${e.cond?' · condicional':''}</p>
+        <h3>${e.t}</h3>
+        <p style="margin:.4rem 0 .7rem;color:var(--tinta2);font-size:.92rem">${e.d}</p>
+        <div class="chips">${inds.map(k=>`<span class="tag">${IND[k][0]}</span>`).join('')}</div>
+        <p style="margin:.7rem 0 0;font-family:var(--mono);font-size:.7rem;color:var(--tinta3)">${qs} QUESTÕES · ${inds.length} INDICADORES</p>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <div class="card aviso" style="margin-top:1.4rem">
+    <b>O eixo 7 é condicional.</b> Só responde quem exerce liderança formal, quem coordena informalmente, ou quem manifesta interesse em assumir. Aplicar a quem não lidera mede aspiração, não competência.
+  </div>
+
+  <div class="divisor"></div>
+  <h2>A fundamentação de cada eixo</h2>
+  <div class="card" style="margin-top:1rem">
+    ${[['Entrega e método','Conscienciosidade é o traço com correlação mais consistente com desempenho no trabalho — mais estável que inteligência em muitas ocupações.','Barrick e Mount, 1991 · Schmidt e Hunter, 1998'],
+       ['Análise e decisão','Pensamento crítico e decisão em contexto real, com dado incompleto e sob pressão de tempo.','Facione, 1990 · Klein, 1998'],
+       ['Relação e colaboração','A variável que mais explica desempenho de equipe não é a competência individual dos membros, mas a segurança do grupo para errar e falar.','Edmondson, 1999 · Salas, 2005'],
+       ['Adaptação e aprendizagem','Agilidade de aprendizagem e resiliência. Sobre mentalidade de crescimento, vale a ressalva de que replicações recentes encontraram efeitos menores que os originais.','DeRue, 2012 · Masten, 2001 · Dweck, 2006'],
+       ['Iniciativa e melhoria','Iniciativa pessoal prediz desempenho acima do que a conscienciosidade explica sozinha. São coisas distintas.','Frese e Fay, 2001 · Organ, 1988'],
+       ['Ética e integridade','Desenvolvimento moral e ética comportamental em organizações.','Rest, 1986 · Treviño, 2006'],
+       ['Liderança','Liderança transformacional e estilos de condução. Não mede tipo de líder: mede repertório, porque quem é diretivo numa crise e participativo no planejamento tem repertório, não duas personalidades.','Bass, 1985 · Hersey e Blanchard · Goleman, 2000 · Sebrae'],
+       ['Tecnologia e inovação','Adoção de tecnologia e criatividade em contexto. Duas das quatro determinantes de uso de uma ferramenta são do ambiente, não da pessoa — e por isso o eixo vem acompanhado de perguntas de contexto próprias.','Rogers, 1962 · Venkatesh, 2003 · Amabile, 1996']]
+      .map(([t,d,f])=>`<div style="padding:.85rem 0;border-bottom:1px solid var(--linha2)">
+        <b style="font-size:.95rem">${t}</b>
+        <p style="margin:.25rem 0 .3rem;font-size:.9rem;color:var(--tinta2)">${d}</p>
+        <p style="margin:0;font-family:var(--mono);font-size:.72rem;color:var(--tinta3)">${f}</p></div>`).join('')}
+  </div>
+</div></section>`;
+
+PAGINAS['/contexto'] = () => `
+<section class="sec"><div class="wrap">
+  <p class="eyebrow">O contexto organizacional</p>
+  <h1>Vinte e uma perguntas que descrevem a empresa,<br>e não a pessoa</h1>
+  <p class="lead" style="margin-top:.8rem">Este é o elemento que diferencia o instrumento de qualquer teste de perfil. E a regra que o governa é absoluta: <b>essas respostas são retiradas do cálculo</b> antes de qualquer leitura individual.</p>
+
+  <div class="card dest" style="margin-top:1.4rem">
+    <p style="margin:0"><b>Por que existe.</b> Um profissional com iniciativa baixa pode ser uma pessoa sem iniciativa — ou uma pessoa cuja iniciativa foi punida três vezes. Alguém com método fraco pode ser desorganizado, ou pode ser alguém a quem ninguém ensinou. Sem separar o contexto, o instrumento mede a organização e cobra da pessoa.</p>
+  </div>
+
+  <div class="grid g3" style="margin-top:1.4rem">
+    ${Object.entries(DIM_CTX).map(([k,[t,d]])=>{
+      const itens = CTX.filter(c=>c.d===k);
+      return `<div class="card">
+        <h3>${t}</h3>
+        <p style="margin:.35rem 0 .6rem;font-size:.88rem;color:var(--tinta2)">${d}</p>
+        ${itens.map(c=>`<p style="margin:0 0 .3rem;font-size:.85rem;color:var(--tinta3);border-left:2px solid var(--linha2);padding-left:.6rem">${esc(c.q)}${c.inv?' <span class="tag">invertida</span>':''}</p>`).join('')}
+      </div>`;
+    }).join('')}
+  </div>
+
+  <div class="divisor"></div>
+  <h2>A leitura que isso permite</h2>
+  <p style="color:var(--tinta2);max-width:74ch">Cruzar o eixo da pessoa com a dimensão do contexto é a inteligência central do instrumento — e o que nenhum teste de perfil faz.</p>
+  <div class="grid g3" style="margin-top:1.2rem">
+    ${[['Iniciativa baixa + segurança para falar baixa','O problema não é das pessoas. Ninguém arrisca onde arriscar custa caro.'],
+       ['Método baixo + acesso a desenvolvimento baixo','Ninguém ensinou. Cobrar método de quem nunca aprendeu é injusto e ineficaz.'],
+       ['Constância baixa + condições de trabalho baixas','É carga, não competência. Formação não resolve o que é volume.'],
+       ['Colaboração baixa + clareza baixa','Não é falta de disposição. É gente sem saber quem faz o quê.'],
+       ['Voz baixa + devolutiva recebida baixa','Quem nunca recebeu retorno aprende que falar não muda nada.'],
+       ['Todos os eixos baixos + contexto alto','Aí sim, é hora de olhar para desenvolvimento individual.']]
+      .map(([t,d])=>`<div class="card info">
+        <b style="font-size:.88rem;display:block;margin-bottom:.3rem;color:var(--azul)">${t}</b>
+        <p style="margin:0;font-size:.87rem;color:var(--tinta2)">${d}</p></div>`).join('')}
+  </div>
+
+  <div class="aviso" style="margin-top:1.4rem">
+    <b>Sobre a pergunta mais sensível.</b> O item C.18 — <i>se eu tivesse outra proposta, eu pensaria antes de sair daqui</i> — é o mais valioso para a empresa e o que mais exige cuidado. Só aparece agregado, e apenas em áreas com no mínimo cinco respondentes. Nunca deve ser possível identificar quem respondeu o quê.
+  </div>
+</div></section>`;
+
+PAGINAS['/limites'] = () => `
+<section class="sec"><div class="wrap">
+  <p class="eyebrow">Limites e ética</p>
+  <h1>O que este instrumento não faz</h1>
+  <p class="lead" style="margin-top:.8rem">Esta página existe porque um instrumento que mede pessoas em contexto de trabalho precisa ser explícito sobre os próprios limites. Ela não é rodapé: é condição de uso.</p>
+
+  <div class="grid g2" style="margin-top:1.6rem">
+    <div class="card" style="border-left:3px solid var(--coral)">
+      <h3>Não serve para decisão sobre a pessoa</h3>
+      <p style="margin:.5rem 0 0;color:var(--tinta2)">Não deve ser usado em seleção, promoção, corte, remuneração ou realocação. E a razão é dupla: usar instrumento comportamental para decidir emprego entra em terreno regulado, e — o que importa mais na prática — quem responde sob risco responde defensivamente, e o dado deixa de valer.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--coral)">
+      <h3>Não foi validado</h3>
+      <p style="margin:.5rem 0 0;color:var(--tinta2)">Faltam validade de conteúdo por painel de especialistas, estudo piloto, análise fatorial confirmatória, confiabilidade por eixo, invariância de medida entre grupos e validade preditiva. A fundamentação teórica sustenta o desenho; ela não substitui evidência.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--ambar)">
+      <h3>É autorrelato</h3>
+      <p style="margin:.5rem 0 0;color:var(--tinta2)">Mede a percepção da pessoa sobre o próprio trabalho, não o desempenho observado. Isso é limitação real — e é também por isso que não serve para avaliar.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--ambar)">
+      <h3>Não é teste psicológico</h3>
+      <p style="margin:.5rem 0 0;color:var(--tinta2)">Não mede traço de personalidade, não diagnostica nada e não substitui avaliação profissional. Sua aplicação não exige formação em psicologia — e justamente por isso não pode ser apresentado como se fosse.</p>
+    </div>
+  </div>
+
+  <div class="divisor"></div>
+  <h2>O que a empresa precisa acertar antes da primeira aplicação</h2>
+  <div class="card" style="margin-top:1rem">
+    ${[['Quem vê o quê, por escrito','O profissional vê o dele. O líder vê o agregado da equipe. O RH vê o agregado por área. Ninguém vê o individual de outro.'],
+       ['Política de não retaliação','Declarada e assinada antes da aplicação. O resultado não é usado para nenhuma decisão sobre a pessoa. Sem isso, o dado não vale.'],
+       ['Participação voluntária','Adesão obrigatória com medo produz o mesmo problema da retaliação.'],
+       ['Prazo de guarda e exclusão','Quanto tempo o dado fica e como a pessoa pede a remoção.'],
+       ['O que acontece se a pessoa sair','O relatório individual é dela. A empresa perde o acesso ao individual e mantém apenas o agregado histórico.']]
+      .map(([t,d])=>`<div style="padding:.8rem 0;border-bottom:1px solid var(--linha2)">
+        <b style="font-size:.94rem">${t}</b>
+        <p style="margin:.2rem 0 0;font-size:.9rem;color:var(--tinta2)">${d}</p></div>`).join('')}
+  </div>
+
+  <div class="ok-box" style="margin-top:1.4rem">
+    <b>O que ele faz bem.</b> Mostra onde investir formação, revela onde a organização está impedindo a competência de aparecer, e mede se o que foi feito produziu efeito. Para uma empresa que hoje decide treinamento por intuição, isso já é bastante.
+  </div>
+</div></section>`;
+</script>
+
+
+<script>
+/* =====================================================================
+   Aplicação e relatório individual
+   ===================================================================== */
+
+const ETAPAS = [
+ {t:'Entrega, método e análise', eixos:[1,2]},
+ {t:'Relação e adaptação',        eixos:[3,4]},
+ {t:'Iniciativa e tecnologia',    eixos:[5,8]},
+ {t:'Ética e integridade',        eixos:[6]},
+ {t:'Sobre a sua organização',    ctx:true, lid:true},
+];
+
+function questoesDa(i){
+  const e = ETAPAS[i];
+  if(e.ctx){
+    const q = S.lider ? BANCO.filter(x=>x.e===7) : [];
+    return [...q, ...CTX.map(c=>({...c, t:'ctx', e:0}))];
+  }
+  return BANCO.filter(q=>e.eixos.includes(q.e));
+}
+const totalQ = () => ETAPAS.reduce((s,_,i)=>s+questoesDa(i).length, 0);
+const respondidas = () => Object.keys(S.resp).length + Object.keys(S.ctx).length;
+
+PAGINAS['/aplicar'] = () => {
+  if(!S.iniciado) return telaCadastro();
+  if(S.concluido) return PAGINAS['/meu-relatorio']();
+  return telaEtapa();
+};
+
+function telaCadastro(){
+  return `<section class="sec"><div class="wrap" style="max-width:640px">
+    <p class="eyebrow">Antes de começar</p>
+    <h1>Este resultado é seu</h1>
+    <p class="lead" style="margin-top:.8rem">A empresa contratou a aplicação, não o conteúdo individual. Ela receberá apenas números agregados por área. Este relatório é seu, e você decide se compartilha.</p>
+
+    <div class="card info" style="margin:1.4rem 0">
+      <b style="display:block;margin-bottom:.4rem">O que você precisa saber</b>
+      <p style="margin:0 0 .4rem;font-size:.9rem">Não há resposta certa. Não é prova, não gera nota e não afeta seu emprego.</p>
+      <p style="margin:0 0 .4rem;font-size:.9rem">São 162 questões em cinco etapas, com pausa. Cerca de 68 minutos.</p>
+      <p style="margin:0;font-size:.9rem">Parte das perguntas é <b>sobre a empresa</b>, não sobre você. Elas ficam de fora do seu resultado.</p>
+    </div>
+
+    <div class="card">
+      <div class="campo"><label for="nm">Nome</label>
+        <input id="nm" placeholder="Como você quer ser chamado no relatório" value="${esc(S.dados.nome||'')}"></div>
+      <div class="campo"><label for="ar">Área</label>
+        <select id="ar">${AREAS_EMP.map(a=>`<option ${S.dados.area===a.n?'selected':''}>${a.n}</option>`).join('')}</select></div>
+      <div class="campo"><label for="tp">Há quanto tempo na empresa</label>
+        <select id="tp"><option>Menos de 1 ano</option><option>1 a 3 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
+      <div class="campo"><label>Você exerce alguma liderança?</label>
+        <div class="chips">
+          <button class="pill ${S.lider===true?'on':''}" onclick="S.lider=true;render()">Sim, formal ou informal</button>
+          <button class="pill ${S.lider===false?'on':''}" onclick="S.lider=false;render()">Não</button>
+          <button class="pill ${S.lider==='quer'?'on':''}" onclick="S.lider='quer';render()">Ainda não, mas tenho interesse</button>
+        </div>
+        <p class="apoio" style="margin-top:.4rem">O bloco de liderança só é aplicado a quem lidera ou pretende. Aplicar a quem não lidera mede aspiração, não competência.</p>
+      </div>
+      <button class="btn" onclick="iniciar()" ${S.lider===null?'disabled':''} style="width:100%;justify-content:center">Começar</button>
+    </div>
+
+    <p class="apoio" style="margin-top:1rem">Protótipo com dados simulados. As respostas não são gravadas em servidor nesta demonstração.</p>
+  </div></section>`;
+}
+
+function iniciar(){
+  S.dados.nome = (document.getElementById('nm').value || 'Participante').trim();
+  S.dados.area = document.getElementById('ar').value;
+  S.dados.tempo = document.getElementById('tp').value;
+  if(S.lider === 'quer') S.lider = true;
+  S.iniciado = true; S.etapa = 0;
+  render(); window.scrollTo(0,0);
+}
+
+function telaEtapa(){
+  const i = S.etapa, E_ = ETAPAS[i], qs = questoesDa(i);
+  const feitas = qs.filter(q=> q.t==='ctx' ? S.ctx[q.id]!==undefined : S.resp[q.id]!==undefined).length;
+  const pronto = feitas === qs.length;
+  const pct = Math.round(respondidas() / totalQ() * 100);
+
+  return `<div class="prog"><div class="wrap">
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--tinta2);margin-bottom:.4rem">
+        <span><b style="color:var(--azul)">Etapa ${i+1} de ${ETAPAS.length}</b> · ${esc(E_.t)}</span>
+        <span class="tag">${feitas} de ${qs.length}</span>
+      </div>
+      <div class="prog-bar"><i style="width:${pct}%"></i></div>
+    </div></div>
+
+  <section class="sec"><div class="wrap" style="max-width:760px">
+    ${E_.ctx? `<div class="card dest" style="margin-bottom:1.2rem">
+      <p style="margin:0"><b>Atenção: esta etapa é sobre a empresa.</b> ${S.lider?'Depois do bloco de liderança, as ':'As '}perguntas descrevem a organização e a sua liderança direta — não você. <b>Elas ficam de fora do seu resultado</b> e aparecem apenas no relatório da empresa, agregadas por área.</p>
+    </div>`:''}
+
+    ${qs.map((q,n)=>cartaoQ(q, n+1)).join('')}
+
+    <div style="display:flex;gap:.7rem;justify-content:space-between;margin-top:1.5rem">
+      ${i>0? `<button class="btn btn-sec" onclick="S.etapa--;render();scrollTo(0,0)">← Etapa anterior</button>`:'<span></span>'}
+      ${i < ETAPAS.length-1
+        ? `<button class="btn" onclick="S.etapa++;render();scrollTo(0,0)" ${pronto?'':'disabled'}>Próxima etapa →</button>`
+        : `<button class="btn" onclick="concluir()" ${pronto?'':'disabled'}>Ver meu resultado</button>`}
+    </div>
+    ${pronto? '' : `<p class="apoio" style="text-align:right;margin-top:.6rem">Faltam ${qs.length-feitas} ${qs.length-feitas===1?'questão':'questões'} nesta etapa.</p>`}
+  </div></section>`;
+}
+
+function cartaoQ(q, n){
+  const ctx = q.t === 'ctx';
+  const val = ctx ? S.ctx[q.id] : S.resp[q.id];
+  const rotulo = ctx ? 'SOBRE A EMPRESA' : ('QUESTÃO ' + q.id);
+  let ops;
+  if(ctx || q.t === 'esc'){
+    ops = `<div class="q-esc">${ESCALA.map((t,k)=>`
+      <button class="q-op ${val===k?'sel':''}" onclick="responder('${q.id}',${k},${ctx})">
+        <span class="mk"></span><span>${t}</span></button>`).join('')}</div>`;
+  } else {
+    ops = `<div class="q-ops">${(q.ops||[]).map((o,k)=>`
+      <button class="q-op ${val===k?'sel':''}" onclick="responder('${q.id}',${k},false)">
+        <span class="mk"></span><span>${esc(o.t)}</span></button>`).join('')}</div>`;
+  }
+  const tipoRot = {sit:'situação de trabalho', dil:'dilema — não há resposta certa', forc:'preferência — as duas são aceitáveis', cog:'raciocínio aplicado', porq:'o que pesou na sua escolha'}[q.t];
+  return `<div class="q-card">
+    <span class="q-num">${rotulo}${tipoRot? ' · '+tipoRot.toUpperCase():''}</span>
+    <p class="q-txt">${esc(q.q)}</p>
+    ${ops}
+  </div>`;
+}
+
+function responder(id, v, ctx){
+  if(ctx) S.ctx[id] = v; else S.resp[id] = v;
+  render();
+}
+
+function concluir(){ S.concluido = true; render(); window.scrollTo(0,0); }
+
+/* ── relatório individual ────────────────────────────────── */
+PAGINAS['/meu-relatorio'] = () => {
+  if(!S.concluido) return PAGINAS['/aplicar']();
+  const pct = calcular(S.resp);
+  const eixos = porEixo(pct);
+  const dctx = calcCtx(S.ctx);
+  const ordenados = Object.keys(pct).sort((a,b)=>pct[b]-pct[a]);
+  const fortes = ordenados.slice(0,5), fracos = ordenados.slice(-5).reverse();
+
+  return `<section class="sec"><div class="wrap" style="max-width:860px">
+    <p class="eyebrow">Seu relatório</p>
+    <h1>${esc(S.dados.nome)}</h1>
+    <p style="color:var(--tinta2);margin-top:.3rem">${esc(S.dados.area)} · ${esc(S.dados.tempo||'')}</p>
+
+    <div class="ok-box" style="margin:1.2rem 0">
+      <b>Este documento é seu.</b> A empresa recebe apenas números agregados por área — ela não vê este relatório, nem o seu nome associado a qualquer resultado.
+    </div>
+
+    <div class="divisor"></div>
+    <h2>Seu perfil pelos eixos</h2>
+    <p style="color:var(--tinta2)">Não há índice geral e não há comparação com colegas. Cada eixo é uma leitura própria.</p>
+    <div class="card" style="margin-top:1rem">
+      ${EIXOS.filter(e=>eixos[e.n]!==undefined).map(e=>`
+        <div style="padding:.8rem 0;border-bottom:1px solid var(--linha2)">
+          ${barra(e.t, eixos[e.n])}
+          <p style="margin:.15rem 0 0;font-size:.84rem;color:var(--tinta3)">${e.d} — <b style="color:${corDe(eixos[e.n])}">${faixaDe(eixos[e.n])}</b></p>
+        </div>`).join('')}
+    </div>
+
+    <div class="grid g2" style="margin-top:1.4rem">
+      <div class="card" style="border-left:3px solid var(--verde)">
+        <h3>O que aparece mais forte</h3>
+        <p class="apoio" style="margin:.2rem 0 .7rem">Os cinco indicadores mais altos nas suas respostas.</p>
+        ${fortes.map(k=>barra(IND[k][0], pct[k])).join('')}
+      </div>
+      <div class="card" style="border-left:3px solid var(--ambar)">
+        <h3>O que tem mais espaço</h3>
+        <p class="apoio" style="margin:.2rem 0 .7rem">Aparece pouco porque não é o seu jeito, ou porque o seu trabalho não tem pedido isso? O instrumento não sabe — vale a pergunta.</p>
+        ${fracos.map(k=>barra(IND[k][0], pct[k])).join('')}
+      </div>
+    </div>
+
+    <div class="divisor"></div>
+    <h2>Seu plano de 90 dias</h2>
+    <p style="color:var(--tinta2)">Três ações, uma por competência prioritária. Cada uma cabe na rotina e depende só de você.</p>
+    <div class="grid g3" style="margin-top:1rem">
+      ${fracos.slice(0,3).map((k,i)=>{
+        const T = TRILHA[k] || {o:'Praticar de forma deliberada, com registro do que mudou.', a:'Escolher uma situação por semana para exercitar isso.'};
+        return `<div class="card">
+          <span class="tag a">AÇÃO ${i+1}</span>
+          <h3 style="margin:.5rem 0 .3rem">${IND[k][0]}</h3>
+          <p style="margin:0 0 .5rem;font-size:.88rem;color:var(--tinta2)"><b>O que trabalhar.</b> ${T.o}</p>
+          <p style="margin:0;font-size:.88rem;color:var(--tinta2)"><b>Primeiro passo.</b> ${T.a}</p>
+        </div>`;
+      }).join('')}
+    </div>
+
+    ${Object.keys(dctx).length? `
+    <div class="divisor"></div>
+    <h2>O que você disse sobre a empresa</h2>
+    <p style="color:var(--tinta2)">Estas respostas <b>não entraram em nenhum resultado seu</b>. Aparecem aqui só para você ver o que respondeu, e vão para o relatório da empresa agregadas com as de todos.</p>
+    <div class="card" style="margin-top:1rem">
+      ${Object.entries(dctx).map(([k,v])=>barra(DIM_CTX[k][0], v)).join('')}
+    </div>`:''}
+
+    <div class="aviso" style="margin-top:1.4rem">
+      <b>Sobre este relatório.</b> Ele descreve o que apareceu nas suas respostas, num momento. Não diz o que você é, não mede inteligência, não indica profissão e não deve ser usado em nenhuma decisão sobre você. O instrumento ainda não passou por validação psicométrica.
+    </div>
+
+    <div style="display:flex;gap:.7rem;margin-top:1.4rem;flex-wrap:wrap">
+      <button class="btn btn-sec" onclick="window.print()">Imprimir</button>
+      <button class="btn btn-sec" onclick="S={dados:{},resp:{},ctx:{},etapa:0,iniciado:false,concluido:false,lider:null};render()">Recomeçar</button>
+    </div>
+  </div></section>`;
+};
+
+/* trilhas por competência */
+const TRILHA = {
+ organizacao:{o:'Planejar antes de começar e manter registro do que já foi feito.', a:'Por duas semanas, escrever as três prioridades do dia antes de abrir o e-mail.'},
+ priorizacao:{o:'Definir o que vem primeiro quando tudo parece urgente.', a:'Classificar as demandas da semana por impacto e prazo, e mostrar ao líder.'},
+ comunicacao:{o:'Passar informação de forma que não precise ser repetida.', a:'Reescrever três mensagens desta semana deixando pedido e prazo explícitos.'},
+ escuta:{o:'Entender o que a pessoa precisa antes de responder.', a:'Em três conversas, repetir o pedido do outro com as próprias palavras antes de responder.'},
+ voz:{o:'Dizer o que precisa ser dito, com a alternativa pronta.', a:'Escolher um ponto que você vem adiando e levar com uma proposta junto.'},
+ iniciativa:{o:'Perceber o que precisa ser feito e começar.', a:'Resolver um problema pequeno da sua área sem esperar ser pedido.'},
+ melhoria:{o:'Propor mudança com o antes e o depois medidos.', a:'Escolher uma etapa que trava e levantar quanto tempo ela custa por semana.'},
+ dados:{o:'Sustentar o que propõe com número.', a:'Na próxima proposta, levar um dado que você mesmo levantou.'},
+ sistemico:{o:'Enxergar o efeito do próprio trabalho sobre os outros.', a:'Conversar com a área que recebe o seu trabalho e perguntar o que atrapalha.'},
+ adaptacao:{o:'Reagir a mudança sem gastar energia resistindo.', a:'Na próxima mudança, listar o que melhora antes de listar o que piora.'},
+ recuperacao:{o:'Voltar ao erro e entender o que aconteceu.', a:'Escrever meia página sobre um erro recente: o que faria diferente e por quê.'},
+ delegacao:{o:'Entregar a tarefa e acompanhar, em vez de fazer.', a:'Escolher uma tarefa que só você faz e ensinar alguém nesta semana.'},
+ devolutiva:{o:'Dizer o que não está bom junto com o que fazer diferente.', a:'Dar uma devolutiva por semana, sempre com uma ação concreta no fim.'},
+ desenvolvimento:{o:'Fazer alguém crescer de propósito, não por acaso.', a:'Perguntar a cada pessoa da equipe o que ela quer desenvolver este ano.'},
+ integridade:{o:'Sustentar o correto quando custa alguma coisa.', a:'Identificar as três situações de risco ético da sua função e escrever como agir.'},
+ conflito:{o:'Discordar sem que a relação se desgaste.', a:'Levar um desacordo pendente para conversa direta, começando pelo que concorda.'},
+ constancia:{o:'Manter o padrão quando a tarefa é repetitiva.', a:'Criar uma conferência final de dois minutos antes de cada entrega.'},
+ metodo_aprender:{o:'Aprender algo novo até realmente dominar.', a:'Escolher uma ferramenta e ensinar alguém em duas semanas.'},
+ antecipacao:{o:'Ver o problema antes de ele estourar.', a:'Toda segunda, listar o que pode dar errado na semana e avisar quem precisa saber.'},
+ propriedade:{o:'Tratar o problema como seu antes de reclamar dele.', a:'Escolher a coisa que mais te irrita no trabalho e propor uma correção.'},
+
+ /* eixo 8 · tecnologia e inovação */
+ uso_ferramenta:{o:'Aproveitar o que a empresa já oferece, em vez de trabalhar à margem.', a:'Escolher a ferramenta que mais usa e listar três recursos que nunca abriu.'},
+ autonomia_digital:{o:'Resolver sozinho antes de escalar.', a:'Na próxima vez que travar, dar quinze minutos de busca antes de pedir ajuda.'},
+ criacao:{o:'Propor o que não existia, em vez de repetir o que já se faz.', a:'Escolher um processo da sua área e desenhar uma versão diferente, mesmo que não seja usada.'},
+ problemas:{o:'Diagnosticar antes de resolver, e testar a hipótese.', a:'No próximo problema, escrever a causa provável antes de agir e conferir depois se acertou.'},
+ experimentacao:{o:'Testar em pequena escala antes de mudar tudo.', a:'Escolher uma mudança que você adiaria e rodar um piloto de uma semana.'},
+ critica_tec:{o:'Confiar na ferramenta com critério, sabendo onde ela falha.', a:'Conferir manualmente três resultados da ferramenta que você mais usa.'},
+ automacao:{o:'Decidir o que fazer com o tempo que a automação devolve.', a:'Listar o que você faria com duas horas a mais por semana, e começar por uma.'},
+ seguranca_info:{o:'Tratar acesso e dado com o cuidado que se espera do outro.', a:'Revisar suas senhas e acessos, e o que está guardado em aparelho pessoal.'},
+
+ /* completando os indicadores que ainda não tinham trilha */
+ causa:{o:'Entender o que causou antes de propor solução.', a:'No próximo problema, listar três causas possíveis antes de escolher uma.'},
+ interpretacao:{o:'Ler um relatório e dizer o que está acontecendo.', a:'Pegar um relatório que você recebe e escrever três frases sobre o que ele mostra.'},
+ decisao_incerteza:{o:'Decidir com o que se tem, dizendo o que ficou em aberto.', a:'Numa decisão pendente, decidir esta semana e registrar o que faltava saber.'},
+ criterio:{o:'Explicar por que decidiu de um jeito e não de outro.', a:'Na próxima decisão, escrever o critério antes de comunicar a escolha.'},
+ verificacao:{o:'Conferir a informação antes de agir sobre ela.', a:'Nas próximas três informações importantes, confirmar a fonte antes de repassar.'},
+ percepcao:{o:'Notar o que acontece com as pessoas antes de virar problema.', a:'Uma vez por semana, perguntar a alguém da equipe como está a carga.'},
+ cidadania:{o:'Contribuir além do que está na descrição do cargo.', a:'Ajudar uma área que não é a sua numa entrega desta semana.'},
+ pedido_ajuda:{o:'Pedir ajuda antes de o problema crescer.', a:'Definir um limite de tempo para travar sozinho, e cumprir.'},
+ mediacao:{o:'Ajudar duas pessoas em desacordo a se entenderem.', a:'Num desacordo que você observa, propor uma conversa com pauta.'},
+ respeito:{o:'Tratar bem inclusive quando discorda.', a:'Numa discordância, começar pelo ponto em que concorda.'},
+ adaptacao:{o:'Reagir a mudança sem gastar energia resistindo.', a:'Na próxima mudança, listar o que melhora antes de listar o que piora.'},
+ flexibilidade:{o:'Mudar o próprio jeito quando aparece um melhor.', a:'Trocar uma rotina sua por outra sugerida por alguém, e comparar.'},
+ autonomia_aprender:{o:'Buscar a resposta antes de pedir.', a:'Aprender uma função nova só com material escrito e ensinar a alguém.'},
+ curiosidade:{o:'Entender o que ninguém pediu que você entendesse.', a:'Escolher algo do seu trabalho que você usa sem entender e ir atrás.'},
+ compartilhar:{o:'Passar adiante o que aprendeu.', a:'Registrar um aprendizado de forma que outra pessoa consiga usar.'},
+ resiliencia:{o:'Separar a crítica ao trabalho da crítica a você.', a:'Na próxima crítica, escrever o que é sobre a entrega e o que é sobre você.'},
+ risco:{o:'Assumir tarefa que pode não sair perfeita.', a:'Aceitar um desafio fora da sua zona de conforto neste trimestre.'},
+ dominio:{o:'Ficar muito bom no que já faz.', a:'Escolher uma competência do seu trabalho e aprofundar por três meses.'},
+ antecipacao_prazo:{o:'Começar antes do último momento possível.', a:'Nas próximas três entregas, começar no primeiro terço do prazo.'},
+ aviso_previo:{o:'Avisar antes de estourar, não depois.', a:'Definir um ponto de checagem no meio de cada prazo.'},
+ compromisso:{o:'Entregar o que se comprometeu.', a:'Antes de aceitar, verificar se cabe, e dizer não quando não couber.'},
+ priorizacao:{o:'Definir o que vem primeiro quando tudo parece urgente.', a:'Classificar as demandas da semana por impacto e prazo.'},
+ conclusao:{o:'Terminar antes de começar outra coisa.', a:'Fechar uma tarefa pendente antes de aceitar qualquer nova.'},
+ revisao:{o:'Conferir antes de enviar.', a:'Criar uma checagem de dois minutos antes de cada entrega.'},
+ qualidade:{o:'Entregar completo, não só rápido.', a:'Numa entrega desta semana, negociar prazo em vez de reduzir qualidade.'},
+ sistemico:{o:'Enxergar o efeito do seu trabalho sobre os outros.', a:'Conversar com quem recebe o seu trabalho e perguntar o que atrapalha.'},
+ justica:{o:'Tratar do mesmo jeito quem pode e quem não pode ajudar.', a:'Observar por uma semana como você responde a pedidos de níveis diferentes.'},
+ sigilo:{o:'Tratar informação com o cuidado devido, dentro e fora.', a:'Identificar que informações da sua função não podem circular.'},
+ responsabilidade:{o:'Assumir a própria parte, inclusive no erro.', a:'No próximo erro coletivo, nomear o que foi seu antes de falarem.'},
+ coragem_moral:{o:'Reportar o que precisa ser reportado.', a:'Descobrir qual é o canal da empresa e como ele funciona.'},
+ canal:{o:'Saber a quem falar quando algo está errado.', a:'Localizar o canal de conduta e ler a política.'},
+ patrimonio:{o:'Cuidar do que é da empresa como do que é seu.', a:'Revisar o que está sob sua responsabilidade e em que estado.'},
+ escuta:{o:'Entender antes de responder.', a:'Em três conversas, repetir o pedido do outro antes de responder.'},
+ clareza:{o:'Deixar claro o que se espera.', a:'Numa delegação desta semana, escrever o que se espera e até quando.'},
+ reconhecimento:{o:'Reconhecer o trabalho de quem fez.', a:'Reconhecer publicamente uma entrega por semana.'},
+ representacao:{o:'Sustentar a equipe diante de outras áreas.', a:'Numa cobrança externa, responder pela equipe antes de repassar.'},
+ planejamento:{o:'Planejar a carga antes da urgência.', a:'Mapear a carga da equipe para as próximas quatro semanas.'},
+ decisao_lideranca:{o:'Decidir quando precisa ser decidido.', a:'Identificar uma decisão que você vem adiando e tomar esta semana.'},
+ cuidado:{o:'Perceber a pessoa antes de a entrega cair.', a:'Uma conversa individual por semana, sem pauta de trabalho.'},
+ logico_mat:{o:'Sustentar raciocínio com número.', a:'Na próxima proposta, calcular o impacto antes de apresentar.'},
+ relacao:{o:'Reconhecer quando a relação está pesando na decisão.', a:'Numa decisão difícil, escrever o critério antes de considerar quem está envolvido.'},
+ seguranca_pessoal:{o:'Reconhecer quando o próprio risco está pesando.', a:'Identificar uma coisa que você não disse por receio, e avaliar o custo disso.'},
+ conformidade:{o:'Distinguir seguir a regra de concordar com ela.', a:'Numa regra que você cumpre sem concordar, verificar por que ela existe.'},
+ transparencia:{o:'Registrar e explicar, não só decidir.', a:'Na próxima decisão, comunicar junto o porquê.'},
+};
+</script>
+
+
+<script>
+/* =====================================================================
+   Painel da empresa — RH, líder e diretoria
+   ===================================================================== */
+
+PAGINAS['/painel'] = () => {
+  if(!rhLiberado) return `<section class="sec"><div class="wrap" style="max-width:460px">
+    <p class="eyebrow">Área restrita</p>
+    <h1>Painel da empresa</h1>
+    <p class="lead" style="margin-top:.7rem">Acesso do RH e da liderança. Nesta demonstração, entre direto.</p>
+    <div class="card" style="margin-top:1.2rem">
+      <div class="campo"><label>E-mail corporativo</label><input value="rh@empresa.com.br"></div>
+      <div class="campo"><label>Senha</label><input type="password" value="demonstracao"></div>
+      <button class="btn" style="width:100%;justify-content:center" onclick="rhLiberado=true;render()">Entrar</button>
+    </div>
+    <div class="card info" style="margin-top:1rem">
+      <p style="margin:0;font-size:.88rem"><b>O que você verá.</b> Apenas dados agregados. Nenhum resultado individual é exibido, nem nesta demonstração — a base tem 132 pessoas simuladas e nenhuma delas é identificável por resultado.</p>
+    </div>
+  </div></section>`;
+
+  const base = baseEmpresa();
+  const ag = agregaArea(base, areaSel==='todas'? null : areaSel);
+  const geral = agregaArea(base, null);
+
+  const abas = [['painel','Visão geral'],['areas','Comparação entre áreas'],['contexto','O que a organização impede'],['formacao','Plano de formação'],['ciclo','Evolução e ciclo']];
+
+  return `<section class="sec"><div class="wrap">
+    <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center">
+      <div><p class="eyebrow">Painel da empresa</p><h1 style="font-size:1.9rem">Indústria Demonstração Ltda.</h1></div>
+      <button class="btn btn-sec btn-mini" onclick="rhLiberado=false;render()">Sair</button>
+    </div>
+
+    <div class="chips" style="margin:1.2rem 0">
+      ${abas.map(([k,t])=>`<button class="pill ${abaRH===k?'on':''}" onclick="abaRH='${k}';render()">${t}</button>`).join('')}
+    </div>
+
+    <div class="chips" style="margin-bottom:1.2rem">
+      <span style="font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--tinta3);align-self:center;margin-right:.4rem">ÁREA</span>
+      <button class="pill ${areaSel==='todas'?'on':''}" onclick="areaSel='todas';render()">Empresa inteira</button>
+      ${AREAS_EMP.map(a=>`<button class="pill ${areaSel===a.n?'on':''}" onclick="areaSel='${a.n}';render()">${a.n}</button>`).join('')}
+    </div>
+
+    ${abaRH==='painel'? abaVisao(ag, geral)
+    : abaRH==='areas'? abaAreas(base, geral)
+    : abaRH==='contexto'? abaContexto(base, ag, geral)
+    : abaRH==='formacao'? abaFormacao(ag, geral)
+    : abaCiclo(ag)}
+
+    <div class="aviso" style="margin-top:1.6rem">
+      <b>Sobre esta demonstração.</b> 132 pessoas simuladas em 8 áreas. Nenhum resultado individual é exibido em nenhuma tela, e áreas com menos de cinco respondentes não teriam o contexto divulgado. O instrumento ainda não passou por validação psicométrica.
+    </div>
+  </div></section>`;
+};
+
+function abaVisao(ag, geral){
+  const rot = areaSel==='todas' ? 'Empresa inteira' : areaSel;
+  const inds = Object.keys(ag.ind).sort((a,b)=>ag.ind[a]-ag.ind[b]);
+  const frageis = inds.slice(0,6), fortes = inds.slice(-6).reverse();
+  const ctxMedia = Math.round(media(Object.values(ag.ctx)));
+
+  return `<div class="grid g4">
+    <div class="card metrica"><b>${ag.n}</b><span>pessoas responderam</span></div>
+    <div class="card metrica"><b>${ag.lideres}</b><span>exercem liderança</span></div>
+    <div class="card metrica"><b style="color:${corDe(media(Object.values(ag.eixos)))}">${fmt(media(Object.values(ag.eixos)))}</b><span>média dos eixos</span></div>
+    <div class="card metrica"><b style="color:${corDe(ctxMedia)}">${ctxMedia}</b><span>contexto organizacional</span></div>
+  </div>
+
+  <div class="divisor"></div>
+  <h2>${esc(rot)} · os sete eixos</h2>
+  <p style="color:var(--tinta2)">A marca vertical é a média da empresa. A diferença entre a barra e a marca é o que distingue problema local de problema institucional.</p>
+  <div class="card" style="margin-top:1rem">
+    ${EIXOS.filter(e=>ag.eixos[e.n]!==undefined).map(e=>{
+      const v = ag.eixos[e.n], g = geral.eixos[e.n], d = v - g;
+      return `<div class="bar-lin">
+        <b>${e.t} ${areaSel!=='todas' && Math.abs(d)>=5? `<span class="tag ${d>0?'v':'c'}">${d>0?'+':''}${d} vs empresa</span>`:''}</b>
+        <span class="bar"><i style="width:${v}%;background:${corDe(v)}"></i><span class="marca-alvo" style="left:${g}%"></span></span>
+        <span class="v" style="color:${corDe(v)}">${v}</span>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <div class="grid g2" style="margin-top:1.4rem">
+    <div class="card" style="border-left:3px solid var(--coral)">
+      <h3>Onde está mais frágil</h3>
+      <p class="apoio" style="margin:.2rem 0 .7rem">As seis competências com menor valor nesta base.</p>
+      ${frageis.map(k=>barra(IND[k][0], ag.ind[k], geral.ind[k])).join('')}
+    </div>
+    <div class="card" style="border-left:3px solid var(--verde)">
+      <h3>Onde está mais forte</h3>
+      <p class="apoio" style="margin:.2rem 0 .7rem">Vale documentar o que produziu isso, para não se perder na troca de equipe.</p>
+      ${fortes.map(k=>barra(IND[k][0], ag.ind[k], geral.ind[k])).join('')}
+    </div>
+  </div>`;
+}
+
+function abaAreas(base, geral){
+  const dados = AREAS_EMP.map(a=>({a, g:agregaArea(base, a.n)})).filter(x=>x.g);
+  return `<h2>Comparação entre áreas</h2>
+  <p style="color:var(--tinta2);max-width:74ch">O sinal não está no valor de uma área: está na <b>diferença entre elas</b>. Uma competência frágil em todas as áreas é problema institucional, e esforço isolado rende pouco. Frágil em uma só tem causa local.</p>
+  <div class="card" style="margin-top:1.2rem;overflow:auto">
+    <table>
+      <thead><tr><th>Área</th><th>Pessoas</th>${EIXOS.filter(e=>!e.cond).map(e=>`<th title="${e.t}">${e.t.split(' ')[0]}</th>`).join('')}<th>Contexto</th></tr></thead>
+      <tbody>${dados.map(({a,g})=>{
+        const cx = Math.round(media(Object.values(g.ctx)));
+        return `<tr>
+          <td><b>${a.n}</b></td><td>${g.n}</td>
+          ${EIXOS.filter(e=>!e.cond).map(e=>`<td><span style="color:${corDe(g.eixos[e.n])};font-weight:600">${g.eixos[e.n]??'—'}</span></td>`).join('')}
+          <td><span style="color:${corDe(cx)};font-weight:600">${cx}</span></td>
+        </tr>`;
+      }).join('')}
+      <tr style="border-top:2px solid var(--linha)"><td><b>Empresa</b></td><td><b>${geral.n}</b></td>
+        ${EIXOS.filter(e=>!e.cond).map(e=>`<td><b>${geral.eixos[e.n]}</b></td>`).join('')}
+        <td><b>${Math.round(media(Object.values(geral.ctx)))}</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divisor"></div>
+  <h2>As três leituras</h2>
+  <div class="grid g3" style="margin-top:1rem">
+    ${(()=>{
+      const inst = Object.keys(geral.ind).filter(k=>geral.ind[k]<50).sort((a,b)=>geral.ind[a]-geral.ind[b]).slice(0,5);
+      const locais = [];
+      dados.forEach(({a,g})=>Object.keys(g.ind).forEach(k=>{
+        const d = g.ind[k]-geral.ind[k];
+        if(d <= -8) locais.push({area:a.n, k, d});
+      }));
+      locais.sort((x,y)=>x.d-y.d);
+      const altas = [];
+      dados.forEach(({a,g})=>Object.keys(g.ind).forEach(k=>{
+        const d = g.ind[k]-geral.ind[k];
+        if(d >= 8) altas.push({area:a.n, k, d});
+      }));
+      altas.sort((x,y)=>y.d-x.d);
+      return `
+      <div class="card" style="border-left:3px solid var(--coral)">
+        <h3>Problema institucional</h3>
+        <p class="apoio" style="margin:.2rem 0 .6rem">Frágil na empresa inteira. Intervenção precisa ser de política, não de área.</p>
+        ${inst.map(k=>`<p style="margin:0 0 .3rem;font-size:.88rem">${IND[k][0]} <span class="tag c">${geral.ind[k]}</span></p>`).join('')}
+      </div>
+      <div class="card" style="border-left:3px solid var(--ambar)">
+        <h3>Problema local</h3>
+        <p class="apoio" style="margin:.2rem 0 .6rem">Bem abaixo da empresa em uma área. Vale conversar com o grupo antes de treinar.</p>
+        ${locais.slice(0,5).map(x=>`<p style="margin:0 0 .3rem;font-size:.88rem">${IND[x.k][0]} <span class="tag">${x.area}</span> <span class="tag c">${x.d}</span></p>`).join('')}
+      </div>
+      <div class="card" style="border-left:3px solid var(--verde)">
+        <h3>O que uma área tem e as outras não</h3>
+        <p class="apoio" style="margin:.2rem 0 .6rem">Vale descobrir o que produziu isso — o achado se replica.</p>
+        ${altas.slice(0,5).map(x=>`<p style="margin:0 0 .3rem;font-size:.88rem">${IND[x.k][0]} <span class="tag">${x.area}</span> <span class="tag v">+${x.d}</span></p>`).join('')}
+      </div>`;
+    })()}
+  </div>`;
+}
+
+/* pares eixo × dimensão de contexto que se explicam mutuamente */
+const CRUZA = [
+ {eixo:5, dim:'seguranca',      t:'Iniciativa baixa com segurança para falar baixa', d:'O problema não é das pessoas. Ninguém arrisca onde arriscar custa caro. Treinar iniciativa aqui produz pouco — o que muda o indicador é mudar o que acontece com quem se arrisca.'},
+ {eixo:1, dim:'desenvolvimento',t:'Método baixo com acesso a desenvolvimento baixo', d:'Ninguém ensinou. Cobrar método de quem nunca aprendeu é injusto e ineficaz. A providência é ensino explícito, não cobrança.'},
+ {eixo:1, dim:'condicoes',      t:'Constância baixa com condições de trabalho baixas', d:'É carga, não competência. Formação não resolve o que é volume, ferramenta ou informação que chega tarde.'},
+ {eixo:3, dim:'clareza',        t:'Colaboração baixa com clareza baixa', d:'Não é falta de disposição. É gente sem saber quem faz o quê, e cada um protegendo o próprio escopo.'},
+ {eixo:5, dim:'devolutiva',     t:'Voz baixa com devolutiva recebida baixa', d:'Quem nunca recebeu retorno aprende que falar não muda nada. O silêncio é resposta racional ao ambiente.'},
+ {eixo:4, dim:'seguranca',      t:'Adaptação baixa com segurança baixa', d:'Resistência a mudança costuma ser medo de errar em público, não apego ao passado.'},
+ {eixo:8, dim:'inovar',         t:'Criação baixa com condições para inovar baixas', d:'O problema não é falta de ideia — é que a ideia não tem para onde ir. Treinar criatividade num ambiente que não acolhe proposta é desperdício.'},
+ {eixo:8, dim:'condicoes',      t:'Uso de ferramenta baixo com condições de trabalho baixas', d:'Não é resistência à tecnologia: é que a tecnologia não está lá, ou não serve para o que se pede.'},
+];
+
+function abaContexto(base, ag, geral){
+  const achados = [];
+  /* quando uma área está selecionada, os achados são só dela */
+  const alvos = areaSel==='todas' ? AREAS_EMP : AREAS_EMP.filter(a=>a.n===areaSel);
+  alvos.forEach(a=>{
+    const g = agregaArea(base, a.n); if(!g) return;
+    CRUZA.forEach(c=>{
+      const ve = g.eixos[c.eixo], vc = g.ctx[c.dim];
+      if(ve!==undefined && ve < 52 && vc < 52) achados.push({area:a.n, c, ve, vc, soma:ve+vc});
+    });
+  });
+  achados.sort((x,y)=>x.soma-y.soma);
+  /* um par por área — sem repetir a mesma leitura */
+  const vistos = new Set();
+  const unicos = achados.filter(x=>{
+    const ch = x.area + '|' + x.c.t;
+    if(vistos.has(ch)) return false;
+    vistos.add(ch); return true;
+  });
+
+  return `<h2>O que a organização está impedindo de aparecer</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Este é o relatório que nenhum teste de perfil entrega. Ele cruza o eixo da pessoa com a dimensão do contexto — e quando os dois estão baixos ao mesmo tempo, a leitura muda completamente.</p>
+
+  <div class="divisor"></div>
+  <h2>${areaSel==='todas'?'Empresa inteira':esc(areaSel)} · as seis dimensões</h2>
+  <div class="card" style="margin-top:1rem">
+    ${Object.entries(DIM_CTX).map(([k,[t,d]])=>`
+      <div style="padding:.75rem 0;border-bottom:1px solid var(--linha2)">
+        ${barra(t, ag.ctx[k], areaSel!=='todas'? geral.ctx[k] : null)}
+        <p style="margin:.1rem 0 0;font-size:.83rem;color:var(--tinta3)">${d}</p>
+      </div>`).join('')}
+  </div>
+
+  <div class="divisor"></div>
+  <h2>Onde o contexto explica o resultado</h2>
+  ${unicos.length? `
+  <p style="color:var(--tinta2)">${unicos.length} ${unicos.length===1?'combinação identificada':'combinações identificadas'}. Nestes casos, investir em formação individual rende pouco enquanto a condição não mudar.</p>
+  <div class="grid g2" style="margin-top:1.2rem">
+    ${unicos.slice(0,6).map(x=>`<div class="card" style="border-left:3px solid var(--coral)">
+      <span class="tag">${x.area}</span>
+      <h3 style="margin:.5rem 0 .4rem;font-size:.98rem">${x.c.t}</h3>
+      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
+        <span class="tag c">${EIXOS[x.c.eixo-1].t}: ${x.ve}</span>
+        <span class="tag c">${DIM_CTX[x.c.dim][0]}: ${x.vc}</span>
+      </div>
+      <p style="margin:0;font-size:.88rem;color:var(--tinta2)">${x.c.d}</p>
+    </div>`).join('')}
+  </div>` : `<div class="ok-box" style="margin-top:1rem">Nenhuma combinação crítica identificada nesta base. Quando eixo e contexto não estão baixos ao mesmo tempo, a leitura de desenvolvimento individual é mais confiável.</div>`}
+
+  <div class="card dest" style="margin-top:1.4rem">
+    <p style="margin:0"><b>Como usar isso.</b> Antes de contratar treinamento para uma área, verifique se a competência frágil vem acompanhada de contexto frágil. Se vier, a ordem se inverte: primeiro muda a condição, depois se treina. Caso contrário, você paga formação e o indicador não se move — e a conclusão errada será de que a formação não funciona.</p>
+  </div>`;
+}
+
+function abaFormacao(ag, geral){
+  const inds = Object.keys(ag.ind).sort((a,b)=>ag.ind[a]-ag.ind[b]).slice(0,8);
+  const horas = inds.slice(0,3).length * 3;
+  return `<h2>Plano de formação${areaSel!=='todas'? ' · '+esc(areaSel):''}</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Duas ou três frentes por semestre. Nunca mais que isso — agir em tudo é agir em nada, e na reaplicação nada terá se movido.</p>
+
+  <div class="grid g3" style="margin-top:1.2rem">
+    ${inds.slice(0,3).map((k,i)=>{
+      const T = TRILHA[k] || {o:'Praticar de forma deliberada, com registro do que mudou.', a:'Escolher uma situação por semana para exercitar.'};
+      return `<div class="card">
+        <span class="tag a">PRIORIDADE ${i+1}</span>
+        <h3 style="margin:.5rem 0 .2rem">${IND[k][0]}</h3>
+        <p style="margin:0 0 .5rem;font-family:var(--mono);font-size:.7rem;color:var(--tinta3)">ESTÁ EM ${ag.ind[k]} · EMPRESA ${geral.ind[k]}</p>
+        <p style="margin:0 0 .5rem;font-size:.88rem;color:var(--tinta2)"><b>O que trabalhar.</b> ${T.o}</p>
+        <p style="margin:0;font-size:.88rem;color:var(--tinta2)"><b>Primeiro passo.</b> ${T.a}</p>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <div class="card info" style="margin-top:1.2rem">
+    <p style="margin:0"><b>O conteúdo pode vir de quem já o oferece.</b> Senai, Sebrae, universidade corporativa da própria empresa, ou plataforma que ela já assine. O instrumento diagnostica, indica e mede de novo — não compete com quem ensina.</p>
+  </div>
+
+  <div class="divisor"></div>
+  <h2>Desafios práticos por eixo</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Aula sobre um tema desenvolve conhecimento sobre o tema. Desafio prático desenvolve a capacidade. Prazo curto, problema real da empresa, entrega concreta.</p>
+  <div class="grid g2" style="margin-top:1.2rem">
+    ${[['Entrega e método','Reorganizar um processo real que trava, em 72 horas, com o antes e o depois medidos.'],
+       ['Análise e decisão','Decidir com dado incompleto sobre um caso real, com o critério publicado e auditado pelos pares.'],
+       ['Relação e colaboração','Resolver um conflito real entre áreas, com acordo escrito e prazo.'],
+       ['Adaptação e aprendizagem','Aprender uma ferramenta nova em uma semana e ensinar a outra equipe.'],
+       ['Iniciativa e melhoria','Encontrar e resolver um desperdício, com o valor economizado calculado.'],
+       ['Ética e integridade','Construir o protocolo de conduta da própria área a partir de dilemas reais.'],
+       ['Liderança','Assumir um projeto fora da própria área, com equipe emprestada.'],
+       ['Tecnologia e inovação','Automatizar uma tarefa manual da própria rotina em uma semana, com as horas economizadas medidas antes e depois.']]
+      .map(([t,d],i)=>`<div class="card" style="border-left:3px solid ${EIXOS[i].cor}">
+        <h3 style="font-size:.98rem">${t}</h3>
+        <p style="margin:.3rem 0 0;font-size:.88rem;color:var(--tinta2)">${d}</p></div>`).join('')}
+  </div>
+
+  <div class="aviso" style="margin-top:1.2rem">
+    <b>Regra de composição das equipes.</b> Quem mais precisa de um eixo não forma equipe entre si — isso cria grupo de déficit, em que ninguém puxa ninguém e a experiência confirma a crença de que não conseguem. Distribua em equipes mistas, com uma âncora em cada.
+  </div>`;
+}
+
+function abaCiclo(ag){
+  const r = rng(99);
+  const sim = Object.keys(ag.ind).sort((a,b)=>ag.ind[a]-ag.ind[b]).slice(0,10).map((k,i)=>{
+    const trabalhada = i < 3;
+    const ganho = trabalhada ? Math.round(9 + r()*13) : Math.round(-2 + r()*6);
+    return {k, antes:ag.ind[k], depois:clamp(ag.ind[k]+ganho,0,100), ganho, trabalhada};
+  });
+  const mediaT = Math.round(media(sim.filter(x=>x.trabalhada).map(x=>x.ganho)));
+  const mediaN = Math.round(media(sim.filter(x=>!x.trabalhada).map(x=>x.ganho)));
+
+  return `<h2>Evolução e ciclo</h2>
+  <p style="color:var(--tinta2);max-width:76ch">A reaplicação em seis ou doze meses é a única prestação de contas honesta possível em desenvolvimento de pessoas. Abaixo, uma simulação de como o relatório se apresentaria.</p>
+
+  <div class="grid g3" style="margin-top:1.2rem">
+    <div class="card metrica"><b style="color:var(--verde)">+${mediaT}</b><span>ganho médio nas competências trabalhadas</span></div>
+    <div class="card metrica"><b>${mediaN>=0?'+':''}${mediaN}</b><span>nas não trabalhadas — a estabilidade aqui é boa notícia</span></div>
+    <div class="card metrica"><b>${sim.filter(x=>x.trabalhada&&x.ganho>8).length}/3</b><span>prioridades com movimento claro</span></div>
+  </div>
+
+  <div class="card" style="margin-top:1.2rem">
+    ${sim.map(x=>`<div class="bar-lin">
+      <b>${IND[x.k][0]} ${x.trabalhada? '<span class="tag a">trabalhada</span>':''}</b>
+      <span class="bar">
+        <i style="width:${Math.min(x.antes,x.depois)}%;background:var(--fundo2)"></i>
+        <i style="position:absolute;left:${Math.min(x.antes,x.depois)}%;width:${Math.abs(x.depois-x.antes)}%;background:${x.ganho>=0?'var(--verde)':'var(--coral)'};top:0"></i>
+      </span>
+      <span class="v" style="color:${x.ganho>0?'var(--verde)':'var(--tinta2)'}">${x.ganho>=0?'+':''}${x.ganho}</span>
+    </div>`).join('')}
+  </div>
+
+  <div class="card dest" style="margin-top:1.2rem">
+    <p style="margin:0 0 .5rem"><b>Como ler a reaplicação</b></p>
+    <p style="margin:0 0 .35rem;font-size:.9rem"><b>Subiu o que foi trabalhado.</b> Registre o que foi feito, com detalhe suficiente para repetir. Isso é conhecimento institucional, e a empresa raramente o produz.</p>
+    <p style="margin:0 0 .35rem;font-size:.9rem"><b>Ficou igual.</b> Verifique primeiro se a ação aconteceu como planejado. A maior parte do que "não funcionou" simplesmente não foi executado.</p>
+    <p style="margin:0;font-size:.9rem"><b>Nada se moveu, nem o contexto.</b> Vale suspeitar do instrumento antes de suspeitar das pessoas.</p>
+  </div>`;
+}
+
+/* ── início ─────────────────────────────────────────────── */
+window.addEventListener('load', ()=>{ if(!location.hash) location.hash = '#/'; render(); });
+if(document.readyState === 'complete') render();
+</script>
+
+
+<script>
+/* =====================================================================
+   Área administrativa — banco, análise de itens e qualidade dos dados
+   ===================================================================== */
+
+let admLiberado = false, abaADM = 'banco', filtroEixo = 0, filtroFormato = 'todos', filtroItem = 'todos';
+let limiteQ = 12;   /* o banco inteiro renderizado de uma vez passa de 300 KB */
+
+/* distribuição simulada de resposta por item, derivada da base.
+   Determinística: o mesmo item devolve sempre a mesma distribuição. */
+const _cacheDist = {};
+function distribuicao(q){
+  if(_cacheDist[q.id]) return _cacheDist[q.id];
+  const base = baseEmpresa();
+  const chaves = q.t==='esc' ? Object.keys(q.w||{}) : [...new Set((q.ops||[]).flatMap(o=>Object.keys(o.w||{})))];
+  const pessoas = q.e===7 ? base.filter(p=>p.lider) : base;
+  const r = rng(q.id.split('').reduce((a,c)=>a+c.charCodeAt(0),0) * 17);
+
+  if(q.t === 'esc'){
+    const cont = [0,0,0,0,0];
+    pessoas.forEach(p=>{
+      let v = media(chaves.map(k=>p.pct[k]||50));
+      if(q.inv) v = 100 - v;
+      const ruido = (r()+r()-1) * 22;
+      const pos = clamp(Math.round((v + ruido) / 25), 0, 4);
+      cont[pos]++;
+    });
+    return _cacheDist[q.id] = {n:pessoas.length, cont, tipo:'esc'};
+  }
+  const cont = new Array((q.ops||[]).length).fill(0);
+  pessoas.forEach(p=>{
+    /* a alternativa mais provável é a que carrega os indicadores altos da pessoa */
+    const pontos = (q.ops||[]).map(o=>{
+      const ks = Object.keys(o.w||{});
+      if(!ks.length) return 18 + r()*22;
+      return media(ks.map(k=>(p.pct[k]||50) * (o.w[k]||1))) / 1.4 + r()*26;
+    });
+    cont[pontos.indexOf(Math.max(...pontos))]++;
+  });
+  return _cacheDist[q.id] = {n:pessoas.length, cont, tipo:'ops'};
+}
+
+/* leitura do item: dificuldade e poder de discriminação */
+function analiseItem(q){
+  const D = distribuicao(q);
+  const tot = D.cont.reduce((a,b)=>a+b,0) || 1;
+  const props = D.cont.map(c=>c/tot);
+  const maior = Math.max(...props);
+  const idx = props.indexOf(maior);
+
+  let dificuldade;   /* média em 0..100, só para escala */
+  if(D.tipo === 'esc'){
+    dificuldade = Math.round(media(D.cont.flatMap((c,i)=>new Array(c).fill(i*25))));
+  } else {
+    dificuldade = null;
+  }
+  /* concentração: quanto mais concentrada, menos o item separa as pessoas */
+  const entropia = -props.filter(p=>p>0).reduce((s,p)=>s+p*Math.log2(p),0);
+  const maxEnt = Math.log2(props.length);
+  const disc = Math.round(entropia / maxEnt * 100);
+
+  let estado, cor;
+  if(maior >= .75){ estado = 'concentrada'; cor = 'a'; }
+  else if(disc >= 78){ estado = 'discrimina bem'; cor = 'v'; }
+  else if(maior <= .12 && D.tipo==='ops'){ estado = 'alternativa morta'; cor = 'c'; }
+  else { estado = 'adequada'; cor = ''; }
+
+  return {D, props, maior, idx, disc, dificuldade, estado, cor, tot};
+}
+
+PAGINAS['/admin'] = () => {
+  if(!admLiberado) return `<section class="sec"><div class="wrap" style="max-width:460px">
+    <p class="eyebrow">Área administrativa</p>
+    <h1>Administração do instrumento</h1>
+    <p class="lead" style="margin-top:.7rem">Banco de questões, análise de itens e qualidade dos dados. Acesso da equipe que mantém o instrumento.</p>
+    <div class="card" style="margin-top:1.2rem">
+      <div class="campo"><label>E-mail</label><input value="admin@mapacorp.com.br"></div>
+      <div class="campo"><label>Senha</label><input type="password" value="demonstracao"></div>
+      <button class="btn" style="width:100%;justify-content:center" onclick="admLiberado=true;render()">Entrar</button>
+    </div>
+  </div></section>`;
+
+  const abas = [['banco','Banco de questões'],['itens','Análise de itens'],['indicadores','Indicadores'],
+                ['qualidade','Qualidade dos dados'],['aplicacoes','Aplicações']];
+
+  return `<section class="sec"><div class="wrap">
+    <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center">
+      <div><p class="eyebrow">Administração</p><h1 style="font-size:1.9rem">O instrumento por dentro</h1></div>
+      <button class="btn btn-sec btn-mini" onclick="admLiberado=false;render()">Sair</button>
+    </div>
+    <div class="chips" style="margin:1.2rem 0">
+      ${abas.map(([k,t])=>`<button class="pill ${abaADM===k?'on':''}" onclick="abaADM='${k}';limiteQ=12;render()">${t}</button>`).join('')}
+    </div>
+    ${abaADM==='banco'? admBanco()
+    : abaADM==='itens'? admItens()
+    : abaADM==='indicadores'? admIndicadores()
+    : abaADM==='qualidade'? admQualidade()
+    : admAplicacoes()}
+  </div></section>`;
+};
+
+/* ── banco de questões ──────────────────────────────────── */
+const FORMATOS = {esc:'Escala', sit:'Situação', dil:'Dilema', forc:'Forçada', cog:'Raciocínio', porq:'Fonte da decisão'};
+
+function filtrarQ(){
+  let q = BANCO.slice();
+  if(filtroEixo) q = q.filter(x=>x.e===filtroEixo);
+  if(filtroFormato!=='todos') q = q.filter(x=>x.t===filtroFormato);
+  return q;
+}
+
+function admBanco(){
+  const qs = filtrarQ();
+  const porF = {}; BANCO.forEach(q=>porF[q.t]=(porF[q.t]||0)+1);
+  const inv = BANCO.filter(q=>q.inv).length, anc = BANCO.filter(q=>q.anc).length;
+
+  return `<div class="grid g4">
+    <div class="card metrica"><b>${BANCO.length}</b><span>questões de eixo</span></div>
+    <div class="card metrica"><b>${CTX.length}</b><span>de contexto, fora do cálculo</span></div>
+    <div class="card metrica"><b>${Object.keys(IND).length}</b><span>indicadores</span></div>
+    <div class="card metrica"><b>${inv}</b><span>itens invertidos · ${Math.round(inv/BANCO.length*100)}%</span></div>
+  </div>
+
+  <div class="card" style="margin:1.2rem 0">
+    <div class="chips" style="margin-bottom:.6rem">
+      <span style="font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;color:var(--tinta3);align-self:center;margin-right:.3rem">EIXO</span>
+      <button class="pill ${filtroEixo===0?'on':''}" onclick="filtroEixo=0;limiteQ=12;render()">Todos · ${BANCO.length}</button>
+      ${EIXOS.map(e=>`<button class="pill ${filtroEixo===e.n?'on':''}" onclick="filtroEixo=${e.n};limiteQ=12;render()">${e.t} · ${BANCO.filter(q=>q.e===e.n).length}</button>`).join('')}
+    </div>
+    <div class="chips">
+      <span style="font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;color:var(--tinta3);align-self:center;margin-right:.3rem">FORMATO</span>
+      <button class="pill ${filtroFormato==='todos'?'on':''}" onclick="filtroFormato='todos';limiteQ=12;render()">Todos</button>
+      ${Object.entries(FORMATOS).map(([k,t])=>`<button class="pill ${filtroFormato===k?'on':''}" onclick="filtroFormato='${k}';limiteQ=12;render()">${t} · ${porF[k]||0}</button>`).join('')}
+    </div>
+  </div>
+
+  <p style="font-family:var(--mono);font-size:.72rem;color:var(--tinta3);margin-bottom:.8rem">
+    ${qs.length} ${qs.length===1?'QUESTÃO':'QUESTÕES'}${qs.length>limiteQ? ' · EXIBINDO '+Math.min(limiteQ,qs.length):''}</p>
+
+  ${qs.slice(0, limiteQ).map(q=>cartaoADM(q)).join('')}
+
+  ${qs.length > limiteQ? `<div style="text-align:center;margin:1rem 0">
+    <button class="btn btn-sec btn-mini" onclick="limiteQ=${limiteQ+24};render()">Mostrar mais ${Math.min(24, qs.length-limiteQ)}</button>
+    <button class="btn btn-sec btn-mini" onclick="limiteQ=9999;render()" style="margin-left:.4rem">Mostrar todas as ${qs.length}</button>
+  </div>`:''}
+
+  <div class="divisor"></div>
+  <h2>Contexto organizacional</h2>
+  <p style="color:var(--tinta2)">As 18 perguntas que descrevem a empresa. <b>Não entram em nenhum indicador da pessoa.</b></p>
+  <div class="card" style="margin-top:1rem">
+    ${Object.entries(DIM_CTX).map(([k,[t]])=>`
+      <p class="coord" style="margin:.9rem 0 .3rem">${t}</p>
+      ${CTX.filter(c=>c.d===k).map(c=>`<p style="margin:0 0 .25rem;font-size:.88rem;color:var(--tinta2)">
+        <span class="tag">${c.id}</span> ${esc(c.q)}${c.inv?' <span class="tag a">invertida</span>':''}</p>`).join('')}
+    `).join('')}
+  </div>`;
+}
+
+function cartaoADM(q){
+  const A = analiseItem(q);
+  const E_ = EIXOS[q.e-1];
+  const alts = q.t==='esc' ? ESCALA : (q.ops||[]).map(o=>o.t);
+  const inds = q.t==='esc' ? Object.keys(q.w||{}) : [...new Set((q.ops||[]).flatMap(o=>Object.keys(o.w||{})))];
+
+  return `<div class="card" style="margin-bottom:.8rem;border-left:3px solid ${E_.cor}">
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin-bottom:.5rem">
+      <span class="tag">${q.id}</span>
+      <span class="tag">${FORMATOS[q.t]}</span>
+      <span class="tag" style="color:${E_.cor}">${E_.t}</span>
+      ${q.inv? '<span class="tag a">invertida</span>':''}
+      ${q.anc? '<span class="tag v">âncora</span>':''}
+      <span class="tag ${A.cor}" style="margin-left:auto">${A.estado}</span>
+    </div>
+    <p style="font-size:.98rem;font-weight:500;margin:0 0 .7rem">${esc(q.q)}</p>
+    ${alts.map((t,i)=>{
+      const pc = Math.round(A.props[i]*100);
+      const w = q.t==='esc' ? (q.w||{}) : ((q.ops||[])[i]||{}).w || {};
+      const ks = Object.keys(w);
+      return `<div style="display:grid;grid-template-columns:1fr 150px 40px;gap:.7rem;align-items:center;padding:.32rem 0">
+        <span style="font-size:.87rem;color:${i===A.idx?'var(--azul)':'var(--tinta2)'};font-weight:${i===A.idx?'500':'400'}">
+          ${esc(t)}
+          ${q.t!=='esc' && ks.length? `<span class="tag" style="margin-left:.3rem">${ks.map(k=>IND[k]?IND[k][0]:k).join(' · ')}</span>`
+            : q.t!=='esc'? '<span class="tag c" style="margin-left:.3rem">sem crédito</span>':''}
+        </span>
+        <span class="bar"><i style="width:${pc}%;background:${i===A.idx?'var(--aco)':'var(--linha)'}"></i></span>
+        <span style="font-family:var(--mono);font-size:.76rem;color:var(--tinta2);text-align:right">${pc}%</span>
+      </div>`;
+    }).join('')}
+    <p style="margin:.6rem 0 0;font-family:var(--mono);font-size:.68rem;color:var(--tinta3)">
+      ${A.tot} RESPOSTAS · DISPERSÃO ${A.disc}%${A.dificuldade!==null? ' · MÉDIA '+A.dificuldade:''}
+      ${q.t==='esc'? ' · ALIMENTA '+inds.map(k=>IND[k]?IND[k][0]:k).join(', ').toUpperCase() : ''}
+    </p>
+  </div>`;
+}
+
+/* ── análise de itens ───────────────────────────────────── */
+function admItens(){
+  const todos = BANCO.map(q=>({q, A:analiseItem(q)}));
+  const grupos = {
+    reforcar:   todos.filter(x=>x.A.estado==='concentrada'),
+    discrimina: todos.filter(x=>x.A.estado==='discrimina bem'),
+    morta:      todos.filter(x=>x.A.estado==='alternativa morta'),
+    ok:         todos.filter(x=>x.A.estado==='adequada'),
+  };
+  const sel = filtroItem==='todos' ? todos
+            : filtroItem==='reforcar' ? grupos.reforcar
+            : filtroItem==='discrimina' ? grupos.discrimina
+            : filtroItem==='morta' ? grupos.morta : grupos.ok;
+
+  return `<h2>Análise de itens</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Cada questão precisa <b>separar as pessoas</b>. Item em que quase todos respondem a mesma coisa não informa nada — ocupa tempo de quem responde e não entra no resultado com peso útil.</p>
+
+  <div class="grid g4" style="margin:1.2rem 0">
+    <div class="card metrica"><b style="color:var(--verde)">${grupos.discrimina.length}</b><span>discriminam bem</span></div>
+    <div class="card metrica"><b>${grupos.ok.length}</b><span>adequadas</span></div>
+    <div class="card metrica"><b style="color:var(--ambar)">${grupos.reforcar.length}</b><span>concentradas · rever redação</span></div>
+    <div class="card metrica"><b style="color:var(--coral)">${grupos.morta.length}</b><span>com alternativa quase nunca escolhida</span></div>
+  </div>
+
+  <div class="card info" style="margin-bottom:1.2rem">
+    <p style="margin:0;font-size:.9rem"><b>Como ler.</b> <b>Concentrada</b> significa que mais de três quartos escolheram a mesma opção — costuma indicar pergunta óbvia ou socialmente desejável. <b>Alternativa morta</b> é opção escolhida por menos de um em oito: ou é implausível, ou está mal escrita. Nos dois casos, a correção é de redação, não de cálculo.</p>
+  </div>
+
+  <div class="chips" style="margin-bottom:1rem">
+    ${[['todos','Todas',todos.length],['discrimina','Discriminam bem',grupos.discrimina.length],
+       ['ok','Adequadas',grupos.ok.length],['reforcar','Concentradas',grupos.reforcar.length],
+       ['morta','Alternativa morta',grupos.morta.length]]
+      .map(([k,t,n])=>`<button class="pill ${filtroItem===k?'on':''}" onclick="filtroItem='${k}';render()">${t} · ${n}</button>`).join('')}
+  </div>
+
+  <div class="card" style="overflow:auto">
+    <table>
+      <thead><tr><th>Item</th><th>Eixo</th><th>Formato</th><th>Enunciado</th><th>Concentração</th><th>Dispersão</th><th>Estado</th></tr></thead>
+      <tbody>${sel.slice(0,60).map(({q,A})=>`<tr>
+        <td><span class="tag">${q.id}</span></td>
+        <td style="font-size:.82rem;color:${EIXOS[q.e-1].cor}">${EIXOS[q.e-1].t.split(' ')[0]}</td>
+        <td style="font-size:.82rem">${FORMATOS[q.t]}</td>
+        <td style="font-size:.85rem;max-width:340px">${esc(q.q.slice(0,90))}${q.q.length>90?'…':''}</td>
+        <td><b style="color:${A.maior>=.75?'var(--ambar)':'var(--tinta)'}">${Math.round(A.maior*100)}%</b></td>
+        <td>${A.disc}%</td>
+        <td><span class="tag ${A.cor}">${A.estado}</span></td>
+      </tr>`).join('')}</tbody>
+    </table>
+    ${sel.length>60? `<p class="apoio" style="margin-top:.8rem">Exibindo 60 de ${sel.length}.</p>`:''}
+  </div>`;
+}
+
+/* ── indicadores ────────────────────────────────────────── */
+function admIndicadores(){
+  const base = baseEmpresa();
+  const linhas = Object.keys(IND).map(k=>{
+    const itens = ITENS_IND[k] || [];
+    const vs = base.map(p=>p.pct[k]).filter(v=>v!==undefined);
+    return {k, nome:IND[k][0], eixo:IND[k][1], itens, n:vs.length,
+            media: vs.length? Math.round(media(vs)) : null,
+            min: vs.length? Math.min(...vs) : null, max: vs.length? Math.max(...vs) : null};
+  }).sort((a,b)=>a.eixo-b.eixo || a.nome.localeCompare(b.nome));
+  const poucos = linhas.filter(l=>l.itens.length < 3);
+
+  return `<h2>Indicadores</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Cada indicador recebe de dois a oito itens. <b>Nenhum tem menos de dois</b> — o mínimo para que uma questão mal redigida não distorça o resultado sozinha.</p>
+
+  <div class="grid g4" style="margin:1.2rem 0">
+    <div class="card metrica"><b>${linhas.length}</b><span>indicadores</span></div>
+    <div class="card metrica"><b>${Math.min(...linhas.map(l=>l.itens.length))}</b><span>itens no menor</span></div>
+    <div class="card metrica"><b>${Math.max(...linhas.map(l=>l.itens.length))}</b><span>itens no maior</span></div>
+    <div class="card metrica"><b style="color:${poucos.length?'var(--ambar)':'var(--verde)'}">${poucos.length}</b><span>com apenas dois itens</span></div>
+  </div>
+
+  ${poucos.length? `<div class="aviso" style="margin-bottom:1.2rem">
+    <b>${poucos.length} ${poucos.length===1?'indicador apoia-se':'indicadores apoiam-se'} em apenas dois itens.</b>
+    Funciona, mas é o piso. Se a análise de consistência mostrar que os dois não medem a mesma coisa, o indicador fica sem base — e a prioridade de redação de novas questões é essa.
+  </div>`:''}
+
+  <div class="card" style="overflow:auto">
+    <table>
+      <thead><tr><th>Indicador</th><th>Eixo</th><th>Itens</th><th>Média</th><th>Mínimo</th><th>Máximo</th><th>Amplitude</th></tr></thead>
+      <tbody>${linhas.map(l=>`<tr>
+        <td><b style="font-size:.88rem">${l.nome}</b></td>
+        <td style="font-size:.82rem;color:${EIXOS[l.eixo-1].cor}">${l.eixo}</td>
+        <td><span class="tag ${l.itens.length<3?'a':''}">${l.itens.length}</span>
+          <span style="font-family:var(--mono);font-size:.66rem;color:var(--tinta3);margin-left:.3rem">${l.itens.join(' ')}</span></td>
+        <td><b style="color:${corDe(l.media)}">${l.media??'—'}</b></td>
+        <td style="font-family:var(--mono);font-size:.8rem;color:var(--tinta3)">${l.min??'—'}</td>
+        <td style="font-family:var(--mono);font-size:.8rem;color:var(--tinta3)">${l.max??'—'}</td>
+        <td>${l.min!==null? `<span class="bar" style="display:block;width:110px"><i style="width:${l.max-l.min}%;margin-left:${l.min}%;background:var(--acoc)"></i></span>`:'—'}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>`;
+}
+
+/* ── qualidade dos dados ────────────────────────────────── */
+function admQualidade(){
+  const base = baseEmpresa();
+  const invertidos = BANCO.filter(q=>q.inv);
+  const ancoras = BANCO.filter(q=>q.anc);
+  const semCredito = BANCO.filter(q=>['sit','dil','cog'].includes(q.t))
+    .flatMap(q=>(q.ops||[]).map((o,i)=>({q,o,i})).filter(x=>!Object.keys(x.o.w||{}).length));
+  const concentradas = BANCO.map(q=>({q,A:analiseItem(q)})).filter(x=>x.A.maior>=.75);
+
+  return `<h2>Qualidade dos dados</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Verificações que antecedem qualquer conclusão. Um instrumento pode gerar relatórios bonitos e não medir nada — estas telas existem para que isso seja detectável.</p>
+
+  <div class="grid g4" style="margin:1.2rem 0">
+    <div class="card metrica"><b>${BANCO.length+CTX.length}</b><span>itens ao todo</span></div>
+    <div class="card metrica"><b>${invertidos.length}</b><span>invertidos · ${Math.round(invertidos.length/BANCO.length*100)}%</span></div>
+    <div class="card metrica"><b>${ancoras.length}</b><span>âncoras com o instrumento escolar</span></div>
+    <div class="card metrica"><b style="color:${concentradas.length>15?'var(--ambar)':'var(--verde)'}">${concentradas.length}</b><span>itens concentrados</span></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h3>Verificações estruturais</h3>
+      ${[['Toda questão tem indicador', BANCO.every(q=>{
+            const k = q.t==='esc'? Object.keys(q.w||{}) : (q.ops||[]).flatMap(o=>Object.keys(o.w||{}));
+            return k.length>0; })],
+         ['Todo indicador tem ao menos dois itens', Object.keys(IND).every(k=>(ITENS_IND[k]||[]).length>=2)],
+         ['Todo peso aponta para indicador existente', BANCO.every(q=>{
+            const k = q.t==='esc'? Object.keys(q.w||{}) : (q.ops||[]).flatMap(o=>Object.keys(o.w||{}));
+            return k.every(x=>IND[x]); })],
+         ['Nenhum identificador duplicado', new Set(BANCO.map(q=>q.id)).size === BANCO.length],
+         ['Contexto fora de todo indicador', CTX.every(c=>!IND[c.id])],
+         ['Itens invertidos entre 8% e 20%', (invertidos.length/BANCO.length)>=.08 && (invertidos.length/BANCO.length)<=.20]
+        ].map(([t,ok])=>`<div style="display:flex;gap:.6rem;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--linha2)">
+          <span class="tag ${ok?'v':'c'}">${ok?'ok':'falha'}</span>
+          <span style="font-size:.89rem">${t}</span></div>`).join('')}
+    </div>
+
+    <div class="card">
+      <h3>O que verificar com dados reais</h3>
+      <p class="apoio" style="margin:.2rem 0 .7rem">Estas verificações só fazem sentido depois da primeira aplicação de verdade. Aqui ficam listadas para não serem esquecidas.</p>
+      ${[['Consistência interna por eixo','Se os itens de um eixo medem a mesma coisa. Alfa abaixo de 0,70 indica que não.'],
+         ['Itens invertidos correlacionando na direção certa','Se um invertido correlaciona positivamente com os demais, está sendo lido errado.'],
+         ['Tempo de resposta por item','Item respondido em menos de dois segundos costuma não ter sido lido.'],
+         ['Padrão de resposta repetido','Quem marca a mesma opção em tudo precisa ser sinalizado, não descartado.'],
+         ['Taxa de abandono por etapa','Onde as pessoas param diz onde o instrumento cansa.'],
+         ['Diferença entre grupos','Se homens e mulheres, ou áreas diferentes, entendem a pergunta do mesmo jeito.']]
+        .map(([t,d])=>`<div style="padding:.55rem 0;border-bottom:1px solid var(--linha2)">
+          <b style="font-size:.88rem">${t}</b>
+          <p style="margin:.15rem 0 0;font-size:.84rem;color:var(--tinta2)">${d}</p></div>`).join('')}
+    </div>
+  </div>
+
+  ${concentradas.length? `
+  <div class="divisor"></div>
+  <h2>Itens que pedem revisão de redação</h2>
+  <p style="color:var(--tinta2)">Mais de três quartos escolheram a mesma opção. Costuma indicar pergunta óbvia ou socialmente desejável.</p>
+  <div class="card" style="margin-top:1rem;overflow:auto">
+    <table><thead><tr><th>Item</th><th>Enunciado</th><th>Opção dominante</th><th>Concentração</th></tr></thead>
+    <tbody>${concentradas.slice(0,20).map(({q,A})=>{
+      const alts = q.t==='esc'? ESCALA : (q.ops||[]).map(o=>o.t);
+      return `<tr>
+        <td><span class="tag">${q.id}</span></td>
+        <td style="font-size:.85rem;max-width:380px">${esc(q.q.slice(0,100))}${q.q.length>100?'…':''}</td>
+        <td style="font-size:.84rem;color:var(--tinta2)">${esc((alts[A.idx]||'').slice(0,44))}</td>
+        <td><b style="color:var(--ambar)">${Math.round(A.maior*100)}%</b></td>
+      </tr>`;}).join('')}</tbody></table>
+  </div>`:''}
+
+  <div class="divisor"></div>
+  <h2>Alternativas sem crédito</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Em situações e dilemas, algumas alternativas não somam a nenhum indicador — são as que descrevem a ação que o instrumento não credita. <b>Elas continuam sendo registradas</b>, porque a escolha por elas é informação.</p>
+  <div class="card" style="margin-top:1rem">
+    ${semCredito.slice(0,12).map(x=>`<div style="padding:.5rem 0;border-bottom:1px solid var(--linha2)">
+      <span class="tag">${x.q.id}</span>
+      <span style="font-size:.87rem;color:var(--tinta2);margin-left:.4rem">${esc(x.o.t)}</span></div>`).join('')}
+    ${semCredito.length>12? `<p class="apoio" style="margin-top:.6rem">E mais ${semCredito.length-12}.</p>`:''}
+  </div>`;
+}
+
+/* ── aplicações ─────────────────────────────────────────── */
+function admAplicacoes(){
+  const base = baseEmpresa();
+  const r = rng(777);
+  const linhas = AREAS_EMP.map(a=>{
+    const g = base.filter(p=>p.area===a.n);
+    const convidados = Math.round(g.length / (0.62 + r()*0.3));
+    const abandono = Math.round(convidados * (0.04 + r()*0.12));
+    return {a, conc:g.length, convidados, abandono, taxa: Math.round(g.length/convidados*100),
+            tempo: Math.round(48 + r()*26)};
+  });
+  const totC = linhas.reduce((s,l)=>s+l.convidados,0);
+  const totF = linhas.reduce((s,l)=>s+l.conc,0);
+
+  return `<h2>Aplicações</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Acompanhamento da aplicação por área. A taxa de conclusão é o primeiro sinal de que algo não vai bem — abandono alto costuma ser instrumento longo demais ou desconfiança sobre o uso do resultado.</p>
+
+  <div class="grid g4" style="margin:1.2rem 0">
+    <div class="card metrica"><b>${totC}</b><span>convidados</span></div>
+    <div class="card metrica"><b style="color:var(--verde)">${totF}</b><span>concluíram</span></div>
+    <div class="card metrica"><b>${Math.round(totF/totC*100)}%</b><span>taxa de conclusão</span></div>
+    <div class="card metrica"><b>${Math.round(media(linhas.map(l=>l.tempo)))} min</b><span>tempo médio</span></div>
+  </div>
+
+  <div class="card" style="overflow:auto">
+    <table>
+      <thead><tr><th>Área</th><th>Convidados</th><th>Concluíram</th><th>Abandonaram</th><th>Taxa</th><th>Tempo médio</th><th>Contexto divulgável</th></tr></thead>
+      <tbody>${linhas.map(l=>`<tr>
+        <td><b>${l.a.n}</b></td>
+        <td>${l.convidados}</td>
+        <td>${l.conc}</td>
+        <td>${l.abandono}</td>
+        <td><b style="color:${l.taxa>=75?'var(--verde)':l.taxa>=60?'var(--ambar)':'var(--coral)'}">${l.taxa}%</b></td>
+        <td>${l.tempo} min</td>
+        <td>${l.conc>=5? '<span class="tag v">sim</span>' : '<span class="tag c">não · menos de 5</span>'}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>
+
+  <div class="card dest" style="margin-top:1.2rem">
+    <p style="margin:0"><b>A regra dos cinco.</b> Área com menos de cinco respondentes não tem o contexto organizacional divulgado, nem agregado. Abaixo desse número, quem respondeu o quê fica identificável — e a garantia de anonimato, que é o que sustenta a resposta honesta, deixa de valer.</p>
+  </div>
+
+  <div class="divisor"></div>
+  <h2>O que fazer com taxa baixa</h2>
+  <div class="grid g3" style="margin-top:1rem">
+    ${[['Abaixo de 60%','Verifique primeiro se a política de não retaliação foi comunicada. Desconfiança sobre o uso do resultado é a causa mais comum de abandono.'],
+       ['Abandono concentrado numa etapa','O instrumento cansa ali. Vale olhar a ordem das questões e o tamanho da etapa.'],
+       ['Tempo médio abaixo de 30 minutos','Respostas rápidas demais indicam preenchimento sem leitura. O dado existe e não vale.']]
+      .map(([t,d])=>`<div class="card info">
+        <b style="font-size:.9rem;display:block;margin-bottom:.3rem;color:var(--azul)">${t}</b>
+        <p style="margin:0;font-size:.87rem;color:var(--tinta2)">${d}</p></div>`).join('')}
+  </div>`;
+}
+</script>
+
+
+<script>
+/* =====================================================================
+   Para empresas — o que a organização recebe e o que precisa acertar
+   ===================================================================== */
+PAGINAS['/empresas'] = () => `
+<section class="sec"><div class="wrap">
+  <p class="eyebrow">Para empresas</p>
+  <h1>O que a sua empresa recebe</h1>
+  <p class="lead" style="margin-top:.8rem">Uma aplicação, quatro leituras. Cada uma corresponde a uma responsabilidade diferente — e nenhuma delas expõe o resultado individual de quem respondeu.</p>
+
+  <div class="grid g2" style="margin-top:1.6rem">
+    ${[['Retrato por área','Os oito eixos e os 70 indicadores, por área e comparados à média da empresa. Mostra onde está frágil, onde está forte, e o que é problema local contra o que é problema institucional.','var(--aco)'],
+       ['O que a organização impede','O relatório que nenhum teste de perfil entrega. Cruza a competência da pessoa com a condição da empresa — e revela quando investir em formação individual rende pouco enquanto a condição não mudar.','var(--coral)'],
+       ['Plano de formação dirigido','Duas ou três prioridades por área, com o que trabalhar e o primeiro passo. O conteúdo pode vir de quem já o oferece: Senai, Sebrae, universidade corporativa ou plataforma que a empresa já assine.','var(--ambar)'],
+       ['Evidência de desenvolvimento','Reaplicação em seis ou doze meses, com o deslocamento medido nas competências trabalhadas contra as não trabalhadas. É a única prestação de contas honesta possível em desenvolvimento de pessoas.','var(--verde)']]
+      .map(([t,d,c])=>`<div class="card" style="border-left:3px solid ${c}">
+        <h3>${t}</h3><p style="margin:.5rem 0 0;color:var(--tinta2)">${d}</p></div>`).join('')}
+  </div>
+
+  <div class="divisor"></div>
+  <h2>O ciclo</h2>
+  <div class="grid g3" style="margin-top:1.2rem">
+    ${[['Aplicação','162 questões em cinco etapas, com pausa. Cerca de 68 minutos. Voluntária.'],
+       ['Leitura','Cada pessoa recebe a sua. Cada líder, o retrato da equipe. O RH consolida por área.'],
+       ['Decisão','Duas ou três competências prioritárias por área. Nunca mais — agir em tudo é agir em nada.'],
+       ['Formação','Trilhas e desafios práticos nas competências escolhidas.'],
+       ['Reaplicação','Seis ou doze meses depois.'],
+       ['Prestação de contas','O deslocamento sustenta o orçamento de treinamento do ano seguinte.']]
+      .map(([t,d],i)=>`<div class="card"><span class="tag">${i+1}</span>
+        <h3 style="margin:.5rem 0 .3rem">${t}</h3>
+        <p style="margin:0;font-size:.88rem;color:var(--tinta2)">${d}</p></div>`).join('')}
+  </div>
+
+  <div class="divisor"></div>
+  <h2>O que precisa ficar acertado antes da primeira aplicação</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Não são formalidades. Cada um destes pontos existe porque, sem ele, o dado deixa de valer — e o instrumento passa a medir medo em vez de competência.</p>
+  <div class="card" style="margin-top:1.2rem">
+    ${[['Política de não retaliação, por escrito','O resultado não é usado para promoção, corte, remuneração nem realocação. Declarada e assinada antes da aplicação. Sem isso, quem responde responde defensivamente, e o que sobra é desejabilidade social.'],
+       ['Quem vê o quê','A pessoa vê o dela. O líder vê o agregado da equipe. O RH vê o agregado por área. Ninguém vê o individual de outro.'],
+       ['Participação voluntária','Adesão obrigatória com medo produz o mesmo problema da retaliação.'],
+       ['Mínimo de cinco respondentes por área','Abaixo disso, o contexto organizacional não é divulgado — nem agregado. Quem respondeu o quê ficaria identificável.'],
+       ['Prazo de guarda e exclusão','Quanto tempo o dado fica e como a pessoa pede a remoção.'],
+       ['O que acontece se a pessoa sair','O relatório individual é dela. A empresa perde o acesso ao individual e mantém apenas o agregado histórico.']]
+      .map(([t,d])=>`<div style="padding:.8rem 0;border-bottom:1px solid var(--linha2)">
+        <b style="font-size:.94rem">${t}</b>
+        <p style="margin:.2rem 0 0;font-size:.9rem;color:var(--tinta2)">${d}</p></div>`).join('')}
+  </div>
+
+  <div class="divisor"></div>
+  <h2>Antes de aplicar em escala</h2>
+  <p style="color:var(--tinta2);max-width:76ch">O instrumento está construído e fundamentado. Não está validado — e o caminho para isso é curto e barato.</p>
+  <div class="grid g4" style="margin-top:1.2rem">
+    ${[['Revisão do banco','Cinco profissionais de RH leem as 162 questões e apontam o que não faz sentido no contexto de trabalho.','2 semanas'],
+       ['Estudo cognitivo','Vinte pessoas respondem em voz alta, explicando o que entenderam. É a etapa que mais corrige.','1 semana'],
+       ['Piloto','Uma área, cem a duzentas pessoas, com análise de consistência dos itens.','1 mês'],
+       ['Reaplicação','Verificar estabilidade e, depois, movimento após a formação.','6 meses']]
+      .map(([t,d,p])=>`<div class="card">
+        <span class="tag a">${p}</span>
+        <h3 style="margin:.5rem 0 .3rem;font-size:.98rem">${t}</h3>
+        <p style="margin:0;font-size:.87rem;color:var(--tinta2)">${d}</p></div>`).join('')}
+  </div>
+
+  <div class="ok-box" style="margin-top:1.4rem">
+    <b>As duas primeiras etapas custam quase nada e resolvem a maior parte dos problemas.</b> Fazê-las já coloca o instrumento acima do que a maioria das ferramentas de diagnóstico organizacional tem — porque a maioria não faz nenhuma.
+  </div>
+
+  <div class="divisor"></div>
+  <div class="card dest">
+    <h3>Conversar sobre uma aplicação</h3>
+    <p style="margin:.5rem 0 0;color:var(--tinta2)">Escola de Líderes · Mato Grosso<br>
+    Para propostas, piloto ou apresentação à diretoria, o contato está na página de limites e ética, junto com as condições de uso.</p>
+  </div>
+</div></section>`;
+</script>
+
+</body>
+</html>
