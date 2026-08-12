@@ -647,10 +647,13 @@ const NOMES_E = ['Ana','Bruno','Carla','Diego','Elaine','Fábio','Gabriela','Hen
 const SOBRE_E = ['Almeida','Barbosa','Cardoso','Duarte','Esteves','Ferreira','Gomes','Henriques','Ibrahim','Jardim',
  'Klein','Lima','Machado','Nunes','Oliveira','Pacheco','Quirino','Ramos','Santana','Teixeira','Ueda','Vieira','Xavier'];
 
+/* o desvio pessoal é deliberadamente pequeno: se ele dominar, todo mundo fica
+   alto ou baixo em tudo ao mesmo tempo, e a base vira bimodal — o que não
+   acontece em dados reais, onde as pessoas têm forças e lacunas distintas. */
 const BASE_PERFIL = {
- forte:  {m:62, s:13, lider:.30},
- medio:  {m:52, s:14, lider:.22},
- fragil: {m:43, s:14, lider:.18},
+ forte:  {m:60, s:8, lider:.30},
+ medio:  {m:52, s:9, lider:.22},
+ fragil: {m:45, s:9, lider:.18},
 };
 const BASE_CTX = { forte:{m:68,s:10}, medio:{m:54,s:12}, fragil:{m:40,s:13} };
 
@@ -698,13 +701,15 @@ function baseEmpresa(){
       const desvio = (r()+r()+r()-1.5) * 2;             /* aproxima normal */
       const pessoal = clamp(P.m + desvio * P.s, 12, 96);
       /* cada pessoa tem forças próprias, além do viés da área */
+      /* forças e lacunas próprias: é o que faz duas pessoas com a mesma média
+         terem perfis completamente diferentes */
       const meuEixo = {};
-      EIXOS.forEach(e=>{ meuEixo[e.n] = (r()+r()+r()-1.5) * 9; });
+      EIXOS.forEach(e=>{ meuEixo[e.n] = (r()+r()+r()-1.5) * 15; });
       const V = VIES_AREA[A.n] || {};
       const pct = {};
       Object.keys(IND).forEach(k=>{
         const ex = IND[k][1];
-        const ruido = (r()+r()+r()-1.5) * 9;
+        const ruido = (r()+r()+r()-1.5) * 14;
         pct[k] = Math.round(clamp(pessoal + (V[ex]||0) + meuEixo[ex] + ruido, 5, 99));
       });
       const lider = r() < P.lider;
@@ -1344,13 +1349,15 @@ PAGINAS['/painel'] = () => {
 
   return `<section class="sec"><div class="wrap">
     <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center">
-      <div><p class="eyebrow">Painel da empresa</p><h1 style="font-size:1.9rem">Indústria Demonstração Ltda.</h1></div>
+      <div><p class="eyebrow">Painel de resultados</p>
+        <h1 style="font-size:1.9rem">Indústria Demonstração Ltda.</h1>
+        <p style="margin:.2rem 0 0;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta3)">
+          ${abas.find(a=>a[0]===abaRH)? abas.find(a=>a[0]===abaRH)[1] : ''}${areaSel!=='todas'? ' · '+esc(areaSel) : ' · empresa inteira'}</p>
+      </div>
       <button class="btn btn-sec btn-mini" onclick="rhLiberado=false;render()">Sair</button>
     </div>
 
-    <div class="chips" style="margin:1.2rem 0">
-      ${abas.map(([k,t])=>`<button class="pill ${abaRH===k?'on':''}" onclick="abaRH='${k}';render()">${t}</button>`).join('')}
-    </div>
+    ${NAV_PAINEL(abaRH)}
 
     <div class="chips" style="margin-bottom:1.2rem">
       <span style="font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--tinta3);align-self:center;margin-right:.4rem">ÁREA</span>
@@ -1361,6 +1368,8 @@ PAGINAS['/painel'] = () => {
     ${abaRH==='painel'? abaVisao(ag, geral)
     : abaRH==='areas'? abaAreas(base, geral)
     : abaRH==='contexto'? abaContexto(base, ag, geral)
+    : abaRH==='ranking'? abaRanking(base)
+    : abaRH==='objetiva'? abaObjetiva(base)
     : abaRH==='relatorio'? abaRelatorio(base)
     : abaRH==='analise'? abaAnalise(base)
     : abaRH==='dispersao'? abaDispersao(base)
@@ -1574,12 +1583,16 @@ function abaContexto(base, ag, geral){
 
 function abaFormacao(ag, geral){
   const inds = Object.keys(ag.ind).sort((a,b)=>ag.ind[a]-ag.ind[b]).slice(0,8);
-  const horas = inds.slice(0,3).length * 3;
-  return `<h2>Plano de formação${areaSel!=='todas'? ' · '+esc(areaSel):''}</h2>
-  <p style="color:var(--tinta2);max-width:76ch">Duas ou três frentes por semestre. Nunca mais que isso — agir em tudo é agir em nada, e na reaplicação nada terá se movido.</p>
+  const prior = inds.slice(0,3);
+  const horas = prior.length * 3;
+  return `<h2>Trilhas e desafios${areaSel!=='todas'? ' · '+esc(areaSel):''}</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Duas coisas diferentes, e por isso separadas: <b>trilhas</b> desenvolvem uma competência específica; <b>desafios práticos</b> exercitam um eixo inteiro em situação real. As primeiras são individuais ou de grupo pequeno; os segundos são coletivos.</p>
 
+  <div class="divisor"></div>
+  <h2 style="font-size:1.35rem">Trilhas por competência</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Duas ou três frentes por semestre. Nunca mais que isso — agir em tudo é agir em nada, e na reaplicação nada terá se movido.</p>
   <div class="grid g3" style="margin-top:1.2rem">
-    ${inds.slice(0,3).map((k,i)=>{
+    ${prior.map((k,i)=>{
       const T = TRILHA[k] || {o:'Praticar de forma deliberada, com registro do que mudou.', a:'Escolher uma situação por semana para exercitar.'};
       return `<div class="card">
         <span class="tag a">PRIORIDADE ${i+1}</span>
@@ -1591,13 +1604,21 @@ function abaFormacao(ag, geral){
     }).join('')}
   </div>
 
-  <div class="card info" style="margin-top:1.2rem">
+  <div class="card" style="margin-top:1rem">
+    <p class="coord">As demais competências frágeis desta seleção</p>
+    <div class="chips" style="margin-top:.5rem">
+      ${inds.slice(3).map(k=>`<span class="tag ${ag.ind[k]<45?'c':'a'}">${IND[k][0]} · ${ag.ind[k]}</span>`).join('')}
+    </div>
+    <p style="margin:.6rem 0 0;font-size:.88rem;color:var(--tinta2)">Ficam para o semestre seguinte. Deixar de fora é escolha, não descuido.</p>
+  </div>
+
+  <div class="card info" style="margin-top:1rem">
     <p style="margin:0"><b>O conteúdo pode vir de quem já o oferece.</b> Senai, Sebrae, universidade corporativa da própria empresa, ou plataforma que ela já assine. O instrumento diagnostica, indica e mede de novo — não compete com quem ensina.</p>
   </div>
 
   <div class="divisor"></div>
-  <h2>Desafios práticos por eixo</h2>
-  <p style="color:var(--tinta2);max-width:76ch">Aula sobre um tema desenvolve conhecimento sobre o tema. Desafio prático desenvolve a capacidade. Prazo curto, problema real da empresa, entrega concreta.</p>
+  <h2 style="font-size:1.35rem">Desafios práticos por eixo</h2>
+  <p style="color:var(--tinta2);max-width:76ch">Aula sobre um tema desenvolve conhecimento sobre o tema. Desafio prático desenvolve a capacidade. Prazo curto, problema real da empresa, entrega concreta. <b>Um por semestre é suficiente</b> — mais que isso vira evento, e evento não move indicador.</p>
   <div class="grid g2" style="margin-top:1.2rem">
     ${[['Entrega e método','Reorganizar um processo real que trava, em 72 horas, com o antes e o depois medidos.'],
        ['Análise e decisão','Decidir com dado incompleto sobre um caso real, com o critério publicado e auditado pelos pares.'],
@@ -1606,14 +1627,14 @@ function abaFormacao(ag, geral){
        ['Iniciativa e melhoria','Encontrar e resolver um desperdício, com o valor economizado calculado.'],
        ['Ética e integridade','Construir o protocolo de conduta da própria área a partir de dilemas reais.'],
        ['Liderança','Assumir um projeto fora da própria área, com equipe emprestada.'],
-       ['Tecnologia e inovação','Automatizar uma tarefa manual da própria rotina em uma semana, com as horas economizadas medidas antes e depois.']]
+       ['Tecnologia e inovação','Automatizar uma tarefa manual da rotina em uma semana, com as horas economizadas medidas antes e depois.']]
       .map(([t,d],i)=>`<div class="card" style="border-left:3px solid ${EIXOS[i].cor}">
         <h3 style="font-size:.98rem">${t}</h3>
         <p style="margin:.3rem 0 0;font-size:.88rem;color:var(--tinta2)">${d}</p></div>`).join('')}
   </div>
 
   <div class="aviso" style="margin-top:1.2rem">
-    <b>Regra de composição das equipes.</b> Quem mais precisa de um eixo não forma equipe entre si — isso cria grupo de déficit, em que ninguém puxa ninguém e a experiência confirma a crença de que não conseguem. Distribua em equipes mistas, com uma âncora em cada.
+    <b>Regra de composição das equipes.</b> Quem mais precisa de um eixo <b>não deve formar equipe entre si</b> — isso cria grupo de déficit, em que ninguém puxa ninguém e a experiência confirma a crença de que não conseguem. Distribua em equipes mistas, com uma âncora em cada. Quem são as âncoras está na aba de análise do grupo.
   </div>`;
 }
 
@@ -2953,24 +2974,43 @@ function abaAnalise(base){
   <h2>Quem está fora da curva</h2>
   <p style="color:var(--tinta2);max-width:78ch">Pessoas cujo resultado se afasta do grupo em uma ou mais competências, para cima ou para baixo. <b>Para cima é ativo</b>: são âncoras naturais. <b>Para baixo é sinal</b>: alguém que a formação coletiva não vai alcançar.</p>
 
-  ${desalinhados.length? `<div class="card" style="margin-top:1rem">
-    ${desalinhados.slice(0,12).map((x,i)=>`<div class="pess-lin" style="cursor:pointer" onclick="pessoaAn=${g.indexOf(x.p)};render()">
-      <span class="pess-n">${i+1}</span>
+  ${(()=>{
+    const acimaP = desalinhados.filter(x=>x.acima.length > x.abaixo.length);
+    const abaixoP = desalinhados.filter(x=>x.abaixo.length >= x.acima.length);
+    const linha = (x,i,dir) => `<div class="pess-lin" style="cursor:pointer" onclick="abaRH='relatorio';relPessoa='${x.p.id}';render();window.scrollTo(0,0)">
+      <span class="pess-n" style="background:${dir>0?'#E8F4EE':'#FBEDEA'};color:${dir>0?'var(--verde)':'var(--coral)'}">${dir>0?'↑':'↓'}</span>
       <span>
         <b style="font-size:.92rem;color:var(--azul)">${esc(x.p.nome)}</b>
         <span style="color:var(--tinta2);font-size:.8rem"> · ${esc(x.p.area)}${x.p.lider?' · lidera':''}</span>
         <span style="display:block;margin-top:.25rem">
-          ${x.acima.slice(0,3).map(a=>`<span class="tag v">↑ ${IND[a.k][0]} ${a.v} <span style="opacity:.6">grupo ${a.m}</span></span>`).join(' ')}
-          ${x.abaixo.slice(0,3).map(a=>`<span class="tag c">↓ ${IND[a.k][0]} ${a.v} <span style="opacity:.6">grupo ${a.m}</span></span>`).join(' ')}
+          ${(dir>0? x.acima : x.abaixo).slice(0,3).map(a=>`<span class="tag ${dir>0?'v':'c'}">${dir>0?'↑':'↓'} ${IND[a.k][0]} ${a.v} <span style="opacity:.6">grupo ${a.m}</span></span>`).join(' ')}
         </span>
       </span>
       <span style="text-align:right;white-space:nowrap">
-        <b style="font-family:var(--disp);font-size:1.05rem;color:${x.dist>=0?'var(--verde)':'var(--coral)'}">${x.dist>=0?'+':''}${x.dist}</b>
+        <b style="font-family:var(--disp);font-size:1.05rem;color:${dir>0?'var(--verde)':'var(--coral)'}">${x.dist>=0?'+':''}${x.dist}</b>
         <span style="display:block;font-family:var(--mono);font-size:.62rem;color:var(--tinta3)">vs grupo</span>
       </span>
-    </div>`).join('')}
-  </div>` : `<div class="ok-box" style="margin-top:1rem">
-    <b>Ninguém se afasta significativamente do grupo.</b> A equipe é homogênea — o que facilita a formação coletiva e significa que o resultado, bom ou ruim, é de todos.</div>`}
+    </div>`;
+
+    if(!desalinhados.length) return `<div class="ok-box" style="margin-top:1rem">
+      <b>Ninguém se afasta significativamente do grupo.</b> A equipe é homogênea — o que facilita a formação coletiva e significa que o resultado, bom ou ruim, é de todos.</div>`;
+
+    return `<div class="grid g2" style="margin-top:1.2rem;align-items:start">
+      <div class="card" style="border-left:3px solid var(--verde)">
+        <h3>Acima do grupo · ${acimaP.length}</h3>
+        <p class="apoio" style="margin:.2rem 0 .7rem">São âncoras naturais. Podem apoiar colegas nas competências em que se destacam — e isso desenvolve os dois lados.</p>
+        ${acimaP.length? acimaP.slice(0,8).map((x,i)=>linha(x,i,1)).join('')
+          : '<p class="nota" style="margin:0">Ninguém significativamente acima do grupo.</p>'}
+      </div>
+      <div class="card" style="border-left:3px solid var(--coral)">
+        <h3>Abaixo do grupo · ${abaixoP.length}</h3>
+        <p class="apoio" style="margin:.2rem 0 .7rem">A formação coletiva provavelmente não alcança. Pede conversa e plano individual, conduzido pelo líder direto.</p>
+        ${abaixoP.length? abaixoP.slice(0,8).map((x,i)=>linha(x,i,-1)).join('')
+          : '<p class="nota" style="margin:0">Ninguém significativamente abaixo do grupo.</p>'}
+      </div>
+    </div>
+    <p class="apoio" style="margin-top:.7rem">Clique em um nome para abrir o relatório individual completo.</p>`;
+  })()}
 
   <div class="aviso" style="margin-top:1.2rem">
     <b>Fora da curva não é problema nem mérito.</b> Descreve distância em relação a este grupo específico — a mesma pessoa em outra equipe poderia estar no meio. Serve para escolher quem apoia quem, não para classificar ninguém.
@@ -3402,7 +3442,7 @@ function relatorioCompleto(p, base){
 
   <div class="rel-cab">
     <p class="coord">Relatório de desenvolvimento</p>
-    <h1 style="font-size:2rem;margin:.2rem 0 .3rem">${esc(p.nome)}</h1>
+    <h2 style="font-size:2rem;margin:.2rem 0 .3rem;border:0;padding:0">${esc(p.nome)}</h2>
     <p style="margin:0;color:var(--tinta2);font-size:.95rem">${esc(p.area)}${p.lider?' · exerce liderança':''} · ${p.tempo} ${p.tempo===1?'ano':'anos'} de casa · código ${p.id}</p>
     <div class="rel-selo">
       <div><b>${IND[ord[0]][0]}</b><span>competência mais forte · ${p.pct[ord[0]]}</span></div>
@@ -3702,6 +3742,529 @@ function abaDispersao(base){
 
   <div class="aviso" style="margin-top:1.2rem">
     <b>Estar fora da curva não é problema nem mérito.</b> Descreve distância em relação a este grupo específico — a mesma pessoa em outra equipe poderia estar no meio. Serve para escolher quem apoia quem, e para saber onde a formação coletiva não vai alcançar.
+  </div>`;
+}
+</script>
+
+
+<style>
+/* ── navegação do painel em cartões, agrupada por nível ─────────── */
+.pnav{margin:1.5rem 0 .4rem}
+.pnav-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:.65rem}
+.pnav-card{display:grid;grid-template-columns:38px 1fr;gap:.75rem;align-items:start;
+  text-decoration:none;background:var(--papel);border:1px solid var(--linha2);
+  border-radius:13px;padding:.85rem .95rem;transition:.16s;position:relative;overflow:hidden;
+  cursor:pointer;text-align:left;font-family:inherit;width:100%}
+.pnav-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cor);opacity:.45;transition:.16s}
+.pnav-card:hover{border-color:var(--cor);transform:translateY(-2px);box-shadow:0 6px 16px rgba(12,27,42,.08)}
+.pnav-card:hover::before{opacity:1;width:4px}
+.pnav-card .ic{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;
+  background:color-mix(in srgb, var(--cor) 13%, transparent);color:var(--cor);font-family:var(--disp);font-weight:700;font-size:1rem}
+.pnav-nv{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--cor);margin-bottom:.15rem;opacity:.9}
+.pnav-card b{display:block;font-family:var(--disp);font-size:.96rem;color:var(--azul);line-height:1.2;margin-bottom:.2rem}
+.pnav-card .ds{display:block;font-size:.78rem;color:var(--tinta2);line-height:1.35}
+.pnav-card.on{background:var(--cor);border-color:var(--cor)}
+.pnav-card.on::before{opacity:0}
+.pnav-card.on b, .pnav-card.on .ds, .pnav-card.on .pnav-nv{color:#fff}
+.pnav-card.on .ds{opacity:.85}
+.pnav-card.on .pnav-nv{opacity:.7}
+.pnav-card.on .ic{background:rgba(255,255,255,.2);color:#fff}
+@media(max-width:700px){.pnav-cards{grid-template-columns:1fr 1fr;gap:.5rem}
+  .pnav-card{grid-template-columns:30px 1fr;gap:.55rem;padding:.7rem}
+  .pnav-card .ic{width:30px;height:30px;font-size:.85rem}
+  .pnav-card b{font-size:.87rem}.pnav-card .ds{display:none}}
+@media print{.pnav{display:none}}
+</style>
+
+<script>
+/* =====================================================================
+   Navegação do painel — cartões agrupados por nível de leitura
+   ===================================================================== */
+const NIVEIS_PAINEL = [
+ {rot:'Individual', cor:'#2E5C7E', itens:[
+   ['ranking','#','Ranking por competência','Todos os profissionais, ordenados pelo critério que você escolher'],
+   ['relatorio','R','Relatório individual','O perfil de cada profissional, comparado com a equipe e com a empresa'],
+ ]},
+ {rot:'Equipe', cor:'#2E7D5B', itens:[
+   ['objetiva','?','Análise objetiva','Perguntas diretas com os extremos: quem se destaca, quem precisa de atenção'],
+   ['analise','A','Análise do grupo','Pontos fortes e frágeis, quem está fora da curva e o que anda junto'],
+   ['dispersao','D','Dispersão por competência','Onde cada pessoa está numa competência, e quem destoa nela'],
+ ]},
+ {rot:'Empresa', cor:'#0C1B2A', itens:[
+   ['painel','V','Visão geral','Os oito eixos da seleção, com o que está mais forte e mais frágil'],
+   ['areas','C','Comparação entre áreas','A tabela completa, ordenável por qualquer eixo'],
+   ['contexto','O','O que a organização impede','Onde a condição de trabalho explica o resultado da pessoa'],
+ ]},
+ {rot:'Saúde do trabalho', cor:'#C25A45', itens:[
+   ['risco','P','Riscos psicossociais','As seis dimensões que a NR-1 pede identificar, agregadas por área'],
+ ]},
+ {rot:'O que fazer', cor:'#C8891A', itens:[
+   ['intervencao','T','Trilhas de intervenção','O nível certo de cada lacuna: empresa, equipe ou pessoa'],
+   ['plano','L','Plano de ação','Cronograma com prazo, responsável, custo e como verificar'],
+   ['formacao','H','Trilhas e desafios','Conteúdo por competência e desafios práticos por eixo'],
+ ]},
+ {rot:'Ciclo', cor:'#6B5B95', itens:[
+   ['ciclo','E','Evolução e ciclo','Reaplicação e o deslocamento depois da formação'],
+ ]},
+];
+
+function NAV_PAINEL(atual){
+  return `<div class="pnav"><div class="pnav-cards">
+    ${NIVEIS_PAINEL.flatMap(n=>n.itens.map(([k,ini,t,d])=>`
+      <button class="pnav-card ${k===atual?'on':''}" style="--cor:${n.cor}"
+        onclick="abaRH='${k}'; relPessoa=null; pessoaAn=null; pessoaInt=null; render(); window.scrollTo(0,0)">
+        <span class="ic">${ini}</span>
+        <span>
+          <span class="pnav-nv">${n.rot}</span>
+          <b>${t}</b>
+          <span class="ds">${d}</span>
+        </span>
+      </button>`)).join('')}
+  </div></div>`;
+}
+</script>
+
+
+<style>
+.rk-filtro{border:1px solid var(--linha2);border-radius:14px;background:var(--papel);padding:1.1rem 1.3rem;margin:1.2rem 0}
+.rk-linha{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;padding:.5rem 0}
+.rk-linha + .rk-linha{border-top:1px dashed var(--linha2);margin-top:.3rem}
+.rk-rot{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta2);min-width:96px}
+.rk-info{font-family:var(--mono);font-size:.73rem;color:var(--tinta2);margin-left:auto}
+.rk-tab th{white-space:nowrap}
+.rk-tab td{vertical-align:top}
+.rk-nome{font-size:.93rem;font-weight:600;color:var(--azul);display:block}
+.rk-sub{font-family:var(--mono);font-size:.68rem;color:var(--tinta3);display:block;margin-top:.1rem}
+.rk-idx{font-family:var(--disp);font-size:1.15rem;font-weight:600}
+.rk-comp{display:flex;height:8px;border-radius:99px;overflow:hidden;background:var(--fundo2);margin-top:.3rem;min-width:120px}
+.rk-comp i{display:block;height:100%}
+@media(max-width:900px){.rk-rot{min-width:100%}.rk-info{margin-left:0;width:100%}}
+</style>
+
+<script>
+/* =====================================================================
+   Ranking de profissionais — tabela com filtro em três níveis
+   ===================================================================== */
+let rkEixo = 'geral', rkLeitura = 'indice', rkCorte = 0, rkLimite = 40;
+
+/* ── o índice composto ──────────────────────────────────────
+   Média dos oito eixos, com peso igual. A escolha de peso igual
+   é deliberada: qualquer ponderação embutiria um juízo de valor
+   sobre qual competência importa mais — e isso varia por função,
+   por empresa e por momento. Peso igual deixa a decisão explícita
+   para quem usa, em vez de escondê-la no cálculo.                    */
+function indiceComposto(p){
+  const vs = EIXOS.filter(e=>p.eixos[e.n]!==undefined).map(e=>p.eixos[e.n]);
+  return vs.length? Math.round(media(vs)) : null;
+}
+
+/* de onde vêm os pontos — é o que torna o índice desenvolvível */
+function composicao(p){
+  return EIXOS.filter(e=>p.eixos[e.n]!==undefined)
+    .map(e=>({e, v:p.eixos[e.n]}))
+    .sort((a,b)=>b.v-a.v);
+}
+
+/* grupos de leitura do filtro */
+const RK_EIXOS = [
+ {k:'geral', n:'Índice geral', sub:[
+   ['indice','Índice composto'],
+   ...EIXOS.map(e=>['e'+e.n, e.t]),
+ ], aj:'As leituras agregadas — o índice composto e a média de cada eixo.'},
+ ...EIXOS.map(e=>({k:'e'+e.n, n:e.t, eixo:e.n,
+   sub: Object.keys(IND).filter(k=>IND[k][1]===e.n).map(k=>[k, IND[k][0]]),
+   aj: e.d})),
+];
+
+function rkValor(p, chave){
+  if(chave === 'indice') return indiceComposto(p);
+  if(/^e\d$/.test(chave)) return p.eixos[+chave[1]] ?? null;
+  return p.pct[chave] ?? null;
+}
+function rkRotulo(chave){
+  if(chave === 'indice') return 'índice composto';
+  if(/^e\d$/.test(chave)) return (EIXOS.find(e=>e.n===+chave[1])||{}).t.toLowerCase();
+  return (IND[chave]||[chave])[0].toLowerCase();
+}
+
+function abaRanking(base){
+  const area = areaSel==='todas' ? null : areaSel;
+  const g = area ? base.filter(p=>p.area===area) : base;
+  const E = RK_EIXOS.find(x=>x.k===rkEixo) || RK_EIXOS[0];
+  if(!E.sub.some(([k])=>k===rkLeitura)) rkLeitura = E.sub[0][0];
+
+  const lista = g.map(p=>({p, v:rkValor(p, rkLeitura)}))
+    .filter(x=>x.v !== null && x.v >= rkCorte)
+    .sort((a,b)=>b.v-a.v);
+  const geral = agregaArea(base, null);
+  const ag = agregaArea(base, area);
+
+  return `<div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center">
+    <h2 style="margin:0">Ranking por competência${area? ' · '+esc(area):''}</h2>
+    <button class="btn btn-sec btn-mini" onclick="window.print()">Imprimir</button>
+  </div>
+  <p style="color:var(--tinta2);max-width:78ch;margin-top:.6rem">Todos os profissionais, ordenados pelo critério escolhido. Serve para <b>encontrar quem tem determinada competência</b> — para convidar a um projeto, escolher âncoras de formação ou compor uma equipe.</p>
+
+  <div class="card aviso" style="margin:1.2rem 0">
+    <b>Sobre o índice composto.</b> É a média dos oito eixos, com peso igual, e existe para ordenar a tabela — não para medir o valor de uma pessoa. <b>Não deve ser usado em decisão de promoção, corte ou remuneração</b>, nem comunicado aos profissionais como posição. A composição de cada índice aparece na própria linha, justamente para que se veja de onde ele vem e o que desenvolver.
+  </div>
+
+  <div class="rk-filtro">
+    <div class="rk-linha">
+      <span class="rk-rot">1 · Eixo</span>
+      ${RK_EIXOS.map(x=>`<button class="pill ${rkEixo===x.k?'on':''}"
+        onclick="rkEixo='${x.k}';rkLeitura='';rkLimite=40;render()">${x.n}</button>`).join('')}
+    </div>
+    <p style="margin:.5rem 0 0;font-size:.83rem;color:var(--tinta2)">${E.aj}</p>
+    <div class="rk-linha">
+      <span class="rk-rot">2 · Leitura</span>
+      ${E.sub.map(([k,t])=>`<button class="pill ${rkLeitura===k?'on':''}"
+        onclick="rkLeitura='${k}';rkLimite=40;render()" style="${rkLeitura===k?'background:var(--aco);border-color:var(--aco)':''}">${t}</button>`).join('')}
+      <span class="rk-info">${E.sub.length} ${E.sub.length===1?'opção':'opções'}</span>
+    </div>
+    <div class="rk-linha">
+      <span class="rk-rot">3 · Corte</span>
+      ${[[0,'Todos'],[45,'A partir de 45'],[60,'A partir de 60'],[70,'A partir de 70']].map(([v,t])=>
+        `<button class="pill ${rkCorte===v?'on':''}" onclick="rkCorte=${v};rkLimite=40;render()"
+          style="${rkCorte===v?'background:var(--ambar);border-color:var(--ambar);color:#33260A':''}">${t}</button>`).join('')}
+      <span class="rk-info">${lista.length} de ${g.length} · ordenado por ${rkRotulo(rkLeitura)}</span>
+    </div>
+  </div>
+
+  ${!lista.length? `<div class="card alerta"><p style="margin:0">Nenhum profissional atinge ${rkCorte} neste critério. Reduza o corte para ver a lista completa.</p></div>` : `
+  <div class="card" style="overflow:auto">
+    <table class="rk-tab">
+      <thead><tr>
+        <th>#</th><th>Profissional</th><th>Área</th><th>Tempo</th>
+        <th>${rkLeitura==='indice'?'Índice':'Valor'}</th>
+        ${EIXOS.filter(e=>!e.cond).map(e=>`<th title="${e.t}">${e.t.split(' ')[0].slice(0,4).toUpperCase()}</th>`).join('')}
+        <th>Composição</th><th>Contexto</th><th></th>
+      </tr></thead>
+      <tbody>${lista.slice(0, rkLimite).map((x,i)=>{
+        const p = x.p, comp = composicao(p);
+        const ctxM = Math.round(media(Object.values(p.ctx)));
+        return `<tr>
+          <td style="font-family:var(--mono);font-size:.8rem;color:var(--tinta3)">${i+1}</td>
+          <td><span class="rk-nome">${esc(p.nome)}</span>
+            <span class="rk-sub">${p.id}${p.lider? ' · LIDERA':''}</span></td>
+          <td style="font-size:.85rem">${esc(p.area)}</td>
+          <td style="font-size:.82rem;color:var(--tinta2)">${p.tempo}a</td>
+          <td><span class="rk-idx" style="color:${corDe(x.v)}">${x.v}</span></td>
+          ${EIXOS.filter(e=>!e.cond).map(e=>{
+            const v = p.eixos[e.n];
+            return `<td style="font-family:var(--mono);font-size:.82rem;color:${v===undefined?'var(--linha)':corDe(v)}">${v??'—'}</td>`;
+          }).join('')}
+          <td><span class="rk-comp" title="${comp.map(c=>c.e.t+' '+c.v).join(' · ')}">
+            ${comp.map(c=>`<i style="width:${100/comp.length}%;background:${c.e.cor};opacity:${.25+(c.v/100)*.75}"></i>`).join('')}
+          </span>
+          <span class="rk-sub">${comp[0].e.t.split(' ')[0]} ${comp[0].v} · ${comp[comp.length-1].e.t.split(' ')[0]} ${comp[comp.length-1].v}</span></td>
+          <td><span style="font-family:var(--mono);font-size:.82rem;color:${corDe(ctxM)}">${ctxM}</span></td>
+          <td><button class="btn btn-sec btn-mini" onclick="abaRH='relatorio';relPessoa='${p.id}';render();window.scrollTo(0,0)">Ver</button></td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>
+  </div>
+  ${lista.length > rkLimite? `<div style="text-align:center;margin-top:1rem">
+    <button class="btn btn-sec btn-mini" onclick="rkLimite=${rkLimite+60};render()">Mostrar mais ${Math.min(60, lista.length-rkLimite)}</button>
+    <button class="btn btn-sec btn-mini" onclick="rkLimite=9999;render()" style="margin-left:.4rem">Mostrar todos os ${lista.length}</button>
+  </div>`:''}
+
+  <div class="divisor"></div>
+  <h2>Como o índice se compõe</h2>
+  <p style="color:var(--tinta2);max-width:78ch">A barra de composição na tabela mostra os oito eixos lado a lado, com a intensidade proporcional ao valor. Duas pessoas com o mesmo índice podem ter composições opostas — e é isso que decide onde cada uma se encaixa.</p>
+  <div class="grid g2" style="margin-top:1.2rem">
+    ${lista.slice(0,2).map(x=>{
+      const comp = composicao(x.p);
+      return `<div class="card">
+        <div style="display:flex;justify-content:space-between;gap:.5rem;align-items:baseline">
+          <b style="font-size:.95rem;color:var(--azul)">${esc(x.p.nome)}</b>
+          <span class="rk-idx" style="color:${corDe(x.v)}">${x.v}</span>
+        </div>
+        <p class="apoio" style="margin:.2rem 0 .7rem">${esc(x.p.area)} · ${x.p.tempo} ${x.p.tempo===1?'ano':'anos'}</p>
+        ${comp.map(c=>barra(c.e.t, c.v, ag.eixos[c.e.n])).join('')}
+        <p style="margin:.6rem 0 0;font-size:.87rem;color:var(--tinta2)">
+          Sustenta o índice em <b>${comp[0].e.t.toLowerCase()}</b> (${comp[0].v}); o que mais puxa para baixo é <b>${comp[comp.length-1].e.t.toLowerCase()}</b> (${comp[comp.length-1].v}).
+          ${comp[comp.length-1].v < 50? ' Desenvolver esse eixo é o que mais moveria o índice desta pessoa.' : ''}</p>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <div class="divisor"></div>
+  <div class="card info">
+    <p style="margin:0 0 .5rem"><b>O que este ranking serve para responder</b></p>
+    <p style="margin:0 0 .35rem;font-size:.9rem">Quem convidar para um projeto que exige determinada competência.</p>
+    <p style="margin:0 0 .35rem;font-size:.9rem">Quem pode ser âncora numa formação de grupo.</p>
+    <p style="margin:0 0 .35rem;font-size:.9rem">Como compor uma equipe com perfis complementares, em vez de repetidos.</p>
+    <p style="margin:0;font-size:.9rem">Onde a formação renderia mais, por concentrar gente com a mesma lacuna.</p>
+  </div>
+
+  <div class="aviso" style="margin-top:1rem">
+    <b>O que ele não serve para responder.</b> Quem é melhor. Quem merece promoção. Quem deve sair. Um número que ordena pessoas responde bem à pergunta <i>quem tem isto</i> e responde muito mal à pergunta <i>quem vale mais</i> — e a segunda pergunta, além de injusta, destrói a validade do instrumento assim que os profissionais percebem que ela está sendo feita.
+  </div>`}`;
+}
+</script>
+
+
+<style>
+.ao-card{background:var(--papel);border:1px solid var(--linha2);border-radius:13px;padding:1.1rem 1.2rem;height:100%}
+.ao-card.pos{border-left:3px solid var(--verde)}
+.ao-card.neg{border-left:3px solid var(--coral)}
+.ao-card.neu{border-left:3px solid var(--aco)}
+.ao-q{font-family:var(--disp);font-size:.98rem;color:var(--azul);line-height:1.25;margin:0 0 .6rem}
+.ao-r{display:flex;gap:.7rem;align-items:baseline;margin-bottom:.45rem}
+.ao-nome{font-size:.95rem;font-weight:600;color:var(--azul)}
+.ao-v{font-family:var(--disp);font-size:1.3rem;font-weight:600;margin-left:auto}
+.ao-ctx{font-size:.8rem;color:var(--tinta2)}
+.ao-nota{font-size:.84rem;color:var(--tinta2);margin:.5rem 0 0;padding-top:.5rem;border-top:1px solid var(--linha2)}
+.ao-lista{margin:.3rem 0 0}
+.ao-lista div{display:flex;gap:.5rem;align-items:baseline;padding:.22rem 0;font-size:.86rem}
+.ao-lista b{margin-left:auto;font-family:var(--mono)}
+</style>
+
+<script>
+/* =====================================================================
+   Análise objetiva — perguntas diretas que o dado responde
+   ===================================================================== */
+
+/* helpers de extremo */
+const maisAlto = (g, f, n) => g.map(p=>({p, v:f(p)})).filter(x=>x.v!==null && !isNaN(x.v))
+  .sort((a,b)=>b.v-a.v).slice(0, n||1);
+const maisBaixo = (g, f, n) => g.map(p=>({p, v:f(p)})).filter(x=>x.v!==null && !isNaN(x.v))
+  .sort((a,b)=>a.v-b.v).slice(0, n||1);
+
+/* quantas competências a pessoa tem acima da média da empresa */
+function acimaDaEmpresa(p, empInd){
+  return Object.keys(IND).filter(k=>p.pct[k]!==undefined && empInd[k]!==undefined && p.pct[k] > empInd[k]).length;
+}
+/* equilíbrio: desvio entre os eixos da própria pessoa */
+const equilibrio = p => { const vs=Object.values(p.eixos); return vs.length>1? dp(vs) : null; };
+/* distância do padrão da empresa */
+function distanciaEmpresa(p, empEixos){
+  const ns = EIXOS.filter(e=>p.eixos[e.n]!==undefined && empEixos[e.n]!==undefined).map(e=>e.n);
+  if(!ns.length) return null;
+  return Math.sqrt(media(ns.map(n=>(p.eixos[n]-empEixos[n])**2)));
+}
+const mediaCtx = p => media(Object.values(p.ctx));
+
+function abaObjetiva(base){
+  const area = areaSel==='todas' ? null : areaSel;
+  const g = area ? base.filter(p=>p.area===area) : base;
+  const emp = agregaArea(base, null);
+  const ag = agregaArea(base, area);
+  if(!ag || g.length < 5) return '<div class="card">Grupo pequeno demais para esta leitura.</div>';
+  const rot = area || 'Empresa inteira';
+
+  const cartao = (tipo, pergunta, resposta, nota) => `<div class="ao-card ${tipo}">
+    <p class="ao-q">${pergunta}</p>${resposta}
+    ${nota? `<p class="ao-nota">${nota}</p>`:''}
+  </div>`;
+
+  const linhaP = (x, sufixo, cor) => `<div class="ao-r">
+    <span>
+      <span class="ao-nome">${esc(x.p.nome)}</span>
+      <span class="ao-ctx" style="display:block">${esc(x.p.area)}${x.p.lider?' · lidera':''} · ${x.p.tempo} ${x.p.tempo===1?'ano':'anos'}</span>
+    </span>
+    <span class="ao-v" style="color:${cor||corDe(x.v)}">${Math.round(x.v)}${sufixo||''}</span>
+  </div>`;
+
+  /* ── cálculos ── */
+  const maiorIndice = maisAlto(g, p=>indiceComposto(p), 3);
+  const menorIndice = maisBaixo(g, p=>indiceComposto(p), 3);
+  const maisEntrega = maisAlto(g, p=>p.eixos[1]??null);
+  const menosEntrega = maisBaixo(g, p=>p.eixos[1]??null);
+  const maisAcima = maisAlto(g, p=>EIXOS.filter(e=>p.eixos[e.n]!==undefined && emp.eixos[e.n]!==undefined && p.eixos[e.n] > emp.eixos[e.n]).length, 3);
+  const maisEquilibrado = maisBaixo(g, p=>equilibrio(p));
+  const maisEspecializado = maisAlto(g, p=>equilibrio(p));
+  const maisDistante = maisAlto(g, p=>distanciaEmpresa(p, emp.eixos), 3);
+  const piorCtx = maisBaixo(g, p=>mediaCtx(p), 3);
+  const melhorCtx = maisAlto(g, p=>mediaCtx(p));
+  const maisEtica = maisAlto(g, p=>p.eixos[6]??null);
+  const maisTec = maisAlto(g, p=>p.eixos[8]??null);
+  const menosTec = maisBaixo(g, p=>p.eixos[8]??null);
+  const maisIniciativa = maisAlto(g, p=>p.eixos[5]??null);
+  const menosIniciativa = maisBaixo(g, p=>p.eixos[5]??null);
+  const lideres = g.filter(p=>p.lider);
+  const melhorLider = lideres.length>=3? maisAlto(lideres, p=>p.eixos[7]??null)[0] : null;
+  const piorLider = lideres.length>=3? maisBaixo(lideres, p=>p.eixos[7]??null)[0] : null;
+
+  /* descompasso: competência alta com contexto ruim, e o inverso */
+  const desc = g.map(p=>({p, comp:media(Object.values(p.eixos)), ctx:mediaCtx(p)}));
+  const boaComCtxRuim = desc.filter(x=>x.comp>=58 && x.ctx<=45).sort((a,b)=>(b.comp-b.ctx)-(a.comp-a.ctx)).slice(0,3);
+  const fracaComCtxBom = desc.filter(x=>x.comp<=45 && x.ctx>=60).sort((a,b)=>(b.ctx-b.comp)-(a.ctx-a.comp)).slice(0,3);
+
+  /* por área */
+  const porArea = AREAS_EMP.map(A=>{
+    const gg = base.filter(p=>p.area===A.n);
+    if(gg.length<3) return null;
+    const t = maisAlto(gg, p=>indiceComposto(p))[0];
+    return {A, t, n:gg.length, m:Math.round(media(gg.map(p=>indiceComposto(p)).filter(Boolean)))};
+  }).filter(Boolean).sort((a,b)=>b.m-a.m);
+
+  /* dispersão por área */
+  const dispArea = AREAS_EMP.map(A=>{
+    const gg = base.filter(p=>p.area===A.n);
+    if(gg.length<5) return null;
+    return {A, s:dp(gg.map(p=>indiceComposto(p)).filter(Boolean)), n:gg.length};
+  }).filter(Boolean).sort((a,b)=>b.s-a.s);
+
+  /* novatos e veteranos */
+  const novatos = g.filter(p=>p.tempo<=2), veteranos = g.filter(p=>p.tempo>=8);
+  const mNov = novatos.length>=3? media(novatos.map(p=>indiceComposto(p)).filter(Boolean)) : null;
+  const mVet = veteranos.length>=3? media(veteranos.map(p=>indiceComposto(p)).filter(Boolean)) : null;
+
+  return `<div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center">
+    <h2 style="margin:0">Análise objetiva · ${esc(rot)}</h2>
+    <button class="btn btn-sec btn-mini" onclick="window.print()">Imprimir</button>
+  </div>
+  <p style="color:var(--tinta2);max-width:78ch;margin-top:.6rem">Perguntas diretas que o dado responde, com os extremos em cada uma. Serve para localizar rapidamente onde olhar — quem pode apoiar, quem precisa de conversa, e onde a organização está produzindo o resultado.</p>
+
+  <div class="card aviso" style="margin:1.2rem 0">
+    <b>Uma precisão que muda tudo.</b> Este instrumento não mede eficiência, produtividade nem desempenho — mede <b>como a pessoa descreve o próprio trabalho</b>. Quem aparece no topo de entrega e método não é necessariamente quem entrega mais: é quem relata as práticas que a literatura associa a boa entrega. A diferença importa, e o instrumento não sabe qual das duas coisas está vendo.
+  </div>
+
+  <div class="divisor"></div>
+  <h2>Os extremos positivos</h2>
+  <div class="grid g3" style="margin-top:1.2rem">
+    ${cartao('pos','Quem tem o maior índice composto?',
+      maiorIndice.map(x=>linhaP(x,'','var(--verde)')).join(''),
+      'Índice alto significa perfil consistente nos oito eixos. Não significa melhor profissional — significa alguém que relata boas práticas em muitas frentes ao mesmo tempo.')}
+
+    ${cartao('pos','Quem está acima da empresa em mais eixos?',
+      maisAcima.map(x=>linhaP(x,' de 8','var(--verde)')).join(''),
+      'É a leitura mais útil para escolher âncoras de formação: quem consegue apoiar em frentes diferentes, e não só numa.')}
+
+    ${cartao('pos','Quem tem o perfil mais equilibrado?',
+      maisEquilibrado.map(x=>linhaP({p:x.p, v:Math.round(indiceComposto(x.p))},'','var(--aco)')).join('') +
+      `<p class="ao-ctx" style="margin-top:.3rem">Variação entre eixos: apenas ${Math.round(maisEquilibrado[0].v)} pontos</p>`,
+      'Perfil parelho em tudo. Costuma se adaptar a funções diferentes — e raramente é a melhor escolha para algo muito específico.')}
+
+    ${cartao('pos','Quem tem o perfil mais especializado?',
+      maisEspecializado.map(x=>linhaP({p:x.p, v:Math.round(indiceComposto(x.p))},'','var(--aco)')).join('') +
+      (()=>{const c=composicao(maisEspecializado[0].p);
+        return `<p class="ao-ctx" style="margin-top:.3rem">${c[0].e.t} ${c[0].v} contra ${c[c.length-1].e.t.toLowerCase()} ${c[c.length-1].v}</p>`;})(),
+      'Muito forte em algumas frentes e fraco em outras. Rende muito no lugar certo e trava no lugar errado — o que faz da alocação a decisão mais importante aqui.')}
+
+    ${maisEtica.length? cartao('pos','Quem tem o maior índice em ética e integridade?',
+      maisEtica.map(x=>linhaP(x,'','var(--verde)')).join(''),
+      'É o eixo que qualifica todos os outros. Vale considerar esta pessoa para funções com acesso a informação sensível ou decisão sobre recursos.'):''}
+
+    ${maisTec.length? cartao('pos','Quem lida melhor com tecnologia e inovação?',
+      maisTec.map(x=>linhaP(x,'','var(--verde)')).join(''),
+      'Não mede conhecimento técnico. Mede a relação com a ferramenta e com o novo — quem provavelmente vai puxar a adoção de um sistema novo.'):''}
+
+    ${maisIniciativa.length? cartao('pos','Quem mais faz sem ser pedido?',
+      maisIniciativa.map(x=>linhaP(x,'','var(--verde)')).join(''),
+      'Iniciativa prediz desempenho acima do que o método explica sozinho. É a diferença entre quem cumpre a função e quem move a organização.'):''}
+
+    ${melhorLider? cartao('pos','Entre quem lidera, quem tem o maior índice de liderança?',
+      linhaP(melhorLider,'','var(--verde)'),
+      `Comparado apenas com os ${lideres.length} que exercem liderança nesta seleção. Comparar com quem não lidera não diria nada.`):''}
+
+    ${melhorCtx.length? cartao('pos','Quem avalia melhor as condições de trabalho?',
+      melhorCtx.map(x=>linhaP(x,'','var(--verde)')).join(''),
+      'A percepção mais positiva do contexto. Vale entender o que essa pessoa vive de diferente — pode ser a área, pode ser a liderança direta.'):''}
+  </div>
+
+  <div class="divisor"></div>
+  <h2>Os extremos que pedem atenção</h2>
+  <p style="color:var(--tinta2);max-width:78ch">Nenhum destes números indica problema com a pessoa. Indicam onde olhar — e a primeira pergunta, sempre, é se a condição de trabalho explica o resultado.</p>
+  <div class="grid g3" style="margin-top:1.2rem">
+    ${cartao('neg','Quem tem o menor índice composto?',
+      menorIndice.map(x=>linhaP(x,'','var(--coral)')).join(''),
+      'Antes de qualquer conclusão: verifique o contexto que essas pessoas relataram. Índice baixo com contexto baixo descreve a organização, não o profissional.')}
+
+    ${cartao('neg','Quem está mais distante do padrão da empresa?',
+      maisDistante.map(x=>linhaP({p:x.p, v:Math.round(indiceComposto(x.p))},'','var(--coral)')).join('') +
+      `<p class="ao-ctx" style="margin-top:.3rem">Distância do perfil médio: ${Math.round(maisDistante[0].v)} pontos</p>`,
+      'Distante não é pior: pode estar muito acima. Mas é quem a formação coletiva menos alcança, porque o programa é desenhado para o padrão.')}
+
+    ${cartao('neg','Quem avalia pior as condições de trabalho?',
+      piorCtx.map(x=>linhaP(x,'','var(--coral)')).join(''),
+      'É o indicador mais próximo de risco de saída que este instrumento produz. Não prevê desligamento — mas quem avalia mal o contexto costuma ser quem primeiro considera outra proposta.')}
+
+    ${menosEntrega.length? cartao('neg','Quem tem o menor índice em entrega e método?',
+      menosEntrega.map(x=>linhaP(x,'','var(--coral)')).join(''),
+      'Método é a competência mais ensinável de todas — e a que menos empresas ensinam. Antes de cobrar, verifique se alguém já ensinou.'):''}
+
+    ${menosIniciativa.length? cartao('neg','Quem menos age sem ser pedido?',
+      menosIniciativa.map(x=>linhaP(x,'','var(--coral)')).join(''),
+      'Iniciativa baixa quase nunca é traço de personalidade. Costuma ser aprendizado: alguém que se arriscou e pagou por isso.'):''}
+
+    ${menosTec.length? cartao('neg','Quem tem mais dificuldade com tecnologia?',
+      menosTec.map(x=>linhaP(x,'','var(--coral)')).join(''),
+      'Verifique primeiro se a ferramenta está adequada e se houve treinamento. Duas das quatro determinantes de uso de tecnologia são do ambiente, não da pessoa.'):''}
+
+    ${piorLider? cartao('neg','Entre quem lidera, quem tem o menor índice de liderança?',
+      linhaP(piorLider,'','var(--coral)'),
+      'Liderar é a única função que quase sempre se assume sem formação. Este número costuma dizer mais sobre a empresa que sobre a pessoa.'):''}
+  </div>
+
+  <div class="divisor"></div>
+  <h2>Os descompassos</h2>
+  <p style="color:var(--tinta2);max-width:78ch">Onde competência e contexto não batem. São as leituras que mudam a decisão — e as que nenhum outro instrumento produz.</p>
+  <div class="grid g2" style="margin-top:1.2rem">
+    ${boaComCtxRuim.length? cartao('neu','Quem tem competência alta e avalia mal o contexto?',
+      boaComCtxRuim.map(x=>`<div class="ao-r">
+        <span><span class="ao-nome">${esc(x.p.nome)}</span>
+          <span class="ao-ctx" style="display:block">${esc(x.p.area)} · competência ${Math.round(x.comp)} · contexto ${Math.round(x.ctx)}</span></span>
+        <span class="ao-v" style="color:var(--ambar)">${Math.round(x.comp-x.ctx)}</span></div>`).join(''),
+      '<b>É o grupo de maior risco de perda.</b> Gente boa que enxerga problemas na organização costuma ter alternativa fora dela. A conversa aqui não é sobre desenvolvimento — é sobre o que precisa mudar.')
+      : cartao('neu','Quem tem competência alta e avalia mal o contexto?','<p class="nota" style="margin:0">Ninguém nesta faixa nesta seleção.</p>','Boa notícia: quem está bem não está enxergando a organização como obstáculo.')}
+
+    ${fracaComCtxBom.length? cartao('neu','Quem avalia bem o contexto mas aparece com competência baixa?',
+      fracaComCtxBom.map(x=>`<div class="ao-r">
+        <span><span class="ao-nome">${esc(x.p.nome)}</span>
+          <span class="ao-ctx" style="display:block">${esc(x.p.area)} · competência ${Math.round(x.comp)} · contexto ${Math.round(x.ctx)}</span></span>
+        <span class="ao-v" style="color:var(--aco)">${Math.round(x.ctx-x.comp)}</span></div>`).join(''),
+      '<b>É o grupo em que a formação mais rende.</b> A condição está dada e a pessoa reconhece isso — o que falta é desenvolvimento, e ele tende a pegar.')
+      : cartao('neu','Quem avalia bem o contexto mas aparece com competência baixa?','<p class="nota" style="margin:0">Ninguém nesta faixa nesta seleção.</p>','Não há gente com condição favorável e competência baixa — o que significa que o investimento em formação precisa vir acompanhado de mudança de condição.')}
+  </div>
+
+  <div class="divisor"></div>
+  <h2>Por área</h2>
+  <div class="grid g2" style="margin-top:1.2rem">
+    <div class="ao-card neu">
+      <p class="ao-q">Qual o maior índice de cada área, e a média dela?</p>
+      <div class="ao-lista">
+        ${porArea.map(x=>`<div>
+          <span style="min-width:118px">${esc(x.A.n)}</span>
+          <span style="color:var(--tinta2);font-size:.82rem">${esc(x.t.p.nome.split(' ')[0])} ${Math.round(x.t.v)}</span>
+          <b style="color:${corDe(x.m)}">média ${x.m}</b></div>`).join('')}
+      </div>
+      <p class="ao-nota">A diferença entre o maior e a média de uma área diz se ela tem um destaque isolado ou um patamar coletivo.</p>
+    </div>
+
+    <div class="ao-card neu">
+      <p class="ao-q">Qual área é mais desigual internamente?</p>
+      <div class="ao-lista">
+        ${dispArea.slice(0,6).map(x=>`<div>
+          <span style="min-width:118px">${esc(x.A.n)}</span>
+          <span style="color:var(--tinta3);font-size:.8rem">${x.n} pessoas</span>
+          <b style="color:${x.s>=16?'var(--ambar)':'var(--tinta2)'}">${Math.round(x.s)}</b></div>`).join('')}
+      </div>
+      <p class="ao-nota">Dispersão alta significa que <b>não há um patamar comum</b> na área. Formação para todos desperdiça o tempo de quem já domina — o caminho é âncora, não turma única.</p>
+    </div>
+  </div>
+
+  ${mNov!==null && mVet!==null? `<div class="divisor"></div>
+  <h2>Tempo de casa</h2>
+  <div class="card">
+    <div class="grid g3">
+      <div class="metrica" style="padding:0"><b style="color:${corDe(mNov)}">${Math.round(mNov)}</b><span>média de quem tem até 2 anos · ${novatos.length} pessoas</span></div>
+      <div class="metrica" style="padding:0"><b style="color:${corDe(mVet)}">${Math.round(mVet)}</b><span>média de quem tem 8 anos ou mais · ${veteranos.length} pessoas</span></div>
+      <div class="metrica" style="padding:0"><b style="color:${Math.abs(mVet-mNov)<4?'var(--tinta2)':corDe(50)}">${mVet>mNov?'+':''}${Math.round(mVet-mNov)}</b><span>diferença</span></div>
+    </div>
+    <p class="ao-nota">${Math.abs(mVet-mNov)<4
+      ? 'Sem diferença relevante entre novatos e veteranos. Isso sugere que a empresa não está desenvolvendo pessoas ao longo do tempo — nem para melhor, nem para pior.'
+      : mVet>mNov
+        ? 'Quem tem mais tempo de casa apresenta índice mais alto. Pode ser desenvolvimento real, pode ser que quem não se adaptou já tenha saído — e as duas explicações pedem verificações diferentes.'
+        : 'Quem tem menos tempo de casa apresenta índice mais alto. Vale investigar: contratação mais qualificada, ou desgaste de quem está há mais tempo?'}</p>
+  </div>`:''}
+
+  <div class="divisor"></div>
+  <div class="card aviso">
+    <b>Como esta tela deve ser usada.</b> Ela responde <i>onde olhar</i>, não <i>o que decidir sobre alguém</i>. Nenhum nome desta página deve entrar em avaliação de desempenho, justificar promoção ou desligamento, ou ser comunicado como posição. O uso legítimo é um só: escolher quem apoia quem, e descobrir onde a organização precisa mudar. E vale repetir o que abre esta página — o que se mede é o relato da pessoa sobre o próprio trabalho, não o trabalho dela.
   </div>`;
 }
 </script>
