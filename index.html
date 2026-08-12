@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAPA Corporativo — desenvolvimento de competências profissionais</title>
+<title>Mapas de Empresas — desenvolvimento de competências profissionais</title>
 <meta name="description" content="Instrumento de desenvolvimento de competências profissionais. Mede o que está por trás do resultado — e separa o que é da pessoa do que é da organização.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 270 358'%3E%3Cpath fill='%230A2358' d='M135 0C60.4 0 0 60.4 0 135c0 26.5 8.9 46.5 22.4 68.6L135 358l112.6-154.4C261.1 181.5 270 161.5 270 135 270 60.4 209.6 0 135 0z'/%3E%3Cpath fill='%23fff' d='M52 96h30l53 62 53-62h30v136h-30V150l-53 62-53-62v82H52z'/%3E%3Ccircle cx='135' cy='77' r='34' fill='%23DAAD33'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,8 +14,8 @@
   --tinta:#0C1B2A; --tinta2:#5A6B7A; --tinta3:#8B9AA7;
   --papel:#FFFFFF; --fundo:#F5F7F9; --fundo2:#EDF1F4;
   --linha:#D8DFE5; --linha2:#E8EDF1;
-  --azul:#0C1B2A; --aco:#2E5C7E; --acoc:#5D8FB3;
-  --ambar:#C8891A; --verde:#2E7D5B; --coral:#C25A45; --roxo:#6B5B95;
+  --azul:#02235A; --aco:#2E5C7E; --acoc:#5D8FB3;
+  --ambar:#DAAD33; --verde:#2E7D5B; --coral:#C25A45; --roxo:#6B5B95;
   --disp:'Fraunces',Georgia,serif; --texto:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
   --raio:14px; --sombra:0 1px 3px rgba(12,27,42,.06),0 6px 20px rgba(12,27,42,.05);
   --sombra2:0 8px 30px rgba(12,27,42,.10);
@@ -39,11 +40,14 @@ a{color:var(--aco)}
 
 /* ── topo ───────────────────────────────────────────────── */
 .topo{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--linha2)}
-.topo .wrap{display:flex;align-items:center;gap:1.2rem;padding-top:.8rem;padding-bottom:.8rem;flex-wrap:wrap}
+.topo .wrap{display:flex;align-items:center;gap:1.2rem;padding-top:.55rem;padding-bottom:.55rem;flex-wrap:wrap}
 .marca{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--azul)}
-.marca .sig{width:36px;height:36px;border-radius:9px;background:var(--azul);display:grid;place-items:center;color:#fff;font-family:var(--disp);font-weight:700;font-size:1rem}
-.marca b{font-family:var(--disp);font-size:1.15rem;display:block;line-height:1.1}
-.marca span{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta3)}
+.marca .sig{width:32px;height:42px;flex:none;display:block;margin-right:.1rem}
+.marca .sig svg{display:block;width:100%;height:100%}
+.marca b{font-family:var(--disp);font-size:1.05rem;display:block;line-height:1.08;white-space:nowrap}
+.marca span{font-family:var(--mono);font-size:.55rem;letter-spacing:.11em;text-transform:uppercase;color:var(--tinta3);white-space:nowrap}
+@media(max-width:1080px){.marca b{font-size:.98rem}.menu a{font-size:.83rem;padding:.4rem .58rem}}
+@media(max-width:820px){.marca span{display:none}}
 .menu{display:flex;gap:.25rem;margin-left:auto;flex-wrap:wrap;align-items:center}
 .menu a{font-size:.87rem;text-decoration:none;color:var(--tinta2);padding:.42rem .72rem;border-radius:8px;transition:.15s}
 .menu a:hover{background:var(--fundo2);color:var(--azul)}
@@ -140,11 +144,27 @@ tr:last-child td{border-bottom:0}
 <body>
 <div id="topo"></div>
 <main id="app"></main>
+<script>
+/* símbolo da marca — pino com o M e o círculo */
+/* pino da marca — traçado do M fiel ao original: pernas retas e largas,
+   vale central agudo, círculo âmbar sobreposto ao vértice */
+const PINO = `<span class="sig"><svg viewBox="0 0 270 358" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path fill="#02235A" d="M135 0C60.4 0 0 60.4 0 135c0 26.5 8.9 46.5 22.4 68.6L135 358l112.6-154.4C261.1 181.5 270 161.5 270 135 270 60.4 209.6 0 135 0z"/>
+  <path fill="#FFFFFF" d="M52 95l83 78 83-78v148h-33v-73l-50 47-50-47v73H52z"/>
+  <circle cx="135" cy="80" r="34" fill="#DAAD33"/>
+</svg></span>`;
+const PINO_BRANCO = `<svg viewBox="0 0 270 358" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:26px;height:34px;display:block">
+  <path fill="#FFFFFF" d="M135 0C60.4 0 0 60.4 0 135c0 26.5 8.9 46.5 22.4 68.6L135 358l112.6-154.4C261.1 181.5 270 161.5 270 135 270 60.4 209.6 0 135 0z"/>
+  <path fill="#02235A" d="M52 95l83 78 83-78v148h-33v-73l-50 47-50-47v73H52z"/>
+  <circle cx="135" cy="80" r="34" fill="#DAAD33"/>
+</svg>`;
+</script>
+
 <div id="rodape"></div>
 
 <script>
 /* =====================================================================
-   MAPA Corporativo — instrumento de desenvolvimento de competências
+   Mapas de Empresas — instrumento de desenvolvimento de competências
    Arquivo único. Protótipo com dados simulados.
    ===================================================================== */
 
@@ -758,16 +778,17 @@ const PAGINAS = {};
 let rhLiberado = false, areaSel = 'todas', pessoaSel = null, abaRH = 'painel';
 let S = { dados:{}, resp:{}, ctx:{}, etapa:0, iniciado:false, concluido:false, lider:null };
 
+/* rótulos curtos: com oito itens, nomes longos empurram o menu para a segunda linha */
 const MENU = [
  ['/', 'Início'], ['/como', 'Como funciona'], ['/eixos', 'O que medimos'],
- ['/contexto', 'O contexto'], ['/limites', 'Limites e ética'], ['/empresas', 'Para empresas'],
+ ['/contexto', 'Contexto'], ['/limites', 'Limites'], ['/empresas', 'Para empresas'],
 ];
 
 function topo(){
   const r = rota();
   return `<header class="topo"><div class="wrap">
-    <a class="marca" href="#/"><span class="sig">M</span>
-      <span><b>MAPA Corporativo</b><span>Desenvolvimento de competências</span></span></a>
+    <a class="marca" href="#/">${PINO}
+      <span><b>Mapas de Empresas</b><span>Desenvolvimento de competências</span></span></a>
     <nav class="menu">
       ${MENU.map(([h,t])=>`<a href="#${h}" class="${r===h?'on':''}">${t}</a>`).join('')}
       <a href="#/painel" class="${r==='/painel'?'on':''}">${rhLiberado?'Painel':'Entrar'}</a>
@@ -779,7 +800,7 @@ function topo(){
 function rodape(){
   return `<footer class="rod"><div class="wrap">
     <div class="grid g3">
-      <div><h4>MAPA Corporativo</h4>
+      <div><div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.4rem">${PINO_BRANCO}<h4 style="margin:0">Mapas de Empresas</h4></div>
         <p style="margin:0">Instrumento de desenvolvimento de competências profissionais. Mede o que está por trás do resultado — e separa o que é da pessoa do que é da organização.</p></div>
       <div><h4>O que ele não é</h4>
         <p style="margin:0">Não é teste psicológico, não serve para seleção, e não deve ser usado em decisão de promoção, corte ou remuneração.</p></div>
@@ -4252,6 +4273,8 @@ function abaObjetiva(base){
       : cartao('neu','Quem avalia bem o contexto mas aparece com competência baixa?','<p class="nota" style="margin:0">Ninguém nesta faixa nesta seleção.</p>','Não há gente com condição favorável e competência baixa — o que significa que o investimento em formação precisa vir acompanhado de mudança de condição.')}
   </div>
 
+  ${blocosAvancados(base, g, area, emp, ag)}
+
   <div class="divisor"></div>
   <h2>Por área</h2>
   <div class="grid g2" style="margin-top:1.2rem">
@@ -4297,6 +4320,238 @@ function abaObjetiva(base){
   <div class="card aviso">
     <b>Como esta tela deve ser usada.</b> Ela responde <i>onde olhar</i>, não <i>o que decidir sobre alguém</i>. Nenhum nome desta página deve entrar em avaliação de desempenho, justificar promoção ou desligamento, ou ser comunicado como posição. O uso legítimo é um só: escolher quem apoia quem, e descobrir onde a organização precisa mudar. E vale repetir o que abre esta página — o que se mede é o relato da pessoa sobre o próprio trabalho, não o trabalho dela.
   </div>`;
+}
+</script>
+
+
+<script>
+/* =====================================================================
+   Análise objetiva — blocos avançados
+   sucessão · atenção · dependência · composição de equipe
+   ===================================================================== */
+
+/* aderência a um perfil de função, com peso por eixo */
+function aderePerfil(p, pesos){
+  let soma=0, tot=0;
+  for(const n in pesos){
+    if(p.eixos[n]===undefined) continue;
+    soma += p.eixos[n]*pesos[n]; tot += pesos[n];
+  }
+  return tot? soma/tot : null;
+}
+
+/* perfil de quem conduz: liderança, relação, ética e decisão */
+const PESO_LIDER = {7:3, 3:2, 6:2, 2:2, 1:1};
+/* perfil de quem sustenta a operação */
+const PESO_OPERA = {1:3, 6:2, 4:1, 3:1};
+/* perfil de quem puxa mudança */
+const PESO_MUDA  = {5:3, 8:3, 4:2, 2:1};
+
+/* quantas competências em nível crítico */
+const criticas = p => Object.keys(IND).filter(k=>p.pct[k]!==undefined && p.pct[k]<40).length;
+
+/* isolamento: distância média desta pessoa para todas as outras do grupo */
+function isolamento(p, g){
+  const ns = EIXOS.filter(e=>p.eixos[e.n]!==undefined).map(e=>e.n);
+  if(!ns.length || g.length<3) return null;
+  const ds = g.filter(x=>x.id!==p.id).map(x=>{
+    const comuns = ns.filter(n=>x.eixos[n]!==undefined);
+    if(!comuns.length) return null;
+    return Math.sqrt(media(comuns.map(n=>(p.eixos[n]-x.eixos[n])**2)));
+  }).filter(v=>v!==null);
+  return ds.length? media(ds) : null;
+}
+
+/* dependência: competências em que uma única pessoa segura o grupo */
+function dependencias(g){
+  /* só faz sentido em grupo pequeno: numa empresa inteira, sempre haverá
+     mais de uma pessoa acima do corte, e a leitura perde o significado */
+  if(g.length > 60) return [];
+  const {inds, est} = perfilGrupo(g);
+  const out = [];
+  inds.forEach(k=>{
+    const altos = g.filter(p=>p.pct[k]!==undefined && p.pct[k]>=65);
+    if(altos.length===1 && est[k].m < 55){
+      out.push({k, p:altos[0], v:altos[0].pct[k], m:Math.round(est[k].m)});
+    }
+  });
+  return out.sort((a,b)=>b.v-a.v);
+}
+
+/* pares complementares: um forte onde o outro é fraco */
+function complementares(g, n){
+  const pares = [];
+  const ns = EIXOS.map(e=>e.n);
+  for(let i=0;i<g.length;i++) for(let j=i+1;j<g.length;j++){
+    const a=g[i], b=g[j];
+    const comuns = ns.filter(x=>a.eixos[x]!==undefined && b.eixos[x]!==undefined);
+    if(comuns.length<6) continue;
+    /* complementaridade: soma dos máximos bem acima da soma das médias individuais */
+    const maxSoma = media(comuns.map(x=>Math.max(a.eixos[x], b.eixos[x])));
+    const indiv = Math.max(media(comuns.map(x=>a.eixos[x])), media(comuns.map(x=>b.eixos[x])));
+    const ganho = maxSoma - indiv;
+    if(ganho >= 5) pares.push({a, b, ganho, cobertura:Math.round(maxSoma)});
+  }
+  return pares.sort((x,y)=>y.ganho-x.ganho).slice(0, n||3);
+}
+
+function blocosAvancados(base, g, area, emp, ag){
+  const cartao = (tipo, pergunta, resposta, nota) => `<div class="ao-card ${tipo}">
+    <p class="ao-q">${pergunta}</p>${resposta}
+    ${nota? `<p class="ao-nota">${nota}</p>`:''}
+  </div>`;
+  const linhaP = (x, sufixo, cor) => `<div class="ao-r">
+    <span>
+      <span class="ao-nome">${esc(x.p.nome)}</span>
+      <span class="ao-ctx" style="display:block">${esc(x.p.area)}${x.p.lider?' · lidera':''} · ${x.p.tempo} ${x.p.tempo===1?'ano':'anos'}</span>
+    </span>
+    <span class="ao-v" style="color:${cor||corDe(x.v)}">${Math.round(x.v)}${sufixo||''}</span>
+  </div>`;
+
+  /* ── sucessão ── */
+  const naoLidera = g.filter(p=>!p.lider);
+  const potenciais = naoLidera.length>=3
+    ? maisAlto(naoLidera, p=>aderePerfil(p, PESO_LIDER), 3) : [];
+  const lideresG = g.filter(p=>p.lider);
+  const lidComLacuna = lideresG.map(p=>({p, v:p.eixos[7]??0,
+      lac: Object.keys(IND).filter(k=>IND[k][1]===7 && p.pct[k]!==undefined && p.pct[k]<45)}))
+    .filter(x=>x.lac.length>=2).sort((a,b)=>b.lac.length-a.lac.length).slice(0,3);
+
+  /* líder sugerido por área */
+  const porAreaLider = AREAS_EMP.map(A=>{
+    const gg = base.filter(p=>p.area===A.n);
+    if(gg.length<4) return null;
+    const cands = maisAlto(gg, p=>aderePerfil(p, PESO_LIDER), 1);
+    if(!cands.length) return null;
+    const atual = gg.filter(p=>p.lider);
+    const jaLidera = cands[0].p.lider;
+    return {A, c:cands[0], jaLidera, nLid:atual.length};
+  }).filter(Boolean).sort((a,b)=>b.c.v-a.c.v);
+
+  /* ── atenção ── */
+  /* eixos em nível crítico comunica melhor que competências: 3 de 8 é legível,
+     56 de 70 não é — e a leitura por eixo é a que orienta a intervenção */
+  const eixosCriticos = p => EIXOS.filter(e=>p.eixos[e.n]!==undefined && p.eixos[e.n]<42).length;
+  const atencao = g.map(p=>{
+    const cr = eixosCriticos(p);
+    const ct = mediaCtx(p);
+    const idx = indiceComposto(p);
+    const score = cr*6 + Math.max(0,(50-idx))*.8 + Math.max(0,(50-ct))*.4;
+    return {p, cr, ct:Math.round(ct), idx, score};
+  }).filter(x=>x.cr>=2 || x.idx<42).sort((a,b)=>b.score-a.score).slice(0,4);
+
+  const isolados = g.length>=8
+    ? maisAlto(g.map(p=>({p, v:isolamento(p,g)})).filter(x=>x.v!==null).map(x=>x.p).map(p=>p), p=>isolamento(p,g), 2)
+    : [];
+
+  /* ── dependência e composição ── */
+  const dep = dependencias(g);
+  const comp = g.length>=6? complementares(g, 3) : [];
+
+  /* âncoras por eixo */
+  const ancorasEixo = EIXOS.map(e=>{
+    const t = maisAlto(g, p=>p.eixos[e.n]??null, 1)[0];
+    return t && t.v>=62? {e, t} : null;
+  }).filter(Boolean);
+
+  return `<div class="divisor"></div>
+  <h2>Liderança e sucessão</h2>
+  <p style="color:var(--tinta2);max-width:78ch">O perfil de quem conduz combina liderança, relação, ética e decisão — com peso maior nos dois primeiros. <b>O instrumento sugere candidatos; não escolhe.</b> Quem decide precisa considerar entrega real, histórico e disposição da pessoa, que não estão aqui.</p>
+  <div class="grid g2" style="margin-top:1.2rem">
+    ${potenciais.length? cartao('pos','Quem tem o perfil mais próximo de liderança, entre quem ainda não lidera?',
+      potenciais.map(x=>linhaP(x,'','var(--verde)')).join(''),
+      'Aderência ao perfil de condução. Vale conversar sobre interesse antes de qualquer movimento — perfil compatível não significa vontade de assumir.')
+      : cartao('neu','Quem tem perfil de liderança entre quem não lidera?','<p class="nota" style="margin:0">Poucas pessoas sem função de liderança nesta seleção.</p>','')}
+
+    ${lidComLacuna.length? cartao('neg','Quem lidera e tem lacuna em competências de liderança?',
+      lidComLacuna.map(x=>`<div class="ao-r">
+        <span><span class="ao-nome">${esc(x.p.nome)}</span>
+          <span class="ao-ctx" style="display:block">${esc(x.p.area)} · ${x.lac.map(k=>IND[k][0].toLowerCase()).slice(0,2).join(', ')}${x.lac.length>2?' e mais '+(x.lac.length-2):''}</span></span>
+        <span class="ao-v" style="color:var(--coral)">${x.lac.length}</span></div>`).join(''),
+      'Liderar é a única função que quase sempre se assume sem formação. Este número costuma dizer mais sobre a empresa que sobre a pessoa — e é a formação com maior retorno, porque cada líder afeta toda a equipe.'):''}
+  </div>
+
+  ${area? '' : `<div class="card" style="margin-top:1rem">
+    <p class="ao-q">Quem tem o perfil mais próximo de liderança em cada área?</p>
+    <div class="ao-lista">
+      ${porAreaLider.map(x=>`<div>
+        <span style="min-width:130px">${esc(x.A.n)}</span>
+        <span style="color:var(--tinta2);font-size:.85rem">${esc(x.c.p.nome)}</span>
+        <span class="tag ${x.jaLidera?'v':'a'}" style="margin-left:.4rem">${x.jaLidera?'já lidera':'não lidera'}</span>
+        <b style="color:${corDe(x.c.v)}">${Math.round(x.c.v)}</b></div>`).join('')}
+    </div>
+    <p class="ao-nota">Onde aparece <b>não lidera</b>, há alguém com perfil de condução fora da função. Onde aparece <b>já lidera</b>, a escolha atual coincide com o que o instrumento indicaria — o que é uma confirmação, não uma coincidência.</p>
+  </div>`}
+
+  <div class="divisor"></div>
+  <h2>Quem precisa de mais atenção</h2>
+  <p style="color:var(--tinta2);max-width:78ch">Estas pessoas não são um problema da empresa: são de quem a empresa precisa cuidar. A ordem combina competências em nível crítico, índice baixo e avaliação ruim do contexto — e <b>a primeira pergunta em todos os casos é se a condição de trabalho explica o resultado</b>.</p>
+  <div class="grid g2" style="margin-top:1.2rem">
+    ${atencao.length? cartao('neg','Quem precisa de acompanhamento individual, em ordem de prioridade?',
+      atencao.map((x,i)=>`<div class="ao-r">
+        <span><span class="ao-nome">${i+1}. ${esc(x.p.nome)}</span>
+          <span class="ao-ctx" style="display:block">${esc(x.p.area)} · ${x.p.tempo} ${x.p.tempo===1?'ano':'anos'} · ${x.cr} de 8 eixos abaixo de 42 · contexto ${x.ct}</span></span>
+        <span class="ao-v" style="color:${corDe(x.idx)}">${x.idx}</span></div>`).join(''),
+      `<b>Como conduzir.</b> Começar pelo contexto, não pelo desempenho: ${atencao.filter(x=>x.ct<48).length} ${atencao.filter(x=>x.ct<48).length===1?'destas pessoas avalia':'destas pessoas avaliam'} mal as condições de trabalho. Formação em grupo não alcança esses casos — o que alcança é conversa individual conduzida pelo líder direto.`)
+      : cartao('pos','Quem precisa de acompanhamento individual?','<div class="ok-box" style="margin:0">Ninguém em situação crítica nesta seleção.</div>','')}
+
+    ${isolados.length? cartao('neu','Quem tem o perfil mais distante de todos os colegas?',
+      isolados.map(x=>linhaP({p:x.p, v:isolamento(x.p,g)},' pts','var(--aco)')).join(''),
+      'Distância média para cada colega do grupo. Não é isolamento social: é perfil diferente. Pode ser alguém muito acima, muito abaixo, ou simplesmente com forças que ninguém mais tem — e nos três casos a formação padrão não serve.'):''}
+  </div>
+
+  ${!dep.length && !area? `<div class="divisor"></div>
+  <div class="card info">
+    <p style="margin:0"><b>Dependência de uma pessoa só:</b> esta leitura só aparece por área. Numa empresa inteira sempre há mais de uma pessoa acima do corte em qualquer competência, e o dado perde significado. <b>Selecione uma área acima</b> para ver onde a competência sai junto com a pessoa.</p>
+  </div>`:''}
+
+  ${dep.length? `<div class="divisor"></div>
+  <h2>Onde o grupo depende de uma pessoa só</h2>
+  <p style="color:var(--tinta2);max-width:78ch">Competências em que <b>uma única pessoa está acima de 65</b> enquanto o grupo está abaixo de 55. É risco de continuidade: se essa pessoa sair, mudar de área ou tirar férias longas, a competência sai com ela.</p>
+  <div class="grid g3" style="margin-top:1.2rem">
+    ${dep.slice(0,6).map(x=>`<div class="ao-card neg">
+      <p class="ao-q">${IND[x.k][0]}</p>
+      <div class="ao-r">
+        <span><span class="ao-nome">${esc(x.p.nome)}</span>
+          <span class="ao-ctx" style="display:block">${esc(x.p.area)} · única pessoa acima de 65</span></span>
+        <span class="ao-v" style="color:var(--ambar)">${x.v}</span></div>
+      <p class="ao-nota">Grupo em ${x.m}. <b>Providência:</b> essa pessoa formar duas outras nesta competência — o que desenvolve as três e elimina a dependência.</p>
+    </div>`).join('')}
+  </div>`:''}
+
+  ${ancorasEixo.length? `<div class="divisor"></div>
+  <h2>Quem é âncora em cada eixo</h2>
+  <p style="color:var(--tinta2);max-width:78ch">Quem está mais alto em cada eixo, quando o valor justifica. São os nomes a considerar na composição de grupos de formação — um por equipe, nunca todos juntos.</p>
+  <div class="card" style="margin-top:1rem">
+    <div class="ao-lista">
+      ${ancorasEixo.map(x=>`<div>
+        <span style="min-width:180px;color:${x.e.cor};font-weight:500">${x.e.t}</span>
+        <span style="color:var(--tinta2);font-size:.86rem">${esc(x.t.p.nome)}${x.t.p.lider?' · lidera':''}</span>
+        <span class="ao-ctx" style="margin-left:.4rem">${esc(x.t.p.area)}</span>
+        <b style="color:var(--verde)">${Math.round(x.t.v)}</b></div>`).join('')}
+    </div>
+    <p class="ao-nota">Se o mesmo nome aparece em vários eixos, a empresa está concentrando referência numa pessoa só — o que é frágil e injusto com ela.</p>
+  </div>`:''}
+
+  ${comp.length? `<div class="divisor"></div>
+  <h2>Duplas que se complementam</h2>
+  <p style="color:var(--tinta2);max-width:78ch">Pares em que um é forte justamente onde o outro é fraco. Juntos cobrem mais eixos do que qualquer um sozinho — é a lógica de composição de dupla para projeto, e também de quem forma quem.</p>
+  <div class="grid g3" style="margin-top:1.2rem">
+    ${comp.map(x=>`<div class="ao-card pos">
+      <p class="ao-q">${esc(x.a.nome.split(' ').slice(0,2).join(' '))} <span style="color:var(--tinta3);font-weight:400">com</span> ${esc(x.b.nome.split(' ').slice(0,2).join(' '))}</p>
+      <div style="display:flex;gap:1.2rem;font-size:.85rem;color:var(--tinta2);margin-bottom:.4rem">
+        <span>${esc(x.a.area)}</span><span>${esc(x.b.area)}</span>
+      </div>
+      ${EIXOS.filter(e=>x.a.eixos[e.n]!==undefined && x.b.eixos[e.n]!==undefined).slice(0,4).map(e=>`
+        <div style="display:flex;gap:.5rem;align-items:center;font-size:.82rem;padding:.15rem 0">
+          <span style="flex:1;color:var(--tinta2)">${e.t.split(' ')[0]}</span>
+          <span style="font-family:var(--mono);color:${x.a.eixos[e.n]>x.b.eixos[e.n]?'var(--verde)':'var(--tinta3)'}">${x.a.eixos[e.n]}</span>
+          <span style="color:var(--linha)">·</span>
+          <span style="font-family:var(--mono);color:${x.b.eixos[e.n]>x.a.eixos[e.n]?'var(--verde)':'var(--tinta3)'}">${x.b.eixos[e.n]}</span>
+        </div>`).join('')}
+      <p class="ao-nota">Juntos cobrem <b>${x.cobertura}</b> de média, contra ${x.cobertura-Math.round(x.ganho)} do melhor deles sozinho.</p>
+    </div>`).join('')}
+  </div>`:''}`;
 }
 </script>
 

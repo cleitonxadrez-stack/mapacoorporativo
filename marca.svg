@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 358" width="270" height="358" role="img" aria-label="Mapas de Empresas">
+  <title>Mapas de Empresas</title>
+  <path fill="#02235A" d="M135 0C60.4 0 0 60.4 0 135c0 26.5 8.9 46.5 22.4 68.6L135 358l112.6-154.4C261.1 181.5 270 161.5 270 135 270 60.4 209.6 0 135 0z"/>
+  <path fill="#FFFFFF" d="M52 95l83 78 83-78v148h-33v-73l-50 47-50-47v73H52z"/>
+  <circle cx="135" cy="80" r="34" fill="#DAAD33"/>
+</svg>
