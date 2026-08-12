@@ -3873,7 +3873,9 @@ const RK_EIXOS = [
    ...EIXOS.map(e=>['e'+e.n, e.t]),
  ], aj:'As leituras agregadas — o índice composto e a média de cada eixo.'},
  ...EIXOS.map(e=>({k:'e'+e.n, n:e.t, eixo:e.n,
-   sub: Object.keys(IND).filter(k=>IND[k][1]===e.n).map(k=>[k, IND[k][0]]),
+   /* a primeira opção é o eixo inteiro: a média de todos os indicadores dele.
+      Sem isso, só dava para ordenar por competência isolada. */
+   sub: [['e'+e.n, 'Todo o eixo'], ...Object.keys(IND).filter(k=>IND[k][1]===e.n).map(k=>[k, IND[k][0]])],
    aj: e.d})),
 ];
 
@@ -3886,6 +3888,18 @@ function rkRotulo(chave){
   if(chave === 'indice') return 'índice composto';
   if(/^e\d$/.test(chave)) return (EIXOS.find(e=>e.n===+chave[1])||{}).t.toLowerCase();
   return (IND[chave]||[chave])[0].toLowerCase();
+}
+
+/* como o indicador é medido — direto, inferido, ou os dois */
+function origemInd(k){
+  const dir = BANCO.filter(q=>q.t==='esc' && q.w && q.w[k]).length;
+  const sit = BANCO.filter(q=>q.t!=='esc' && (q.ops||[]).some(o=>o.w && o.w[k])).length;
+  if(dir && sit) return {t:'direto e confirmado', c:'v', d:dir, s:sit,
+    x:'Medido por questão direta e confirmado por situações. É a leitura mais segura.'};
+  if(dir) return {t:'direto', c:'', d:dir, s:0,
+    x:'Medido por questão direta de escala. A pessoa declara com que frequência faz aquilo.'};
+  return {t:'inferido', c:'a', d:0, s:sit,
+    x:'Não é perguntado diretamente: aparece na escolha que a pessoa faz diante de uma situação. Mede o comportamento, não a autodescrição — mas apoia-se em menos itens.'};
 }
 
 function abaRanking(base){
@@ -3930,6 +3944,23 @@ function abaRanking(base){
           style="${rkCorte===v?'background:var(--ambar);border-color:var(--ambar);color:#33260A':''}">${t}</button>`).join('')}
       <span class="rk-info">${lista.length} de ${g.length} · ordenado por ${rkRotulo(rkLeitura)}</span>
     </div>
+    ${(()=>{
+      if(rkLeitura==='indice') return `<p style="margin:.6rem 0 0;font-size:.82rem;color:var(--tinta2)">
+        <b>Índice composto:</b> média dos oito eixos, com peso igual. Agrega 70 indicadores e 141 questões.</p>`;
+      if(/^e\d$/.test(rkLeitura)){
+        const n = +rkLeitura[1];
+        const qs = BANCO.filter(q=>q.e===n).length;
+        const inds = Object.keys(IND).filter(k=>IND[k][1]===n).length;
+        return `<p style="margin:.6rem 0 0;font-size:.82rem;color:var(--tinta2)">
+          <b>Eixo inteiro:</b> média dos ${inds} indicadores deste eixo, alimentados por ${qs} questões.</p>`;
+      }
+      const O = origemInd(rkLeitura);
+      return `<p style="margin:.6rem 0 0;font-size:.82rem;color:var(--tinta2)">
+        <span class="tag ${O.c}">${O.t}</span>
+        <b style="margin-left:.4rem">${O.d + O.s} ${O.d+O.s===1?'item':'itens'}</b>
+        ${O.d? ' · '+O.d+' de escala':''}${O.s? ' · '+O.s+' de situação':''}
+        — ${O.x}</p>`;
+    })()}
   </div>
 
   ${!lista.length? `<div class="card alerta"><p style="margin:0">Nenhum profissional atinge ${rkCorte} neste critério. Reduza o corte para ver a lista completa.</p></div>` : `
